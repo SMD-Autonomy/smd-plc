@@ -1,0 +1,7 @@
+@appendable
+struct PLCcontrol {
+    @key long PLCid;
+    int32 count_r;
+    int32 value_r;
+    int32 value_rw;
+};
