@@ -24,9 +24,6 @@ if __name__ == "__main__":
     # populating our address space
     plc_obj = objects.add_object(idx, "PLCcontrol")
 
-    plc_id = plc_obj.add_variable(idx, "PLCid", 0, ua.VariantType.Int64)
-    plc_id.set_writable()
-
     count_r = plc_obj.add_variable(idx, "count_r", 0, ua.VariantType.Int32)
     count_r.set_writable()
 
@@ -43,13 +40,13 @@ if __name__ == "__main__":
         print("Server started. Press Ctrl-C to stop.")
         while True:
             # Generate random values
-            plc_id.set_value(random.randint(1, 100))
+            # plc_id.set_value(random.randint(1, 100))
             count_r.set_value(random.randint(0, 1000))
             value_r.set_value(random.randint(-100, 100))
             value_rw.set_value(random.randint(-100, 100))
 
             # Print current values
-            print(f"PLCid: {plc_id.get_value()}, count_r: {count_r.get_value()}, "
+            print(f"PLCid: , count_r: {count_r.get_value()}, "
                   f"value_r: {value_r.get_value()}, value_rw: {value_rw.get_value()}")
 
             # Wait for 1 second before updating again

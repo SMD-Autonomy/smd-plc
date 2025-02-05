@@ -10,11 +10,11 @@
 
   <ddsopcua_service name="PLCcontrolService">
     
-    <opcua_connection name="PLCServerConnection" server_endpoint_url="opc.tcp://0.0.0.0:4840/freeopcua/server/">
+    <opcua_connection name="PLCServerConnection" server_endpoint_url="opc.tcp://192.168.1.220:4840">
       <timeout>5000</timeout>
     </opcua_connection>
     
-    <domain_participant name="PLCDomainParticipant" domain_id="14">
+    <domain_participant name="PLCDomainParticipant" domain_id="6">
       <register_type name="PLCcontrol" type_ref="PLCcontrolType"/>
     </domain_participant>
 
@@ -27,7 +27,7 @@
         </attribute_service_set>
       </service_set>
 
-      <subscription name="PLCControlSubscription">
+      <!-- <subscription name="PLCControlSubscription">
         <opcua_input name="PLCOPCInput" opcua_connection_ref="PLCServerConnection">
                     
           <subscription_protocol>
@@ -35,7 +35,7 @@
             <publishing_enabled>true</publishing_enabled>
           </subscription_protocol>
 
-          <monitored_items>            
+          <monitored_items>                     
             <node_attribute dds_topic_field_name="count_r">
               <node_id>
                 <namespace_index>6</namespace_index>
@@ -65,7 +65,7 @@
           <registered_type_name>PLCcontrol</registered_type_name>
         </dds_output>
 
-      </subscription>
+      </subscription> -->
 
       <publication name="PLCControlPublication">
         <dds_input name="PLCDDSInput" domain_participant_ref="PLCDomainParticipant">
