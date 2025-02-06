@@ -27,7 +27,7 @@
         </attribute_service_set>
       </service_set>
 
-      <!-- <subscription name="PLCControlSubscription">
+      <subscription name="PLCControlSubscription">
         <opcua_input name="PLCOPCInput" opcua_connection_ref="PLCServerConnection">
                     
           <subscription_protocol>
@@ -65,7 +65,7 @@
           <registered_type_name>PLCcontrol</registered_type_name>
         </dds_output>
 
-      </subscription> -->
+      </subscription>
 
       <publication name="PLCControlPublication">
         <dds_input name="PLCDDSInput" domain_participant_ref="PLCDomainParticipant">
@@ -93,6 +93,7 @@
                 <namespace_index>6</namespace_index>
                 <string_identifier>Value_RW</string_identifier>
               </node_id>
+              <attribute_id>VALUE</attribute_id>
             </node_attribute>
          </opcua_output>
 

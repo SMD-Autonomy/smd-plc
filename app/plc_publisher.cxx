@@ -51,9 +51,9 @@ void run_publisher_application(unsigned int domain_id, unsigned int sample_count
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.PLCid(static_cast< int32_t>(samples_written));
-        data.count_r(static_cast< int32_t>(samples_written));
-        data.value_r(static_cast< int32_t>(samples_written));
+        // data.PLCid(static_cast< int32_t>(samples_written));
+        // data.count_r(static_cast< int32_t>(samples_written));
+        // data.value_r(static_cast< int32_t>(samples_written));
         data.value_rw(static_cast< int32_t>(samples_written));
         std::cout << "Writing ::PLCcontrol, count " << samples_written << std::endl;
 
