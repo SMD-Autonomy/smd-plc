@@ -29,11 +29,11 @@
 #include "plc.hpp"
 #include "application.hpp"  // for command line parsing and ctrl-c
 
-int process_data(dds::sub::DataReader< ::PLCcontrol> reader)
+int process_data(dds::sub::DataReader< ::PanAndTiltControl> reader)
 {
     // Take all samples
     int count = 0;
-    dds::sub::LoanedSamples< ::PLCcontrol> samples = reader.take();
+    dds::sub::LoanedSamples< ::PanAndTiltControl> samples = reader.take();
     for (auto sample : samples) {
         if (sample.info().valid()) {
             count++;
@@ -56,11 +56,11 @@ void run_subscriber_application(unsigned int domain_id, unsigned int sample_coun
     dds::domain::DomainParticipant participant(domain_id);
 
     // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PLCcontrol> topic(participant, "PLCMonitorTopic");
+    dds::topic::Topic< ::PanAndTiltControl> topic(participant, "Example PanAndTiltControl");
 
     // Create a Subscriber and DataReader with default Qos
     dds::sub::Subscriber subscriber(participant);
-    dds::sub::DataReader< ::PLCcontrol> reader(subscriber, topic);
+    dds::sub::DataReader< ::PanAndTiltControl> reader(subscriber, topic);
 
     // Create a ReadCondition for any data received on this reader and set a
     // handler to process the data
@@ -75,7 +75,7 @@ void run_subscriber_application(unsigned int domain_id, unsigned int sample_coun
     waitset += read_condition;
 
     while (!application::shutdown_requested && samples_read < sample_count) {
-        std::cout << "::PLCcontrol subscriber sleeping up to 1 sec..." << std::endl;
+        std::cout << "::PanAndTiltControl subscriber sleeping up to 1 sec..." << std::endl;
 
         // Run the handlers of the active conditions. Wait for up to 1 second.
         waitset.dispatch(dds::core::Duration(1));

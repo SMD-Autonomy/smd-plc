@@ -18,10 +18,10 @@ then
     tmux split-window -v
 
     # Run the camera server (OPCUA) in Pane 1 (left top)
-    tmux send-keys -t $SESSION:0.0 'cd app; ./objs/x64Linux4gcc7.3.0/plc_subscriber -d 6' C-m  
+    tmux send-keys -t $SESSION:0.0 'cd app; ./objs/x64Linux4gcc7.3.0/plc_subscriber -d 6 -s 50' C-m  
         
     # Run the camera server (OPCUA) in Pane 2 (right top)
-    tmux send-keys -t $SESSION:0.1 'cd app; ./objs/x64Linux4gcc7.3.0/plc_publisher -d 6' C-m  
+    tmux send-keys -t $SESSION:0.1 'cd app; ./objs/x64Linux4gcc7.3.0/plc_publisher -d 6 -s 50' C-m  
 
     # Run the camera controller (DDS) in Pane 2 (right bottom)
     tmux send-keys -t $SESSION:0.2 'sleep 3; ./gateway-opcua/bin/rtiddsopcuagateway -cfgFile plc_control_service.xml -cfgName PLCcontrolService' C-m  

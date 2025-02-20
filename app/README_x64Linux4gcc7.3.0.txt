@@ -1,7 +1,7 @@
 Welcome to your first Connext DDS example! 
 
 This example was generated for architecture x64Linux4gcc7.3.0, using the
-data type PLCcontrol from plc.idl.
+data type PanAndTiltControl from plc.idl.
 This example builds two applications, named plc_publisher and
 plc_subscriber.
 

@@ -1,7 +1,32 @@
 @appendable
-struct PLCcontrol {
-    @key long PLCid;
-    int32 count_r;
-    int32 value_r;
-    int32 value_rw;
+struct Power {
+    boolean CMD;
+    boolean ON;
+};
+
+struct LampControl {
+
+    float intensity;
+    Power power;
+};
+
+struct CameraControl {
+
+    Power focus_far;
+    Power focus_near;
+    Power LED;
+    Power power;
+    Power zoom_in;
+    Power zoom_out;
+
+};
+
+struct PanAndTiltControl {
+
+    Power pan_left;
+    Power pan_right;
+    Power power;
+    Power tilt_down;
+    Power tilt_up;
+    
 };

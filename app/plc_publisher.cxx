@@ -28,7 +28,7 @@
 #include "application.hpp"  // for command line parsing and ctrl-c
 #include "plc.hpp"
 
-void run_publisher_application(unsigned int domain_id, unsigned int sample_count)
+void camera_publisher(unsigned int domain_id, unsigned int sample_count)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -37,25 +37,88 @@ void run_publisher_application(unsigned int domain_id, unsigned int sample_count
     dds::domain::DomainParticipant participant(domain_id);
 
     // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PLCcontrol> topic(participant, "PLCControlTopic");
+    dds::topic::Topic< ::CameraControl> topic(participant, "CameraControlTopic");
 
     // Create a Publisher
     dds::pub::Publisher publisher(participant);
 
     // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::PLCcontrol> writer(publisher, topic);
+    dds::pub::DataWriter< ::CameraControl> writer(publisher, topic);
 
-    ::PLCcontrol data;
+    ::CameraControl data;
     // Main loop, write data
     for (unsigned int samples_written = 0;
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        // data.PLCid(static_cast< int32_t>(samples_written));
-        // data.count_r(static_cast< int32_t>(samples_written));
-        // data.value_r(static_cast< int32_t>(samples_written));
-        data.value_rw(static_cast< int32_t>(samples_written));
-        std::cout << "Writing ::PLCcontrol, count " << samples_written << std::endl;
+        data.LED().CMD(static_cast<bool>(true));
+        std::cout << "Writing ::CameraControl Status" << std::endl;
+
+        writer.write(data);
+
+        // Send once every second
+        rti::util::sleep(dds::core::Duration(1));
+    }
+}
+
+void lamp_publisher(unsigned int domain_id, unsigned int sample_count)
+{
+    // DDS objects behave like shared pointers or value types
+    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
+
+    // Start communicating in a domain, usually one participant per application
+    dds::domain::DomainParticipant participant(domain_id);
+
+    // Create a Topic with a name and a datatype
+    dds::topic::Topic< ::LampControl> topic(participant, "LampControlTopic");
+
+    // Create a Publisher
+    dds::pub::Publisher publisher(participant);
+
+    // Create a DataWriter with default QoS
+    dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
+
+    ::LampControl data;
+    // Main loop, write data
+    for (unsigned int samples_written = 0;
+    !application::shutdown_requested && samples_written < sample_count;
+    samples_written++) {
+        // Modify the data to be written here
+        data.power().CMD(static_cast<bool>(true));
+        std::cout << "Writing ::LampControl" << std::endl;
+
+        writer.write(data);
+
+        // Send once every second
+        rti::util::sleep(dds::core::Duration(1));
+    }
+}
+
+void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count)
+{
+    // DDS objects behave like shared pointers or value types
+    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
+
+    // Start communicating in a domain, usually one participant per application
+    dds::domain::DomainParticipant participant(domain_id);
+
+    // Create a Topic with a name and a datatype
+    dds::topic::Topic< ::PanAndTiltControl> topic(participant, "PanAndTiltControlTopic");
+
+    // Create a Publisher
+    dds::pub::Publisher publisher(participant);
+
+    // Create a DataWriter with default QoS
+    dds::pub::DataWriter< ::PanAndTiltControl> writer(publisher, topic);
+
+    ::PanAndTiltControl data;
+    // Main loop, write data
+    for (unsigned int samples_written = 0;
+    !application::shutdown_requested && samples_written < sample_count;
+    samples_written++) {
+        // Modify the data to be written here
+        data.power().CMD(static_cast<bool>(true));
+        std::cout << "Writing ::PanAndTiltControl " << std::endl;
 
         writer.write(data);
 
@@ -82,10 +145,28 @@ int main(int argc, char *argv[])
     rti::config::Logger::instance().verbosity(arguments.verbosity);
 
     try {
-        run_publisher_application(arguments.domain_id, arguments.sample_count);
+        camera_publisher(arguments.domain_id, arguments.sample_count);
     } catch (const std::exception& ex) {
         // This will catch DDS exceptions
-        std::cerr << "Exception in run_publisher_application(): " << ex.what()
+        std::cerr << "Exception in camera_publisher(): " << ex.what()
+        << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    try {
+        lamp_publisher(arguments.domain_id, arguments.sample_count);
+    } catch (const std::exception& ex) {
+        // This will catch DDS exceptions
+        std::cerr << "Exception in lamp_publisher(): " << ex.what()
+        << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    try {
+        panandtilt_publisher(arguments.domain_id, arguments.sample_count);
+    } catch (const std::exception& ex) {
+        // This will catch DDS exceptions
+        std::cerr << "Exception in panandtilt_publisher(): " << ex.what()
         << std::endl;
         return EXIT_FAILURE;
     }

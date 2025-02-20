@@ -12,6 +12,8 @@ or consult the Code Generator User's Manual.
 
 #include <iosfwd>
 #include <iomanip>
+#include <cmath>
+#include <limits>
 
 #ifndef NDDS_STANDALONE_TYPE
 #include "rti/topic/cdr/Serialization.hpp"
@@ -24,60 +26,216 @@ or consult the Code Generator User's Manual.
 
 #include <rti/util/ostream_operators.hpp>
 
-// ---- PLCcontrol: 
+// ---- Power: 
 
-PLCcontrol::PLCcontrol() :
-    m_PLCid_ (0) ,
-    m_count_r_ (0) ,
-    m_value_r_ (0) ,
-    m_value_rw_ (0)  {
+Power::Power() :
+    m_CMD_ (0) ,
+    m_ON_ (0)  {
 
 }   
 
-PLCcontrol::PLCcontrol (int32_t PLCid_,int32_t count_r_,int32_t value_r_,int32_t value_rw_):
-    m_PLCid_(PLCid_), 
-    m_count_r_(count_r_), 
-    m_value_r_(value_r_), 
-    m_value_rw_(value_rw_) {
+Power::Power (bool CMD_,bool ON_):
+    m_CMD_(CMD_), 
+    m_ON_(ON_) {
 }
 
-void PLCcontrol::swap(PLCcontrol& other_)  noexcept 
+void Power::swap(Power& other_)  noexcept 
 {
     using std::swap;
-    swap(m_PLCid_, other_.m_PLCid_);
-    swap(m_count_r_, other_.m_count_r_);
-    swap(m_value_r_, other_.m_value_r_);
-    swap(m_value_rw_, other_.m_value_rw_);
+    swap(m_CMD_, other_.m_CMD_);
+    swap(m_ON_, other_.m_ON_);
 }  
 
-bool PLCcontrol::operator == (const PLCcontrol& other_) const {
-    if (m_PLCid_ != other_.m_PLCid_) {
+bool Power::operator == (const Power& other_) const {
+    if (m_CMD_ != other_.m_CMD_) {
         return false;
     }
-    if (m_count_r_ != other_.m_count_r_) {
-        return false;
-    }
-    if (m_value_r_ != other_.m_value_r_) {
-        return false;
-    }
-    if (m_value_rw_ != other_.m_value_rw_) {
+    if (m_ON_ != other_.m_ON_) {
         return false;
     }
     return true;
 }
 
-bool PLCcontrol::operator != (const PLCcontrol& other_) const {
+bool Power::operator != (const Power& other_) const {
     return !this->operator ==(other_);
 }
 
-std::ostream& operator << (std::ostream& o,const PLCcontrol& sample)
+std::ostream& operator << (std::ostream& o,const Power& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
-    o << "PLCid: " << sample.PLCid ()<<", ";
-    o << "count_r: " << sample.count_r ()<<", ";
-    o << "value_r: " << sample.value_r ()<<", ";
-    o << "value_rw: " << sample.value_rw ();
+    o << "CMD: " << sample.CMD ()<<", ";
+    o << "ON: " << sample.ON ();
+    o <<"]";
+    return o;
+}
+
+// ---- LampControl: 
+
+LampControl::LampControl() :
+    m_intensity_ (0.0f)  {
+
+}   
+
+LampControl::LampControl (float intensity_,const ::Power& power_):
+    m_intensity_(intensity_), 
+    m_power_(power_) {
+}
+
+void LampControl::swap(LampControl& other_)  noexcept 
+{
+    using std::swap;
+    swap(m_intensity_, other_.m_intensity_);
+    swap(m_power_, other_.m_power_);
+}  
+
+bool LampControl::operator == (const LampControl& other_) const {
+    if (std::fabs(m_intensity_ - other_.m_intensity_) > std::numeric_limits< float>::epsilon()
+    && !(std::fabs(m_intensity_ - other_.m_intensity_) < (std::numeric_limits< float>::min)())) {
+        return false;
+    }
+    if (m_power_ != other_.m_power_) {
+        return false;
+    }
+    return true;
+}
+
+bool LampControl::operator != (const LampControl& other_) const {
+    return !this->operator ==(other_);
+}
+
+std::ostream& operator << (std::ostream& o,const LampControl& sample)
+{
+    ::rti::util::StreamFlagSaver flag_saver (o);
+    o <<"[";
+    o << "intensity: " << std::setprecision(9) << sample.intensity ()<<", ";
+    o << "power: " << sample.power ();
+    o <<"]";
+    return o;
+}
+
+// ---- CameraControl: 
+
+CameraControl::CameraControl()  {
+
+}   
+
+CameraControl::CameraControl (const ::Power& focus_far_,const ::Power& focus_near_,const ::Power& LED_,const ::Power& power_,const ::Power& zoom_in_,const ::Power& zoom_out_):
+    m_focus_far_(focus_far_), 
+    m_focus_near_(focus_near_), 
+    m_LED_(LED_), 
+    m_power_(power_), 
+    m_zoom_in_(zoom_in_), 
+    m_zoom_out_(zoom_out_) {
+}
+
+void CameraControl::swap(CameraControl& other_)  noexcept 
+{
+    using std::swap;
+    swap(m_focus_far_, other_.m_focus_far_);
+    swap(m_focus_near_, other_.m_focus_near_);
+    swap(m_LED_, other_.m_LED_);
+    swap(m_power_, other_.m_power_);
+    swap(m_zoom_in_, other_.m_zoom_in_);
+    swap(m_zoom_out_, other_.m_zoom_out_);
+}  
+
+bool CameraControl::operator == (const CameraControl& other_) const {
+    if (m_focus_far_ != other_.m_focus_far_) {
+        return false;
+    }
+    if (m_focus_near_ != other_.m_focus_near_) {
+        return false;
+    }
+    if (m_LED_ != other_.m_LED_) {
+        return false;
+    }
+    if (m_power_ != other_.m_power_) {
+        return false;
+    }
+    if (m_zoom_in_ != other_.m_zoom_in_) {
+        return false;
+    }
+    if (m_zoom_out_ != other_.m_zoom_out_) {
+        return false;
+    }
+    return true;
+}
+
+bool CameraControl::operator != (const CameraControl& other_) const {
+    return !this->operator ==(other_);
+}
+
+std::ostream& operator << (std::ostream& o,const CameraControl& sample)
+{
+    ::rti::util::StreamFlagSaver flag_saver (o);
+    o <<"[";
+    o << "focus_far: " << sample.focus_far ()<<", ";
+    o << "focus_near: " << sample.focus_near ()<<", ";
+    o << "LED: " << sample.LED ()<<", ";
+    o << "power: " << sample.power ()<<", ";
+    o << "zoom_in: " << sample.zoom_in ()<<", ";
+    o << "zoom_out: " << sample.zoom_out ();
+    o <<"]";
+    return o;
+}
+
+// ---- PanAndTiltControl: 
+
+PanAndTiltControl::PanAndTiltControl()  {
+
+}   
+
+PanAndTiltControl::PanAndTiltControl (const ::Power& pan_left_,const ::Power& pan_right_,const ::Power& power_,const ::Power& tilt_down_,const ::Power& tilt_up_):
+    m_pan_left_(pan_left_), 
+    m_pan_right_(pan_right_), 
+    m_power_(power_), 
+    m_tilt_down_(tilt_down_), 
+    m_tilt_up_(tilt_up_) {
+}
+
+void PanAndTiltControl::swap(PanAndTiltControl& other_)  noexcept 
+{
+    using std::swap;
+    swap(m_pan_left_, other_.m_pan_left_);
+    swap(m_pan_right_, other_.m_pan_right_);
+    swap(m_power_, other_.m_power_);
+    swap(m_tilt_down_, other_.m_tilt_down_);
+    swap(m_tilt_up_, other_.m_tilt_up_);
+}  
+
+bool PanAndTiltControl::operator == (const PanAndTiltControl& other_) const {
+    if (m_pan_left_ != other_.m_pan_left_) {
+        return false;
+    }
+    if (m_pan_right_ != other_.m_pan_right_) {
+        return false;
+    }
+    if (m_power_ != other_.m_power_) {
+        return false;
+    }
+    if (m_tilt_down_ != other_.m_tilt_down_) {
+        return false;
+    }
+    if (m_tilt_up_ != other_.m_tilt_up_) {
+        return false;
+    }
+    return true;
+}
+
+bool PanAndTiltControl::operator != (const PanAndTiltControl& other_) const {
+    return !this->operator ==(other_);
+}
+
+std::ostream& operator << (std::ostream& o,const PanAndTiltControl& sample)
+{
+    ::rti::util::StreamFlagSaver flag_saver (o);
+    o <<"[";
+    o << "pan_left: " << sample.pan_left ()<<", ";
+    o << "pan_right: " << sample.pan_right ()<<", ";
+    o << "power: " << sample.power ()<<", ";
+    o << "tilt_down: " << sample.tilt_down ()<<", ";
+    o << "tilt_up: " << sample.tilt_up ();
     o <<"]";
     return o;
 }
@@ -95,18 +253,18 @@ namespace rti {
     namespace topic {
 
         template<>
-        struct native_type_code< ::PLCcontrol > {
+        struct native_type_code< ::Power > {
             static DDS_TypeCode * get()
             {
                 using namespace ::rti::topic::interpreter;
 
                 static RTIBool is_initialized = RTI_FALSE;
 
-                static DDS_TypeCode_Member PLCcontrol_g_tc_members[4]=
+                static DDS_TypeCode_Member Power_g_tc_members[2]=
                 {
 
                     {
-                        (char *)"PLCid",/* Member name */
+                        (char *)"CMD",/* Member name */
                         {
                             0,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -117,52 +275,16 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        RTI_CDR_KEY_MEMBER , /* Is a key? */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
                         DDS_PUBLIC_MEMBER,/* Member visibility */
                         1,
                         NULL, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"count_r",/* Member name */
+                        (char *)"ON",/* Member name */
                         {
                             1,/* Representation ID */
-                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
-                            -1, /* Bitfield bits */
-                            NULL/* Member type code is assigned later */
-                        },
-                        0, /* Ignored */
-                        0, /* Ignored */
-                        0, /* Ignored */
-                        NULL, /* Ignored */
-                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
-                        DDS_PUBLIC_MEMBER,/* Member visibility */
-                        1,
-                        NULL, /* Ignored */
-                        RTICdrTypeCodeAnnotations_INITIALIZER
-                    }, 
-                    {
-                        (char *)"value_r",/* Member name */
-                        {
-                            2,/* Representation ID */
-                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
-                            -1, /* Bitfield bits */
-                            NULL/* Member type code is assigned later */
-                        },
-                        0, /* Ignored */
-                        0, /* Ignored */
-                        0, /* Ignored */
-                        NULL, /* Ignored */
-                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
-                        DDS_PUBLIC_MEMBER,/* Member visibility */
-                        1,
-                        NULL, /* Ignored */
-                        RTICdrTypeCodeAnnotations_INITIALIZER
-                    }, 
-                    {
-                        (char *)"value_rw",/* Member name */
-                        {
-                            3,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
                             -1, /* Bitfield bits */
                             NULL/* Member type code is assigned later */
@@ -179,136 +301,108 @@ namespace rti {
                     }
                 };
 
-                static DDS_TypeCode PLCcontrol_g_tc =
+                static DDS_TypeCode Power_g_tc =
                 {{
                         DDS_TK_STRUCT, /* Kind */
                         DDS_BOOLEAN_FALSE, /* Ignored */
                         -1, /*Ignored*/
-                        (char *)"PLCcontrol", /* Name */
+                        (char *)"Power", /* Name */
                         NULL, /* Ignored */      
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        4, /* Number of members */
-                        PLCcontrol_g_tc_members, /* Members */
+                        2, /* Number of members */
+                        Power_g_tc_members, /* Members */
                         DDS_VM_NONE, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER,
                         DDS_BOOLEAN_TRUE, /* _isCopyable */
                         NULL, /* _sampleAccessInfo: assigned later */
                         NULL /* _typePlugin: assigned later */
-                    }}; /* Type code for PLCcontrol*/
+                    }}; /* Type code for Power*/
 
                 if (is_initialized) {
-                    return &PLCcontrol_g_tc;
+                    return &Power_g_tc;
                 }
 
                 is_initialized = RTI_TRUE;
 
-                PLCcontrol_g_tc._data._annotations._allowedDataRepresentationMask = 5;
+                Power_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                PLCcontrol_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
-                PLCcontrol_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
-                PLCcontrol_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
-                PLCcontrol_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+                Power_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::interpreter::initialize_bool_typecode();
+                Power_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::interpreter::initialize_bool_typecode();
 
                 /* Initialize the values for member annotations. */
-                PLCcontrol_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[0]._annotations._defaultValue._u.long_value = 0;
-                PLCcontrol_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[0]._annotations._minValue._u.long_value = RTIXCdrLong_MIN;
-                PLCcontrol_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[0]._annotations._maxValue._u.long_value = RTIXCdrLong_MAX;
-                PLCcontrol_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[1]._annotations._defaultValue._u.long_value = 0;
-                PLCcontrol_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[1]._annotations._minValue._u.long_value = RTIXCdrLong_MIN;
-                PLCcontrol_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[1]._annotations._maxValue._u.long_value = RTIXCdrLong_MAX;
-                PLCcontrol_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[2]._annotations._defaultValue._u.long_value = 0;
-                PLCcontrol_g_tc_members[2]._annotations._minValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[2]._annotations._minValue._u.long_value = RTIXCdrLong_MIN;
-                PLCcontrol_g_tc_members[2]._annotations._maxValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[2]._annotations._maxValue._u.long_value = RTIXCdrLong_MAX;
-                PLCcontrol_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[3]._annotations._defaultValue._u.long_value = 0;
-                PLCcontrol_g_tc_members[3]._annotations._minValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[3]._annotations._minValue._u.long_value = RTIXCdrLong_MIN;
-                PLCcontrol_g_tc_members[3]._annotations._maxValue._d = RTI_XCDR_TK_LONG;
-                PLCcontrol_g_tc_members[3]._annotations._maxValue._u.long_value = RTIXCdrLong_MAX;
+                Power_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_BOOLEAN;
+                Power_g_tc_members[0]._annotations._defaultValue._u.boolean_value = 0;
+                Power_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_BOOLEAN;
+                Power_g_tc_members[1]._annotations._defaultValue._u.boolean_value = 0;
 
-                PLCcontrol_g_tc._data._sampleAccessInfo = sample_access_info();
-                PLCcontrol_g_tc._data._typePlugin = type_plugin_info();    
+                Power_g_tc._data._sampleAccessInfo = sample_access_info();
+                Power_g_tc._data._typePlugin = type_plugin_info();    
 
-                return &PLCcontrol_g_tc;
+                return &Power_g_tc;
             }
 
             static RTIXCdrSampleAccessInfo * sample_access_info()
             {
                 static RTIBool is_initialized = RTI_FALSE;
 
-                ::PLCcontrol *sample;
+                ::Power *sample;
 
-                static RTIXCdrMemberAccessInfo PLCcontrol_g_memberAccessInfos[4] =
+                static RTIXCdrMemberAccessInfo Power_g_memberAccessInfos[2] =
                 {RTIXCdrMemberAccessInfo_INITIALIZER};
 
-                static RTIXCdrSampleAccessInfo PLCcontrol_g_sampleAccessInfo = 
+                static RTIXCdrSampleAccessInfo Power_g_sampleAccessInfo = 
                 RTIXCdrSampleAccessInfo_INITIALIZER;
 
                 if (is_initialized) {
-                    return (RTIXCdrSampleAccessInfo*) &PLCcontrol_g_sampleAccessInfo;
+                    return (RTIXCdrSampleAccessInfo*) &Power_g_sampleAccessInfo;
                 }
 
                 RTIXCdrHeap_allocateStruct(
                     &sample, 
-                    ::PLCcontrol);
+                    ::Power);
                 if (sample == NULL) {
                     return NULL;
                 }
 
-                PLCcontrol_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->PLCid() - (char *)sample);
+                Power_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->CMD() - (char *)sample);
 
-                PLCcontrol_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->count_r() - (char *)sample);
+                Power_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->ON() - (char *)sample);
 
-                PLCcontrol_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->value_r() - (char *)sample);
-
-                PLCcontrol_g_memberAccessInfos[3].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->value_rw() - (char *)sample);
-
-                PLCcontrol_g_sampleAccessInfo.memberAccessInfos = 
-                PLCcontrol_g_memberAccessInfos;
+                Power_g_sampleAccessInfo.memberAccessInfos = 
+                Power_g_memberAccessInfos;
 
                 {
-                    size_t candidateTypeSize = sizeof(::PLCcontrol);
+                    size_t candidateTypeSize = sizeof(::Power);
 
                     if (candidateTypeSize > RTIXCdrLong_MAX) {
-                        PLCcontrol_g_sampleAccessInfo.typeSize[0] =
+                        Power_g_sampleAccessInfo.typeSize[0] =
                         RTIXCdrLong_MAX;
                     } else {
-                        PLCcontrol_g_sampleAccessInfo.typeSize[0] =
+                        Power_g_sampleAccessInfo.typeSize[0] =
                         (RTIXCdrUnsignedLong) candidateTypeSize;
                     }
                 }
 
-                PLCcontrol_g_sampleAccessInfo.useGetMemberValueOnlyWithRef =
+                Power_g_sampleAccessInfo.useGetMemberValueOnlyWithRef =
                 RTI_XCDR_TRUE;
 
-                PLCcontrol_g_sampleAccessInfo.getMemberValuePointerFcn = 
-                interpreter::get_aggregation_value_pointer< ::PLCcontrol >;
+                Power_g_sampleAccessInfo.getMemberValuePointerFcn = 
+                interpreter::get_aggregation_value_pointer< ::Power >;
 
-                PLCcontrol_g_sampleAccessInfo.languageBinding = 
+                Power_g_sampleAccessInfo.languageBinding = 
                 RTI_XCDR_TYPE_BINDING_CPP_11_STL ;
 
                 RTIXCdrHeap_freeStruct(sample);
                 is_initialized = RTI_TRUE;
-                return (RTIXCdrSampleAccessInfo*) &PLCcontrol_g_sampleAccessInfo;
+                return (RTIXCdrSampleAccessInfo*) &Power_g_sampleAccessInfo;
             }
             static RTIXCdrTypePlugin * type_plugin_info()
             {
-                static RTIXCdrTypePlugin PLCcontrol_g_typePlugin = 
+                static RTIXCdrTypePlugin Power_g_typePlugin = 
                 {
                     NULL, /* serialize */
                     NULL, /* serialize_key */
@@ -327,22 +421,710 @@ namespace rti {
                     NULL
                 };
 
-                return &PLCcontrol_g_typePlugin;
+                return &Power_g_typePlugin;
             }
         }; // native_type_code
 
-        const ::dds::core::xtypes::StructType& dynamic_type< ::PLCcontrol >::get()
+        const ::dds::core::xtypes::StructType& dynamic_type< ::Power >::get()
         {
             return static_cast<const ::dds::core::xtypes::StructType&>(
                 ::rti::core::native_conversions::cast_from_native< ::dds::core::xtypes::DynamicType >(
-                    *(native_type_code< ::PLCcontrol >::get())));
+                    *(native_type_code< ::Power >::get())));
+        }
+
+        template<>
+        struct native_type_code< ::LampControl > {
+            static DDS_TypeCode * get()
+            {
+                using namespace ::rti::topic::interpreter;
+
+                static RTIBool is_initialized = RTI_FALSE;
+
+                static DDS_TypeCode_Member LampControl_g_tc_members[2]=
+                {
+
+                    {
+                        (char *)"intensity",/* Member name */
+                        {
+                            0,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"power",/* Member name */
+                        {
+                            1,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }
+                };
+
+                static DDS_TypeCode LampControl_g_tc =
+                {{
+                        DDS_TK_STRUCT, /* Kind */
+                        DDS_BOOLEAN_FALSE, /* Ignored */
+                        -1, /*Ignored*/
+                        (char *)"LampControl", /* Name */
+                        NULL, /* Ignored */      
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        2, /* Number of members */
+                        LampControl_g_tc_members, /* Members */
+                        DDS_VM_NONE, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER,
+                        DDS_BOOLEAN_TRUE, /* _isCopyable */
+                        NULL, /* _sampleAccessInfo: assigned later */
+                        NULL /* _typePlugin: assigned later */
+                    }}; /* Type code for LampControl*/
+
+                if (is_initialized) {
+                    return &LampControl_g_tc;
+                }
+
+                is_initialized = RTI_TRUE;
+
+                LampControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
+
+                LampControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+                LampControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+
+                /* Initialize the values for member annotations. */
+                LampControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
+                LampControl_g_tc_members[0]._annotations._defaultValue._u.float_value = 0.0f;
+                LampControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
+                LampControl_g_tc_members[0]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
+                LampControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
+                LampControl_g_tc_members[0]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
+
+                LampControl_g_tc._data._sampleAccessInfo = sample_access_info();
+                LampControl_g_tc._data._typePlugin = type_plugin_info();    
+
+                return &LampControl_g_tc;
+            }
+
+            static RTIXCdrSampleAccessInfo * sample_access_info()
+            {
+                static RTIBool is_initialized = RTI_FALSE;
+
+                ::LampControl *sample;
+
+                static RTIXCdrMemberAccessInfo LampControl_g_memberAccessInfos[2] =
+                {RTIXCdrMemberAccessInfo_INITIALIZER};
+
+                static RTIXCdrSampleAccessInfo LampControl_g_sampleAccessInfo = 
+                RTIXCdrSampleAccessInfo_INITIALIZER;
+
+                if (is_initialized) {
+                    return (RTIXCdrSampleAccessInfo*) &LampControl_g_sampleAccessInfo;
+                }
+
+                RTIXCdrHeap_allocateStruct(
+                    &sample, 
+                    ::LampControl);
+                if (sample == NULL) {
+                    return NULL;
+                }
+
+                LampControl_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->intensity() - (char *)sample);
+
+                LampControl_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
+
+                LampControl_g_sampleAccessInfo.memberAccessInfos = 
+                LampControl_g_memberAccessInfos;
+
+                {
+                    size_t candidateTypeSize = sizeof(::LampControl);
+
+                    if (candidateTypeSize > RTIXCdrLong_MAX) {
+                        LampControl_g_sampleAccessInfo.typeSize[0] =
+                        RTIXCdrLong_MAX;
+                    } else {
+                        LampControl_g_sampleAccessInfo.typeSize[0] =
+                        (RTIXCdrUnsignedLong) candidateTypeSize;
+                    }
+                }
+
+                LampControl_g_sampleAccessInfo.useGetMemberValueOnlyWithRef =
+                RTI_XCDR_TRUE;
+
+                LampControl_g_sampleAccessInfo.getMemberValuePointerFcn = 
+                interpreter::get_aggregation_value_pointer< ::LampControl >;
+
+                LampControl_g_sampleAccessInfo.languageBinding = 
+                RTI_XCDR_TYPE_BINDING_CPP_11_STL ;
+
+                RTIXCdrHeap_freeStruct(sample);
+                is_initialized = RTI_TRUE;
+                return (RTIXCdrSampleAccessInfo*) &LampControl_g_sampleAccessInfo;
+            }
+            static RTIXCdrTypePlugin * type_plugin_info()
+            {
+                static RTIXCdrTypePlugin LampControl_g_typePlugin = 
+                {
+                    NULL, /* serialize */
+                    NULL, /* serialize_key */
+                    NULL, /* deserialize_sample */
+                    NULL, /* deserialize_key_sample */
+                    NULL, /* skip */
+                    NULL, /* get_serialized_sample_size */
+                    NULL, /* get_serialized_sample_max_size_ex */
+                    NULL, /* get_serialized_key_max_size_ex */
+                    NULL, /* get_serialized_sample_min_size */
+                    NULL, /* serialized_sample_to_key */
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL
+                };
+
+                return &LampControl_g_typePlugin;
+            }
+        }; // native_type_code
+
+        const ::dds::core::xtypes::StructType& dynamic_type< ::LampControl >::get()
+        {
+            return static_cast<const ::dds::core::xtypes::StructType&>(
+                ::rti::core::native_conversions::cast_from_native< ::dds::core::xtypes::DynamicType >(
+                    *(native_type_code< ::LampControl >::get())));
+        }
+
+        template<>
+        struct native_type_code< ::CameraControl > {
+            static DDS_TypeCode * get()
+            {
+                using namespace ::rti::topic::interpreter;
+
+                static RTIBool is_initialized = RTI_FALSE;
+
+                static DDS_TypeCode_Member CameraControl_g_tc_members[6]=
+                {
+
+                    {
+                        (char *)"focus_far",/* Member name */
+                        {
+                            0,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"focus_near",/* Member name */
+                        {
+                            1,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"LED",/* Member name */
+                        {
+                            2,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"power",/* Member name */
+                        {
+                            3,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"zoom_in",/* Member name */
+                        {
+                            4,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"zoom_out",/* Member name */
+                        {
+                            5,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }
+                };
+
+                static DDS_TypeCode CameraControl_g_tc =
+                {{
+                        DDS_TK_STRUCT, /* Kind */
+                        DDS_BOOLEAN_FALSE, /* Ignored */
+                        -1, /*Ignored*/
+                        (char *)"CameraControl", /* Name */
+                        NULL, /* Ignored */      
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        6, /* Number of members */
+                        CameraControl_g_tc_members, /* Members */
+                        DDS_VM_NONE, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER,
+                        DDS_BOOLEAN_TRUE, /* _isCopyable */
+                        NULL, /* _sampleAccessInfo: assigned later */
+                        NULL /* _typePlugin: assigned later */
+                    }}; /* Type code for CameraControl*/
+
+                if (is_initialized) {
+                    return &CameraControl_g_tc;
+                }
+
+                is_initialized = RTI_TRUE;
+
+                CameraControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
+
+                CameraControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                CameraControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                CameraControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                CameraControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                CameraControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                CameraControl_g_tc_members[5]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+
+                /* Initialize the values for member annotations. */
+
+                CameraControl_g_tc._data._sampleAccessInfo = sample_access_info();
+                CameraControl_g_tc._data._typePlugin = type_plugin_info();    
+
+                return &CameraControl_g_tc;
+            }
+
+            static RTIXCdrSampleAccessInfo * sample_access_info()
+            {
+                static RTIBool is_initialized = RTI_FALSE;
+
+                ::CameraControl *sample;
+
+                static RTIXCdrMemberAccessInfo CameraControl_g_memberAccessInfos[6] =
+                {RTIXCdrMemberAccessInfo_INITIALIZER};
+
+                static RTIXCdrSampleAccessInfo CameraControl_g_sampleAccessInfo = 
+                RTIXCdrSampleAccessInfo_INITIALIZER;
+
+                if (is_initialized) {
+                    return (RTIXCdrSampleAccessInfo*) &CameraControl_g_sampleAccessInfo;
+                }
+
+                RTIXCdrHeap_allocateStruct(
+                    &sample, 
+                    ::CameraControl);
+                if (sample == NULL) {
+                    return NULL;
+                }
+
+                CameraControl_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->focus_far() - (char *)sample);
+
+                CameraControl_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->focus_near() - (char *)sample);
+
+                CameraControl_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->LED() - (char *)sample);
+
+                CameraControl_g_memberAccessInfos[3].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
+
+                CameraControl_g_memberAccessInfos[4].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->zoom_in() - (char *)sample);
+
+                CameraControl_g_memberAccessInfos[5].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->zoom_out() - (char *)sample);
+
+                CameraControl_g_sampleAccessInfo.memberAccessInfos = 
+                CameraControl_g_memberAccessInfos;
+
+                {
+                    size_t candidateTypeSize = sizeof(::CameraControl);
+
+                    if (candidateTypeSize > RTIXCdrLong_MAX) {
+                        CameraControl_g_sampleAccessInfo.typeSize[0] =
+                        RTIXCdrLong_MAX;
+                    } else {
+                        CameraControl_g_sampleAccessInfo.typeSize[0] =
+                        (RTIXCdrUnsignedLong) candidateTypeSize;
+                    }
+                }
+
+                CameraControl_g_sampleAccessInfo.useGetMemberValueOnlyWithRef =
+                RTI_XCDR_TRUE;
+
+                CameraControl_g_sampleAccessInfo.getMemberValuePointerFcn = 
+                interpreter::get_aggregation_value_pointer< ::CameraControl >;
+
+                CameraControl_g_sampleAccessInfo.languageBinding = 
+                RTI_XCDR_TYPE_BINDING_CPP_11_STL ;
+
+                RTIXCdrHeap_freeStruct(sample);
+                is_initialized = RTI_TRUE;
+                return (RTIXCdrSampleAccessInfo*) &CameraControl_g_sampleAccessInfo;
+            }
+            static RTIXCdrTypePlugin * type_plugin_info()
+            {
+                static RTIXCdrTypePlugin CameraControl_g_typePlugin = 
+                {
+                    NULL, /* serialize */
+                    NULL, /* serialize_key */
+                    NULL, /* deserialize_sample */
+                    NULL, /* deserialize_key_sample */
+                    NULL, /* skip */
+                    NULL, /* get_serialized_sample_size */
+                    NULL, /* get_serialized_sample_max_size_ex */
+                    NULL, /* get_serialized_key_max_size_ex */
+                    NULL, /* get_serialized_sample_min_size */
+                    NULL, /* serialized_sample_to_key */
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL
+                };
+
+                return &CameraControl_g_typePlugin;
+            }
+        }; // native_type_code
+
+        const ::dds::core::xtypes::StructType& dynamic_type< ::CameraControl >::get()
+        {
+            return static_cast<const ::dds::core::xtypes::StructType&>(
+                ::rti::core::native_conversions::cast_from_native< ::dds::core::xtypes::DynamicType >(
+                    *(native_type_code< ::CameraControl >::get())));
+        }
+
+        template<>
+        struct native_type_code< ::PanAndTiltControl > {
+            static DDS_TypeCode * get()
+            {
+                using namespace ::rti::topic::interpreter;
+
+                static RTIBool is_initialized = RTI_FALSE;
+
+                static DDS_TypeCode_Member PanAndTiltControl_g_tc_members[5]=
+                {
+
+                    {
+                        (char *)"pan_left",/* Member name */
+                        {
+                            0,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"pan_right",/* Member name */
+                        {
+                            1,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"power",/* Member name */
+                        {
+                            2,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"tilt_down",/* Member name */
+                        {
+                            3,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"tilt_up",/* Member name */
+                        {
+                            4,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }
+                };
+
+                static DDS_TypeCode PanAndTiltControl_g_tc =
+                {{
+                        DDS_TK_STRUCT, /* Kind */
+                        DDS_BOOLEAN_FALSE, /* Ignored */
+                        -1, /*Ignored*/
+                        (char *)"PanAndTiltControl", /* Name */
+                        NULL, /* Ignored */      
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        5, /* Number of members */
+                        PanAndTiltControl_g_tc_members, /* Members */
+                        DDS_VM_NONE, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER,
+                        DDS_BOOLEAN_TRUE, /* _isCopyable */
+                        NULL, /* _sampleAccessInfo: assigned later */
+                        NULL /* _typePlugin: assigned later */
+                    }}; /* Type code for PanAndTiltControl*/
+
+                if (is_initialized) {
+                    return &PanAndTiltControl_g_tc;
+                }
+
+                is_initialized = RTI_TRUE;
+
+                PanAndTiltControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
+
+                PanAndTiltControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                PanAndTiltControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                PanAndTiltControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                PanAndTiltControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                PanAndTiltControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+
+                /* Initialize the values for member annotations. */
+
+                PanAndTiltControl_g_tc._data._sampleAccessInfo = sample_access_info();
+                PanAndTiltControl_g_tc._data._typePlugin = type_plugin_info();    
+
+                return &PanAndTiltControl_g_tc;
+            }
+
+            static RTIXCdrSampleAccessInfo * sample_access_info()
+            {
+                static RTIBool is_initialized = RTI_FALSE;
+
+                ::PanAndTiltControl *sample;
+
+                static RTIXCdrMemberAccessInfo PanAndTiltControl_g_memberAccessInfos[5] =
+                {RTIXCdrMemberAccessInfo_INITIALIZER};
+
+                static RTIXCdrSampleAccessInfo PanAndTiltControl_g_sampleAccessInfo = 
+                RTIXCdrSampleAccessInfo_INITIALIZER;
+
+                if (is_initialized) {
+                    return (RTIXCdrSampleAccessInfo*) &PanAndTiltControl_g_sampleAccessInfo;
+                }
+
+                RTIXCdrHeap_allocateStruct(
+                    &sample, 
+                    ::PanAndTiltControl);
+                if (sample == NULL) {
+                    return NULL;
+                }
+
+                PanAndTiltControl_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->pan_left() - (char *)sample);
+
+                PanAndTiltControl_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->pan_right() - (char *)sample);
+
+                PanAndTiltControl_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
+
+                PanAndTiltControl_g_memberAccessInfos[3].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->tilt_down() - (char *)sample);
+
+                PanAndTiltControl_g_memberAccessInfos[4].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->tilt_up() - (char *)sample);
+
+                PanAndTiltControl_g_sampleAccessInfo.memberAccessInfos = 
+                PanAndTiltControl_g_memberAccessInfos;
+
+                {
+                    size_t candidateTypeSize = sizeof(::PanAndTiltControl);
+
+                    if (candidateTypeSize > RTIXCdrLong_MAX) {
+                        PanAndTiltControl_g_sampleAccessInfo.typeSize[0] =
+                        RTIXCdrLong_MAX;
+                    } else {
+                        PanAndTiltControl_g_sampleAccessInfo.typeSize[0] =
+                        (RTIXCdrUnsignedLong) candidateTypeSize;
+                    }
+                }
+
+                PanAndTiltControl_g_sampleAccessInfo.useGetMemberValueOnlyWithRef =
+                RTI_XCDR_TRUE;
+
+                PanAndTiltControl_g_sampleAccessInfo.getMemberValuePointerFcn = 
+                interpreter::get_aggregation_value_pointer< ::PanAndTiltControl >;
+
+                PanAndTiltControl_g_sampleAccessInfo.languageBinding = 
+                RTI_XCDR_TYPE_BINDING_CPP_11_STL ;
+
+                RTIXCdrHeap_freeStruct(sample);
+                is_initialized = RTI_TRUE;
+                return (RTIXCdrSampleAccessInfo*) &PanAndTiltControl_g_sampleAccessInfo;
+            }
+            static RTIXCdrTypePlugin * type_plugin_info()
+            {
+                static RTIXCdrTypePlugin PanAndTiltControl_g_typePlugin = 
+                {
+                    NULL, /* serialize */
+                    NULL, /* serialize_key */
+                    NULL, /* deserialize_sample */
+                    NULL, /* deserialize_key_sample */
+                    NULL, /* skip */
+                    NULL, /* get_serialized_sample_size */
+                    NULL, /* get_serialized_sample_max_size_ex */
+                    NULL, /* get_serialized_key_max_size_ex */
+                    NULL, /* get_serialized_sample_min_size */
+                    NULL, /* serialized_sample_to_key */
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL
+                };
+
+                return &PanAndTiltControl_g_typePlugin;
+            }
+        }; // native_type_code
+
+        const ::dds::core::xtypes::StructType& dynamic_type< ::PanAndTiltControl >::get()
+        {
+            return static_cast<const ::dds::core::xtypes::StructType&>(
+                ::rti::core::native_conversions::cast_from_native< ::dds::core::xtypes::DynamicType >(
+                    *(native_type_code< ::PanAndTiltControl >::get())));
         }
     }
 }
 
 namespace dds { 
     namespace topic {
-        void topic_type_support< ::PLCcontrol >:: register_type(
+        void topic_type_support< ::Power >:: register_type(
             ::dds::domain::DomainParticipant& participant,
             const std::string& type_name) 
         {
@@ -350,18 +1132,18 @@ namespace dds {
             ::rti::domain::register_type_plugin(
                 participant,
                 type_name,
-                ::PLCcontrolPlugin_new,
-                ::PLCcontrolPlugin_delete);
+                ::PowerPlugin_new,
+                ::PowerPlugin_delete);
         }
 
-        std::vector<char>& topic_type_support< ::PLCcontrol >::to_cdr_buffer(
+        std::vector<char>& topic_type_support< ::Power >::to_cdr_buffer(
             std::vector<char>& buffer, 
-            const ::PLCcontrol& sample,
+            const ::Power& sample,
             ::dds::core::policy::DataRepresentationId representation)
         {
             // First get the length of the buffer
             unsigned int length = 0;
-            RTIBool ok = PLCcontrolPlugin_serialize_to_cdr_buffer(
+            RTIBool ok = PowerPlugin_serialize_to_cdr_buffer(
                 NULL, 
                 &length,
                 &sample,
@@ -372,7 +1154,7 @@ namespace dds {
 
             // Create a vector with that size and copy the cdr buffer into it
             buffer.resize(length);
-            ok = PLCcontrolPlugin_serialize_to_cdr_buffer(
+            ok = PowerPlugin_serialize_to_cdr_buffer(
                 &buffer[0], 
                 &length, 
                 &sample,
@@ -384,29 +1166,235 @@ namespace dds {
             return buffer;
         }
 
-        void topic_type_support< ::PLCcontrol >::from_cdr_buffer(::PLCcontrol& sample, 
+        void topic_type_support< ::Power >::from_cdr_buffer(::Power& sample, 
         const std::vector<char>& buffer)
         {
 
-            RTIBool ok  = PLCcontrolPlugin_deserialize_from_cdr_buffer(
+            RTIBool ok  = PowerPlugin_deserialize_from_cdr_buffer(
                 &sample, 
                 &buffer[0], 
                 static_cast<unsigned int>(buffer.size()));
             ::rti::core::check_return_code(ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
-            "Failed to create ::PLCcontrol from cdr buffer");
+            "Failed to create ::Power from cdr buffer");
         }
 
-        void topic_type_support< ::PLCcontrol >::reset_sample(::PLCcontrol& sample) 
+        void topic_type_support< ::Power >::reset_sample(::Power& sample) 
         {
-            sample.PLCid(0);
-            sample.count_r(0);
-            sample.value_r(0);
-            sample.value_rw(0);
+            sample.CMD(0);
+            sample.ON(0);
         }
 
-        void topic_type_support< ::PLCcontrol >::allocate_sample(::PLCcontrol& sample, int, int) 
+        void topic_type_support< ::Power >::allocate_sample(::Power& sample, int, int) 
         {
             RTIOsapiUtility_unusedParameter(sample);
+        }
+        void topic_type_support< ::LampControl >:: register_type(
+            ::dds::domain::DomainParticipant& participant,
+            const std::string& type_name) 
+        {
+
+            ::rti::domain::register_type_plugin(
+                participant,
+                type_name,
+                ::LampControlPlugin_new,
+                ::LampControlPlugin_delete);
+        }
+
+        std::vector<char>& topic_type_support< ::LampControl >::to_cdr_buffer(
+            std::vector<char>& buffer, 
+            const ::LampControl& sample,
+            ::dds::core::policy::DataRepresentationId representation)
+        {
+            // First get the length of the buffer
+            unsigned int length = 0;
+            RTIBool ok = LampControlPlugin_serialize_to_cdr_buffer(
+                NULL, 
+                &length,
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to calculate cdr buffer size");
+
+            // Create a vector with that size and copy the cdr buffer into it
+            buffer.resize(length);
+            ok = LampControlPlugin_serialize_to_cdr_buffer(
+                &buffer[0], 
+                &length, 
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to copy cdr buffer");
+
+            return buffer;
+        }
+
+        void topic_type_support< ::LampControl >::from_cdr_buffer(::LampControl& sample, 
+        const std::vector<char>& buffer)
+        {
+
+            RTIBool ok  = LampControlPlugin_deserialize_from_cdr_buffer(
+                &sample, 
+                &buffer[0], 
+                static_cast<unsigned int>(buffer.size()));
+            ::rti::core::check_return_code(ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+            "Failed to create ::LampControl from cdr buffer");
+        }
+
+        void topic_type_support< ::LampControl >::reset_sample(::LampControl& sample) 
+        {
+            sample.intensity(0.0f);
+            ::rti::topic::reset_sample(sample.power());
+        }
+
+        void topic_type_support< ::LampControl >::allocate_sample(::LampControl& sample, int, int) 
+        {
+            ::rti::topic::allocate_sample(sample.power(),  -1, -1);
+        }
+        void topic_type_support< ::CameraControl >:: register_type(
+            ::dds::domain::DomainParticipant& participant,
+            const std::string& type_name) 
+        {
+
+            ::rti::domain::register_type_plugin(
+                participant,
+                type_name,
+                ::CameraControlPlugin_new,
+                ::CameraControlPlugin_delete);
+        }
+
+        std::vector<char>& topic_type_support< ::CameraControl >::to_cdr_buffer(
+            std::vector<char>& buffer, 
+            const ::CameraControl& sample,
+            ::dds::core::policy::DataRepresentationId representation)
+        {
+            // First get the length of the buffer
+            unsigned int length = 0;
+            RTIBool ok = CameraControlPlugin_serialize_to_cdr_buffer(
+                NULL, 
+                &length,
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to calculate cdr buffer size");
+
+            // Create a vector with that size and copy the cdr buffer into it
+            buffer.resize(length);
+            ok = CameraControlPlugin_serialize_to_cdr_buffer(
+                &buffer[0], 
+                &length, 
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to copy cdr buffer");
+
+            return buffer;
+        }
+
+        void topic_type_support< ::CameraControl >::from_cdr_buffer(::CameraControl& sample, 
+        const std::vector<char>& buffer)
+        {
+
+            RTIBool ok  = CameraControlPlugin_deserialize_from_cdr_buffer(
+                &sample, 
+                &buffer[0], 
+                static_cast<unsigned int>(buffer.size()));
+            ::rti::core::check_return_code(ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+            "Failed to create ::CameraControl from cdr buffer");
+        }
+
+        void topic_type_support< ::CameraControl >::reset_sample(::CameraControl& sample) 
+        {
+            ::rti::topic::reset_sample(sample.focus_far());
+            ::rti::topic::reset_sample(sample.focus_near());
+            ::rti::topic::reset_sample(sample.LED());
+            ::rti::topic::reset_sample(sample.power());
+            ::rti::topic::reset_sample(sample.zoom_in());
+            ::rti::topic::reset_sample(sample.zoom_out());
+        }
+
+        void topic_type_support< ::CameraControl >::allocate_sample(::CameraControl& sample, int, int) 
+        {
+            ::rti::topic::allocate_sample(sample.focus_far(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.focus_near(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.LED(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.power(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.zoom_in(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.zoom_out(),  -1, -1);
+        }
+        void topic_type_support< ::PanAndTiltControl >:: register_type(
+            ::dds::domain::DomainParticipant& participant,
+            const std::string& type_name) 
+        {
+
+            ::rti::domain::register_type_plugin(
+                participant,
+                type_name,
+                ::PanAndTiltControlPlugin_new,
+                ::PanAndTiltControlPlugin_delete);
+        }
+
+        std::vector<char>& topic_type_support< ::PanAndTiltControl >::to_cdr_buffer(
+            std::vector<char>& buffer, 
+            const ::PanAndTiltControl& sample,
+            ::dds::core::policy::DataRepresentationId representation)
+        {
+            // First get the length of the buffer
+            unsigned int length = 0;
+            RTIBool ok = PanAndTiltControlPlugin_serialize_to_cdr_buffer(
+                NULL, 
+                &length,
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to calculate cdr buffer size");
+
+            // Create a vector with that size and copy the cdr buffer into it
+            buffer.resize(length);
+            ok = PanAndTiltControlPlugin_serialize_to_cdr_buffer(
+                &buffer[0], 
+                &length, 
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to copy cdr buffer");
+
+            return buffer;
+        }
+
+        void topic_type_support< ::PanAndTiltControl >::from_cdr_buffer(::PanAndTiltControl& sample, 
+        const std::vector<char>& buffer)
+        {
+
+            RTIBool ok  = PanAndTiltControlPlugin_deserialize_from_cdr_buffer(
+                &sample, 
+                &buffer[0], 
+                static_cast<unsigned int>(buffer.size()));
+            ::rti::core::check_return_code(ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+            "Failed to create ::PanAndTiltControl from cdr buffer");
+        }
+
+        void topic_type_support< ::PanAndTiltControl >::reset_sample(::PanAndTiltControl& sample) 
+        {
+            ::rti::topic::reset_sample(sample.pan_left());
+            ::rti::topic::reset_sample(sample.pan_right());
+            ::rti::topic::reset_sample(sample.power());
+            ::rti::topic::reset_sample(sample.tilt_down());
+            ::rti::topic::reset_sample(sample.tilt_up());
+        }
+
+        void topic_type_support< ::PanAndTiltControl >::allocate_sample(::PanAndTiltControl& sample, int, int) 
+        {
+            ::rti::topic::allocate_sample(sample.pan_left(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.pan_right(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.power(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.tilt_down(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.tilt_up(),  -1, -1);
         }
     }
 }  
