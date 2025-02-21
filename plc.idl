@@ -1,7 +1,7 @@
 @appendable
 struct Power {
-    boolean CMD;
-    boolean ON;
+    octet CMD;
+    octet On;
 };
 
 struct LampControl {

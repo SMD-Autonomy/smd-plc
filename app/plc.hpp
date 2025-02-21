@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493951881_hpp
-#define plc_493951881_hpp
+#ifndef plc_493951877_hpp
+#define plc_493951877_hpp
 
 #include <iosfwd>
 
@@ -68,32 +68,32 @@ class NDDSUSERDllExport Power {
 
     Power();
 
-    Power(bool CMD_,bool ON_);
+    Power(uint8_t CMD_,uint8_t On_);
 
-    bool& CMD() noexcept {
+    uint8_t& CMD() noexcept {
         return m_CMD_;
     }
 
-    const bool& CMD() const noexcept {
+    const uint8_t& CMD() const noexcept {
         return m_CMD_;
     }
 
-    void CMD(bool value) {
+    void CMD(uint8_t value) {
 
         m_CMD_ = value;
     }
 
-    bool& ON() noexcept {
-        return m_ON_;
+    uint8_t& On() noexcept {
+        return m_On_;
     }
 
-    const bool& ON() const noexcept {
-        return m_ON_;
+    const uint8_t& On() const noexcept {
+        return m_On_;
     }
 
-    void ON(bool value) {
+    void On(uint8_t value) {
 
-        m_ON_ = value;
+        m_On_ = value;
     }
 
     bool operator == (const Power& other_) const;
@@ -103,8 +103,8 @@ class NDDSUSERDllExport Power {
 
   private:
 
-    bool m_CMD_;
-    bool m_ON_;
+    uint8_t m_CMD_;
+    uint8_t m_On_;
 
 };
 
@@ -622,5 +622,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493951881_hpp
+#endif // plc_493951877_hpp
 

@@ -51,7 +51,7 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count)
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.LED().CMD(static_cast<bool>(true));
+        data.LED().CMD(1);
         std::cout << "Writing ::CameraControl Status" << std::endl;
 
         writer.write(data);
@@ -84,7 +84,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count)
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.power().CMD(static_cast<bool>(true));
+        data.power().CMD(1);
         std::cout << "Writing ::LampControl" << std::endl;
 
         writer.write(data);
@@ -117,7 +117,7 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count)
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.power().CMD(static_cast<bool>(true));
+        data.power().CMD(1);
         std::cout << "Writing ::PanAndTiltControl " << std::endl;
 
         writer.write(data);

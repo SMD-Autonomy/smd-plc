@@ -30,27 +30,27 @@ or consult the Code Generator User's Manual.
 
 Power::Power() :
     m_CMD_ (0) ,
-    m_ON_ (0)  {
+    m_On_ (0)  {
 
 }   
 
-Power::Power (bool CMD_,bool ON_):
+Power::Power (uint8_t CMD_,uint8_t On_):
     m_CMD_(CMD_), 
-    m_ON_(ON_) {
+    m_On_(On_) {
 }
 
 void Power::swap(Power& other_)  noexcept 
 {
     using std::swap;
     swap(m_CMD_, other_.m_CMD_);
-    swap(m_ON_, other_.m_ON_);
+    swap(m_On_, other_.m_On_);
 }  
 
 bool Power::operator == (const Power& other_) const {
     if (m_CMD_ != other_.m_CMD_) {
         return false;
     }
-    if (m_ON_ != other_.m_ON_) {
+    if (m_On_ != other_.m_On_) {
         return false;
     }
     return true;
@@ -64,8 +64,8 @@ std::ostream& operator << (std::ostream& o,const Power& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
-    o << "CMD: " << sample.CMD ()<<", ";
-    o << "ON: " << sample.ON ();
+    o << "CMD: " << std::hex<<(int) sample.CMD ()<<", ";
+    o << "On: " << std::hex<<(int) sample.On ();
     o <<"]";
     return o;
 }
@@ -282,7 +282,7 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"ON",/* Member name */
+                        (char *)"On",/* Member name */
                         {
                             1,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -328,14 +328,22 @@ namespace rti {
 
                 Power_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                Power_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::interpreter::initialize_bool_typecode();
-                Power_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::interpreter::initialize_bool_typecode();
+                Power_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
+                Power_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
 
                 /* Initialize the values for member annotations. */
-                Power_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_BOOLEAN;
-                Power_g_tc_members[0]._annotations._defaultValue._u.boolean_value = 0;
-                Power_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_BOOLEAN;
-                Power_g_tc_members[1]._annotations._defaultValue._u.boolean_value = 0;
+                Power_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
+                Power_g_tc_members[0]._annotations._defaultValue._u.octet_value = 0;
+                Power_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
+                Power_g_tc_members[0]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
+                Power_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
+                Power_g_tc_members[0]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
+                Power_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
+                Power_g_tc_members[1]._annotations._defaultValue._u.octet_value = 0;
+                Power_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
+                Power_g_tc_members[1]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
+                Power_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
+                Power_g_tc_members[1]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
 
                 Power_g_tc._data._sampleAccessInfo = sample_access_info();
                 Power_g_tc._data._typePlugin = type_plugin_info();    
@@ -370,7 +378,7 @@ namespace rti {
                 (RTIXCdrUnsignedLong) ((char *)&sample->CMD() - (char *)sample);
 
                 Power_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->ON() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->On() - (char *)sample);
 
                 Power_g_sampleAccessInfo.memberAccessInfos = 
                 Power_g_memberAccessInfos;
@@ -1181,7 +1189,7 @@ namespace dds {
         void topic_type_support< ::Power >::reset_sample(::Power& sample) 
         {
             sample.CMD(0);
-            sample.ON(0);
+            sample.On(0);
         }
 
         void topic_type_support< ::Power >::allocate_sample(::Power& sample, int, int) 
