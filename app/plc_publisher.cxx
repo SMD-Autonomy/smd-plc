@@ -11,6 +11,8 @@
 */
 
 #include <iostream>
+#include <thread>
+#include <vector>
 
 #include <dds/pub/ddspub.hpp>
 #include <rti/util/util.hpp>      // for sleep()
@@ -129,7 +131,6 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count)
 
 int main(int argc, char *argv[])
 {
-
     using namespace application;
 
     // Parse arguments and handle control-C
@@ -144,31 +145,38 @@ int main(int argc, char *argv[])
     // Sets Connext verbosity to help debugging
     rti::config::Logger::instance().verbosity(arguments.verbosity);
 
-    try {
-        camera_publisher(arguments.domain_id, arguments.sample_count);
-    } catch (const std::exception& ex) {
-        // This will catch DDS exceptions
-        std::cerr << "Exception in camera_publisher(): " << ex.what()
-        << std::endl;
-        return EXIT_FAILURE;
+    std::vector<std::thread> threads;
+    std::vector<std::exception_ptr> exceptions(3);
+
+    // Lambda function to run a publisher and catch exceptions
+    auto run_publisher = [&](auto publisher_func, int index) {
+        try {
+            publisher_func(arguments.domain_id, arguments.sample_count);
+        } catch (...) {
+            exceptions[index] = std::current_exception();
+        }
+    };
+
+    // Create threads for each publisher
+    threads.emplace_back(run_publisher, camera_publisher, 0);
+    threads.emplace_back(run_publisher, lamp_publisher, 1);
+    threads.emplace_back(run_publisher, panandtilt_publisher, 2);
+
+    // Wait for all threads to complete
+    for (auto& thread : threads) {
+        thread.join();
     }
 
-    try {
-        lamp_publisher(arguments.domain_id, arguments.sample_count);
-    } catch (const std::exception& ex) {
-        // This will catch DDS exceptions
-        std::cerr << "Exception in lamp_publisher(): " << ex.what()
-        << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    try {
-        panandtilt_publisher(arguments.domain_id, arguments.sample_count);
-    } catch (const std::exception& ex) {
-        // This will catch DDS exceptions
-        std::cerr << "Exception in panandtilt_publisher(): " << ex.what()
-        << std::endl;
-        return EXIT_FAILURE;
+    // Check for exceptions
+    for (int i = 0; i < 3; ++i) {
+        if (exceptions[i]) {
+            try {
+                std::rethrow_exception(exceptions[i]);
+            } catch (const std::exception& ex) {
+                std::cerr << "Exception in publisher " << i << ": " << ex.what() << std::endl;
+                return EXIT_FAILURE;
+            }
+        }
     }
 
     // Releases the memory used by the participant factory.  Optional at
