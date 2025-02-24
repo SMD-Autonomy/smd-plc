@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plcPlugin_493951877_h
-#define plcPlugin_493951877_h
+#ifndef plcPlugin_493951772_h
+#define plcPlugin_493951772_h
 
 #include "plc.hpp"
 
@@ -28,166 +28,29 @@ struct RTICdrStream;
 #define NDDSUSERDllExport __declspec(dllexport)
 #endif
 
-#define PowerPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
-
-#define PowerPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
-#define PowerPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
-
-#define PowerPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
-#define PowerPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
-
-/* --------------------------------------------------------------------------------------
-Support functions:
-* -------------------------------------------------------------------------------------- */
-
-NDDSUSERDllExport extern Power*
-PowerPluginSupport_create_data_w_params(
-    const struct DDS_TypeAllocationParams_t * alloc_params);
-
-NDDSUSERDllExport extern Power*
-PowerPluginSupport_create_data_ex(RTIBool allocate_pointers);
-
-NDDSUSERDllExport extern Power*
-PowerPluginSupport_create_data(void);
-
-NDDSUSERDllExport extern RTIBool 
-PowerPluginSupport_copy_data(
-    Power *out,
-    const Power *in);
-
-NDDSUSERDllExport extern void 
-PowerPluginSupport_destroy_data_w_params(
-    Power *sample,
-    const struct DDS_TypeDeallocationParams_t * dealloc_params);
-
-NDDSUSERDllExport extern void 
-PowerPluginSupport_destroy_data_ex(
-    Power *sample,RTIBool deallocate_pointers);
-
-NDDSUSERDllExport extern void 
-PowerPluginSupport_destroy_data(
-    Power *sample);
-
-NDDSUSERDllExport extern void 
-PowerPluginSupport_print_data(
-    const Power *sample,
-    const char *desc,
-    unsigned int indent);
-
-/* ----------------------------------------------------------------------------
-Callback functions:
-* ---------------------------------------------------------------------------- */
-
-NDDSUSERDllExport extern PRESTypePluginParticipantData 
-PowerPlugin_on_participant_attached(
-    void *registration_data, 
-    const struct PRESTypePluginParticipantInfo *participant_info,
-    RTIBool top_level_registration, 
-    void *container_plugin_context,
-    RTICdrTypeCode *typeCode);
-
-NDDSUSERDllExport extern void 
-PowerPlugin_on_participant_detached(
-    PRESTypePluginParticipantData participant_data);
-
-NDDSUSERDllExport extern PRESTypePluginEndpointData 
-PowerPlugin_on_endpoint_attached(
-    PRESTypePluginParticipantData participant_data,
-    const struct PRESTypePluginEndpointInfo *endpoint_info,
-    RTIBool top_level_registration, 
-    void *container_plugin_context);
-
-NDDSUSERDllExport extern void 
-PowerPlugin_on_endpoint_detached(
-    PRESTypePluginEndpointData endpoint_data);
-
-NDDSUSERDllExport extern void    
-PowerPlugin_return_sample(
-    PRESTypePluginEndpointData endpoint_data,
-    Power *sample,
-    void *handle);    
-
-NDDSUSERDllExport extern RTIBool 
-PowerPlugin_copy_sample(
-    PRESTypePluginEndpointData endpoint_data,
-    Power *out,
-    const Power *in);
-
-/* ----------------------------------------------------------------------------
-(De)Serialize functions:
-* ------------------------------------------------------------------------- */
-
-NDDSUSERDllExport extern RTIBool
-PowerPlugin_serialize_to_cdr_buffer(
-    char * buffer,
-    unsigned int * length,
-    const Power *sample,
-    ::dds::core::policy::DataRepresentationId representation
-    = ::dds::core::policy::DataRepresentation::xcdr()); 
-
-NDDSUSERDllExport extern RTIBool 
-PowerPlugin_deserialize(
-    PRESTypePluginEndpointData endpoint_data,
-    Power **sample, 
-    RTIBool * drop_sample,
-    struct RTICdrStream *cdrStream,
-    RTIBool deserialize_encapsulation,
-    RTIBool deserialize_sample, 
-    void *endpoint_plugin_qos);
-
-NDDSUSERDllExport extern RTIBool
-PowerPlugin_deserialize_from_cdr_buffer(
-    Power *sample,
-    const char * buffer,
-    unsigned int length);    
-
-NDDSUSERDllExport extern unsigned int 
-PowerPlugin_get_serialized_sample_max_size(
-    PRESTypePluginEndpointData endpoint_data,
-    RTIBool include_encapsulation,
-    RTIEncapsulationId encapsulation_id,
-    unsigned int current_alignment);
-
-/* --------------------------------------------------------------------------------------
-Key Management functions:
-* -------------------------------------------------------------------------------------- */
-NDDSUSERDllExport extern PRESTypePluginKeyKind 
-PowerPlugin_get_key_kind(void);
-
-NDDSUSERDllExport extern unsigned int 
-PowerPlugin_get_serialized_key_max_size(
-    PRESTypePluginEndpointData endpoint_data,
-    RTIBool include_encapsulation,
-    RTIEncapsulationId encapsulation_id,
-    unsigned int current_alignment);
-
-NDDSUSERDllExport extern unsigned int 
-PowerPlugin_get_serialized_key_max_size_for_keyhash(
-    PRESTypePluginEndpointData endpoint_data,
-    RTIEncapsulationId encapsulation_id,
-    unsigned int current_alignment);
-
-NDDSUSERDllExport extern RTIBool 
-PowerPlugin_deserialize_key(
-    PRESTypePluginEndpointData endpoint_data,
-    Power ** sample,
-    RTIBool * drop_sample,
-    struct RTICdrStream *cdrStream,
-    RTIBool deserialize_encapsulation,
-    RTIBool deserialize_key,
-    void *endpoint_plugin_qos);
-
-/* Plugin Functions */
-NDDSUSERDllExport extern struct PRESTypePlugin*
-PowerPlugin_new(void);
-
-NDDSUSERDllExport extern void
-PowerPlugin_delete(struct PRESTypePlugin *);
+/* The type used to store keys for instances of type struct
+* AnotherSimple.
+*
+* By default, this type is struct LampControl
+* itself. However, if for some reason this choice is not practical for your
+* system (e.g. if sizeof(struct LampControl)
+* is very large), you may redefine this typedef in terms of another type of
+* your choosing. HOWEVER, if you define the KeyHolder type to be something
+* other than struct AnotherSimple, the
+* following restriction applies: the key of struct
+* LampControl must consist of a
+* single field of your redefined KeyHolder type and that field must be the
+* first field in struct LampControl.
+*/
+typedef class LampControl LampControlKeyHolder;
 
 #define LampControlPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
 
 #define LampControlPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
 #define LampControlPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
+
+#define LampControlPlugin_get_key PRESTypePluginDefaultEndpointData_getKey 
+#define LampControlPlugin_return_key PRESTypePluginDefaultEndpointData_returnKey
 
 #define LampControlPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
 #define LampControlPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
@@ -229,6 +92,20 @@ LampControlPluginSupport_print_data(
     const LampControl *sample,
     const char *desc,
     unsigned int indent);
+
+NDDSUSERDllExport extern LampControl*
+LampControlPluginSupport_create_key_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern LampControl*
+LampControlPluginSupport_create_key(void);
+
+NDDSUSERDllExport extern void 
+LampControlPluginSupport_destroy_key_ex(
+    LampControlKeyHolder *key,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+LampControlPluginSupport_destroy_key(
+    LampControlKeyHolder *key);
 
 /* ----------------------------------------------------------------------------
 Callback functions:
@@ -333,6 +210,26 @@ LampControlPlugin_deserialize_key(
     RTIBool deserialize_key,
     void *endpoint_plugin_qos);
 
+NDDSUSERDllExport extern RTIBool 
+LampControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    LampControlKeyHolder *key, 
+    const LampControl *instance);
+
+NDDSUSERDllExport extern RTIBool 
+LampControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    LampControl *instance, 
+    const LampControlKeyHolder *key);
+
+NDDSUSERDllExport extern RTIBool 
+LampControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos); 
+
 /* Plugin Functions */
 NDDSUSERDllExport extern struct PRESTypePlugin*
 LampControlPlugin_new(void);
@@ -340,10 +237,29 @@ LampControlPlugin_new(void);
 NDDSUSERDllExport extern void
 LampControlPlugin_delete(struct PRESTypePlugin *);
 
+/* The type used to store keys for instances of type struct
+* AnotherSimple.
+*
+* By default, this type is struct CameraControl
+* itself. However, if for some reason this choice is not practical for your
+* system (e.g. if sizeof(struct CameraControl)
+* is very large), you may redefine this typedef in terms of another type of
+* your choosing. HOWEVER, if you define the KeyHolder type to be something
+* other than struct AnotherSimple, the
+* following restriction applies: the key of struct
+* CameraControl must consist of a
+* single field of your redefined KeyHolder type and that field must be the
+* first field in struct CameraControl.
+*/
+typedef class CameraControl CameraControlKeyHolder;
+
 #define CameraControlPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
 
 #define CameraControlPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
 #define CameraControlPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
+
+#define CameraControlPlugin_get_key PRESTypePluginDefaultEndpointData_getKey 
+#define CameraControlPlugin_return_key PRESTypePluginDefaultEndpointData_returnKey
 
 #define CameraControlPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
 #define CameraControlPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
@@ -385,6 +301,20 @@ CameraControlPluginSupport_print_data(
     const CameraControl *sample,
     const char *desc,
     unsigned int indent);
+
+NDDSUSERDllExport extern CameraControl*
+CameraControlPluginSupport_create_key_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern CameraControl*
+CameraControlPluginSupport_create_key(void);
+
+NDDSUSERDllExport extern void 
+CameraControlPluginSupport_destroy_key_ex(
+    CameraControlKeyHolder *key,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+CameraControlPluginSupport_destroy_key(
+    CameraControlKeyHolder *key);
 
 /* ----------------------------------------------------------------------------
 Callback functions:
@@ -488,6 +418,26 @@ CameraControlPlugin_deserialize_key(
     RTIBool deserialize_encapsulation,
     RTIBool deserialize_key,
     void *endpoint_plugin_qos);
+
+NDDSUSERDllExport extern RTIBool 
+CameraControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    CameraControlKeyHolder *key, 
+    const CameraControl *instance);
+
+NDDSUSERDllExport extern RTIBool 
+CameraControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    CameraControl *instance, 
+    const CameraControlKeyHolder *key);
+
+NDDSUSERDllExport extern RTIBool 
+CameraControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos); 
 
 /* Plugin Functions */
 NDDSUSERDllExport extern struct PRESTypePlugin*
@@ -659,5 +609,5 @@ PanAndTiltControlPlugin_delete(struct PRESTypePlugin *);
 #define NDDSUSERDllExport
 #endif
 
-#endif /* plcPlugin_493951877_h */
+#endif /* plcPlugin_493951772_h */
 

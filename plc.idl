@@ -1,32 +1,25 @@
 @appendable
-struct Power {
-    octet CMD;
-    octet On;
-};
-
 struct LampControl {
 
+    @key uint32 lampID;
     float intensity;
-    Power power;
+    boolean power;
 };
 
 struct CameraControl {
 
-    Power focus_far;
-    Power focus_near;
-    Power LED;
-    Power power;
-    Power zoom_in;
-    Power zoom_out;
+    @key uint32 cameraId;
+    boolean	power;
+    boolean	light;
+    float focus;
+    float zoom;
 
 };
 
 struct PanAndTiltControl {
 
-    Power pan_left;
-    Power pan_right;
-    Power power;
-    Power tilt_down;
-    Power tilt_up;
+    float x;
+    float y;
+    float z;
     
 };

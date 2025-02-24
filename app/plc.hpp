@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493951877_hpp
-#define plc_493951877_hpp
+#ifndef plc_493951772_hpp
+#define plc_493951772_hpp
 
 #include <iosfwd>
 
@@ -63,64 +63,25 @@ or consult the Code Generator User's Manual.
 #define NDDSUSERDllExport __declspec(dllexport)
 #endif
 
-class NDDSUSERDllExport Power {
-  public:
-
-    Power();
-
-    Power(uint8_t CMD_,uint8_t On_);
-
-    uint8_t& CMD() noexcept {
-        return m_CMD_;
-    }
-
-    const uint8_t& CMD() const noexcept {
-        return m_CMD_;
-    }
-
-    void CMD(uint8_t value) {
-
-        m_CMD_ = value;
-    }
-
-    uint8_t& On() noexcept {
-        return m_On_;
-    }
-
-    const uint8_t& On() const noexcept {
-        return m_On_;
-    }
-
-    void On(uint8_t value) {
-
-        m_On_ = value;
-    }
-
-    bool operator == (const Power& other_) const;
-    bool operator != (const Power& other_) const;
-
-    void swap(Power& other_) noexcept ;
-
-  private:
-
-    uint8_t m_CMD_;
-    uint8_t m_On_;
-
-};
-
-inline void swap(Power& a, Power& b)  noexcept 
-{
-    a.swap(b);
-}
-
-NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const Power& sample);
-
 class NDDSUSERDllExport LampControl {
   public:
 
     LampControl();
 
-    LampControl(float intensity_,const ::Power& power_);
+    LampControl(uint32_t lampID_,float intensity_,bool power_);
+
+    uint32_t& lampID() noexcept {
+        return m_lampID_;
+    }
+
+    const uint32_t& lampID() const noexcept {
+        return m_lampID_;
+    }
+
+    void lampID(uint32_t value) {
+
+        m_lampID_ = value;
+    }
 
     float& intensity() noexcept {
         return m_intensity_;
@@ -135,22 +96,19 @@ class NDDSUSERDllExport LampControl {
         m_intensity_ = value;
     }
 
-    ::Power& power() noexcept {
+    bool& power() noexcept {
         return m_power_;
     }
 
-    const ::Power& power() const noexcept {
+    const bool& power() const noexcept {
         return m_power_;
     }
 
-    void power(const ::Power& value) {
+    void power(bool value) {
 
         m_power_ = value;
     }
 
-    void power(::Power&& value) {
-        m_power_ = std::move(value);
-    }
     bool operator == (const LampControl& other_) const;
     bool operator != (const LampControl& other_) const;
 
@@ -158,8 +116,9 @@ class NDDSUSERDllExport LampControl {
 
   private:
 
+    uint32_t m_lampID_;
     float m_intensity_;
-    ::Power m_power_;
+    bool m_power_;
 
 };
 
@@ -175,104 +134,73 @@ class NDDSUSERDllExport CameraControl {
 
     CameraControl();
 
-    CameraControl(const ::Power& focus_far_,const ::Power& focus_near_,const ::Power& LED_,const ::Power& power_,const ::Power& zoom_in_,const ::Power& zoom_out_);
+    CameraControl(uint32_t cameraId_,bool power_,bool light_,float focus_,float zoom_);
 
-    ::Power& focus_far() noexcept {
-        return m_focus_far_;
+    uint32_t& cameraId() noexcept {
+        return m_cameraId_;
     }
 
-    const ::Power& focus_far() const noexcept {
-        return m_focus_far_;
+    const uint32_t& cameraId() const noexcept {
+        return m_cameraId_;
     }
 
-    void focus_far(const ::Power& value) {
+    void cameraId(uint32_t value) {
 
-        m_focus_far_ = value;
+        m_cameraId_ = value;
     }
 
-    void focus_far(::Power&& value) {
-        m_focus_far_ = std::move(value);
-    }
-    ::Power& focus_near() noexcept {
-        return m_focus_near_;
-    }
-
-    const ::Power& focus_near() const noexcept {
-        return m_focus_near_;
-    }
-
-    void focus_near(const ::Power& value) {
-
-        m_focus_near_ = value;
-    }
-
-    void focus_near(::Power&& value) {
-        m_focus_near_ = std::move(value);
-    }
-    ::Power& LED() noexcept {
-        return m_LED_;
-    }
-
-    const ::Power& LED() const noexcept {
-        return m_LED_;
-    }
-
-    void LED(const ::Power& value) {
-
-        m_LED_ = value;
-    }
-
-    void LED(::Power&& value) {
-        m_LED_ = std::move(value);
-    }
-    ::Power& power() noexcept {
+    bool& power() noexcept {
         return m_power_;
     }
 
-    const ::Power& power() const noexcept {
+    const bool& power() const noexcept {
         return m_power_;
     }
 
-    void power(const ::Power& value) {
+    void power(bool value) {
 
         m_power_ = value;
     }
 
-    void power(::Power&& value) {
-        m_power_ = std::move(value);
-    }
-    ::Power& zoom_in() noexcept {
-        return m_zoom_in_;
+    bool& light() noexcept {
+        return m_light_;
     }
 
-    const ::Power& zoom_in() const noexcept {
-        return m_zoom_in_;
+    const bool& light() const noexcept {
+        return m_light_;
     }
 
-    void zoom_in(const ::Power& value) {
+    void light(bool value) {
 
-        m_zoom_in_ = value;
+        m_light_ = value;
     }
 
-    void zoom_in(::Power&& value) {
-        m_zoom_in_ = std::move(value);
-    }
-    ::Power& zoom_out() noexcept {
-        return m_zoom_out_;
+    float& focus() noexcept {
+        return m_focus_;
     }
 
-    const ::Power& zoom_out() const noexcept {
-        return m_zoom_out_;
+    const float& focus() const noexcept {
+        return m_focus_;
     }
 
-    void zoom_out(const ::Power& value) {
+    void focus(float value) {
 
-        m_zoom_out_ = value;
+        m_focus_ = value;
     }
 
-    void zoom_out(::Power&& value) {
-        m_zoom_out_ = std::move(value);
+    float& zoom() noexcept {
+        return m_zoom_;
     }
+
+    const float& zoom() const noexcept {
+        return m_zoom_;
+    }
+
+    void zoom(float value) {
+
+        m_zoom_ = value;
+    }
+
     bool operator == (const CameraControl& other_) const;
     bool operator != (const CameraControl& other_) const;
 
@@ -280,12 +208,11 @@ class NDDSUSERDllExport CameraControl {
 
   private:
 
-    ::Power m_focus_far_;
-    ::Power m_focus_near_;
-    ::Power m_LED_;
-    ::Power m_power_;
-    ::Power m_zoom_in_;
-    ::Power m_zoom_out_;
+    uint32_t m_cameraId_;
+    bool m_power_;
+    bool m_light_;
+    float m_focus_;
+    float m_zoom_;
 
 };
 
@@ -301,88 +228,47 @@ class NDDSUSERDllExport PanAndTiltControl {
 
     PanAndTiltControl();
 
-    PanAndTiltControl(const ::Power& pan_left_,const ::Power& pan_right_,const ::Power& power_,const ::Power& tilt_down_,const ::Power& tilt_up_);
+    PanAndTiltControl(float x_,float y_,float z_);
 
-    ::Power& pan_left() noexcept {
-        return m_pan_left_;
+    float& x() noexcept {
+        return m_x_;
     }
 
-    const ::Power& pan_left() const noexcept {
-        return m_pan_left_;
+    const float& x() const noexcept {
+        return m_x_;
     }
 
-    void pan_left(const ::Power& value) {
+    void x(float value) {
 
-        m_pan_left_ = value;
+        m_x_ = value;
     }
 
-    void pan_left(::Power&& value) {
-        m_pan_left_ = std::move(value);
-    }
-    ::Power& pan_right() noexcept {
-        return m_pan_right_;
+    float& y() noexcept {
+        return m_y_;
     }
 
-    const ::Power& pan_right() const noexcept {
-        return m_pan_right_;
+    const float& y() const noexcept {
+        return m_y_;
     }
 
-    void pan_right(const ::Power& value) {
+    void y(float value) {
 
-        m_pan_right_ = value;
+        m_y_ = value;
     }
 
-    void pan_right(::Power&& value) {
-        m_pan_right_ = std::move(value);
-    }
-    ::Power& power() noexcept {
-        return m_power_;
+    float& z() noexcept {
+        return m_z_;
     }
 
-    const ::Power& power() const noexcept {
-        return m_power_;
+    const float& z() const noexcept {
+        return m_z_;
     }
 
-    void power(const ::Power& value) {
+    void z(float value) {
 
-        m_power_ = value;
+        m_z_ = value;
     }
 
-    void power(::Power&& value) {
-        m_power_ = std::move(value);
-    }
-    ::Power& tilt_down() noexcept {
-        return m_tilt_down_;
-    }
-
-    const ::Power& tilt_down() const noexcept {
-        return m_tilt_down_;
-    }
-
-    void tilt_down(const ::Power& value) {
-
-        m_tilt_down_ = value;
-    }
-
-    void tilt_down(::Power&& value) {
-        m_tilt_down_ = std::move(value);
-    }
-    ::Power& tilt_up() noexcept {
-        return m_tilt_up_;
-    }
-
-    const ::Power& tilt_up() const noexcept {
-        return m_tilt_up_;
-    }
-
-    void tilt_up(const ::Power& value) {
-
-        m_tilt_up_ = value;
-    }
-
-    void tilt_up(::Power&& value) {
-        m_tilt_up_ = std::move(value);
-    }
     bool operator == (const PanAndTiltControl& other_) const;
     bool operator != (const PanAndTiltControl& other_) const;
 
@@ -390,11 +276,9 @@ class NDDSUSERDllExport PanAndTiltControl {
 
   private:
 
-    ::Power m_pan_left_;
-    ::Power m_pan_right_;
-    ::Power m_power_;
-    ::Power m_tilt_down_;
-    ::Power m_tilt_up_;
+    float m_x_;
+    float m_y_;
+    float m_z_;
 
 };
 
@@ -421,41 +305,6 @@ namespace rti {
 namespace dds {
     namespace topic {
 
-        template<>
-        struct topic_type_name< ::Power > {
-            NDDSUSERDllExport static std::string value() {
-                return "Power";
-            }
-        };
-
-        template<>
-        struct is_topic_type< ::Power > : public ::dds::core::true_type {};
-
-        template<>
-        struct topic_type_support< ::Power > {
-            NDDSUSERDllExport 
-            static void register_type(
-                ::dds::domain::DomainParticipant& participant,
-                const std::string & type_name);
-
-            NDDSUSERDllExport 
-            static std::vector<char>& to_cdr_buffer(
-                std::vector<char>& buffer, 
-                const ::Power& sample,
-                ::dds::core::policy::DataRepresentationId representation 
-                = ::dds::core::policy::DataRepresentation::auto_id());
-
-            NDDSUSERDllExport 
-            static void from_cdr_buffer(::Power& sample, const std::vector<char>& buffer);
-            NDDSUSERDllExport 
-            static void reset_sample(::Power& sample);
-
-            NDDSUSERDllExport 
-            static void allocate_sample(::Power& sample, int, int);
-
-            static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
-            ::rti::topic::TypePluginKind::STL;
-        };
         template<>
         struct topic_type_name< ::LampControl > {
             NDDSUSERDllExport static std::string value() {
@@ -568,17 +417,6 @@ namespace rti {
     namespace topic {
 
         template<>
-        struct dynamic_type< ::Power > {
-            typedef ::dds::core::xtypes::StructType type;
-            NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
-        };
-
-        template <>
-        struct extensibility< ::Power > {
-            static const ::dds::core::xtypes::ExtensibilityKind::type kind =
-            ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
-
-        template<>
         struct dynamic_type< ::LampControl > {
             typedef ::dds::core::xtypes::StructType type;
             NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
@@ -622,5 +460,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493951877_hpp
+#endif // plc_493951772_hpp
 
