@@ -1,8 +1,8 @@
 <dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://community.rti.com/schema/7.3.0/rti_dds_opcua_service.xsd">
   <types>
         <struct name="Power" nested="true">
-            <member name="CMD" type="boolean"/>
-            <member name="On" type="boolean"/>
+            <member name="CMD" type="octet"/>
+            <member name="On" type="octet"/>
         </struct>
   
         <struct name="LampControlType" nested="true">
@@ -63,7 +63,48 @@
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
+        
+           <node_attribute dds_topic_field_name="power.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_Camera_Control.IO_Camera_Control[2].Power.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+        
+           <node_attribute dds_topic_field_name="zoom_in.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_Camera_Control.IO_Camera_Control[2].Zoom_In.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+
+           <node_attribute dds_topic_field_name="zoom_out.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_Camera_Control.IO_Camera_Control[2].Zoom_Out.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+
+           <node_attribute dds_topic_field_name="focus_far.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_Camera_Control.IO_Camera_Control[2].Focus_Far.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+
+           <node_attribute dds_topic_field_name="focus_near.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_Camera_Control.IO_Camera_Control[2].Focus_Near.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
         </opcua_output>
+
       </publication>
 
       <publication name="LampControlPublication">
@@ -73,6 +114,14 @@
         </dds_input>
 
         <opcua_output name="PLCOPCOutput" opcua_connection_ref="PLCServerConnection">
+           <node_attribute dds_topic_field_name="intensity">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_Lamp_Control.IO_Lamp_Control[2].Intensity</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+        
            <node_attribute dds_topic_field_name="power.CMD">
               <node_id>
                 <namespace_index>6</namespace_index>
@@ -90,14 +139,39 @@
         </dds_input>
 
         <opcua_output name="PLCOPCOutput" opcua_connection_ref="PLCServerConnection">
-           <node_attribute dds_topic_field_name="power.CMD">
+           <node_attribute dds_topic_field_name="tilt_up.CMD">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.IO_PanTilt_Control[2].Power.CMD</string_identifier>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.IO_PanTilt_Control[2].Tilt_Up.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+       
+           <node_attribute dds_topic_field_name="tilt_down.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.IO_PanTilt_Control[2].Tilt_Down.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+        
+           <node_attribute dds_topic_field_name="pan_right.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.IO_PanTilt_Control[2].Pan_Right.CMD</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+        
+           <node_attribute dds_topic_field_name="pan_left.CMD">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, 1756-L85E/B, OPCUA_QA67231.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.IO_PanTilt_Control[2].Pan_Left.CMD</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
         </opcua_output>
+
       </publication>
     </opcua_to_dds_bridge>
   </ddsopcua_service>

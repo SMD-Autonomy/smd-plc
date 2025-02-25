@@ -40,7 +40,7 @@ class HelperMethods
     bool float_to_bool(float message)
     {
         bool bool_val;
-        message = std::clamp(message, -100, 100); 
+        message = clamp(message, -100, 100); 
         if (message > 0){
             bool_val = true;
             return bool_val;
@@ -49,6 +49,11 @@ class HelperMethods
             bool_val = false;
             return bool_val;
         }
+    }
+
+    float clamp(float v, float lo, float hi)
+    {
+        return (v < lo) ? lo : (hi < v) ? hi : v;
     }
     
 };
@@ -83,7 +88,6 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-
         data.LED().CMD(var_light_oct);
         data.power().CMD(var_power_oct);
         if (var_zoom_bool)
@@ -220,8 +224,8 @@ int main(int argc, char *argv[])
     std::vector<std::exception_ptr> exceptions(3);
 
     // Sample control data for each publisher
-    CameraControlStruct camera_control_data = {1,true, false, 22, 25};
-    LampControlStruct lamp_control_data = {1,true, 75};
+    CameraControlStruct camera_control_data = {1,true, true, 22, 25};
+    LampControlStruct lamp_control_data = {1, 75, true};
     PanAndTiltControlStruct pan_and_tilt_control_data = {80, 20, 23};
 
     // Lambda function to run a publisher and catch exceptions

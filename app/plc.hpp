@@ -1003,9 +1003,6 @@ struct PanAndTiltControlStruct {
     
 };
 
-LampControlStruct lcstruct;
-CameraControlStruct ccstruct;
-PanAndTiltControlStruct ptcstruct;
 
 #endif // NDDS_STANDALONE_TYPE
 #if (defined(RTI_WIN32) || defined (RTI_WINCE) || defined(RTI_INTIME)) && defined(NDDS_USER_DLL_EXPORT)
