@@ -1,4 +1,29 @@
 @appendable
+struct LampControlCustom {
+
+    @key uint32 lampID;
+    float intensity;
+    boolean power;
+};
+
+struct CameraControlCustom {
+
+    @key uint32 cameraId;
+    boolean	power;
+    boolean	light;
+    float focus;
+    float zoom;
+
+};
+
+struct PanAndTiltControlCustom {
+
+    float x;
+    float y;
+    float z;
+    
+};
+
 struct Power {
     octet CMD;
     octet On;
