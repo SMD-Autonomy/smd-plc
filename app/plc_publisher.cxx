@@ -227,9 +227,9 @@ int main(int argc, char *argv[])
     std::vector<std::exception_ptr> exceptions(3);
 
     // Sample control data for each publisher
-    CameraControlStruct camera_control_data = {8, true, true, 22, 25};
-    LampControlStruct lamp_control_data = {8, 75, true};
-    PanAndTiltControlStruct pan_and_tilt_control_data = {8, 80, 20, 23};
+    // CameraControlStruct camera_control_data = {8, true, true, 22, 25};
+    // LampControlStruct lamp_control_data = {8, 75, true};
+    // PanAndTiltControlStruct pan_and_tilt_control_data = {8, 80, 20, 23};
 
     // Lambda function to run a publisher and catch exceptions
     auto run_publisher = [&](auto publisher_func, int index, auto control_data) {

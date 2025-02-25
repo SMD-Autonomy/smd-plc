@@ -29,23 +29,31 @@
 #include "plc.hpp"
 #include "application.hpp"  // for command line parsing and ctrl-c
 
-int process_data(dds::sub::DataReader< ::PanAndTiltControl> reader)
+int process_data(dds::sub::DataReader< ::CameraControlCustom> reader, std::vector<CameraControlStruct>& data_vector)
 {
-    // Take all samples
     int count = 0;
-    dds::sub::LoanedSamples< ::PanAndTiltControl> samples = reader.take();
+    dds::sub::LoanedSamples< ::CameraControlCustom> samples = reader.take();
     for (auto sample : samples) {
         if (sample.info().valid()) {
             count++;
             std::cout << sample.data() << std::endl;
+            
+            // Copy data to CameraControlStruct
+            camera_control_data.cameraID = sample.data().cameraID();
+            camera_control_data.power = sample.data().power();
+            camera_control_data.light = sample.data().light();
+            camera_control_data.focus = sample.data().focus();
+            camera_control_data.zoom = sample.data().zoom();
+            
+            // Add the struct to the vector
+            data_vector.push_back(camera_control);
         } else {
             std::cout << "Instance state changed to "
             << sample.info().state().instance_state() << std::endl;
         }
     }
-
-    return count; 
-} // The LoanedSamples destructor returns the loan
+    return count;
+}
 
 void run_subscriber_application(unsigned int domain_id, unsigned int sample_count)
 {
