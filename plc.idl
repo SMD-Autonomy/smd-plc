@@ -8,7 +8,7 @@ struct LampControlCustom {
 
 struct CameraControlCustom {
 
-    @key uint32 cameraId;
+    @key uint32 cameraID;
     boolean	power;
     boolean	light;
     float focus;
@@ -18,6 +18,7 @@ struct CameraControlCustom {
 
 struct PanAndTiltControlCustom {
 
+    @key uint32 panandtiltID;
     float x;
     float y;
     float z;
@@ -25,18 +26,21 @@ struct PanAndTiltControlCustom {
 };
 
 struct Power {
+
     octet CMD;
     octet On;
 };
 
 struct LampControl {
 
+    @key uint32 lampID;
     float intensity;
     Power power;
 };
 
 struct CameraControl {
 
+    @key uint32 cameraID;
     Power focus_far;
     Power focus_near;
     Power LED;
@@ -48,6 +52,7 @@ struct CameraControl {
 
 struct PanAndTiltControl {
 
+    @key uint32 panandtiltID;
     Power pan_left;
     Power pan_right;
     Power power;

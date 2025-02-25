@@ -81,7 +81,7 @@ std::ostream& operator << (std::ostream& o,const LampControlCustom& sample)
 // ---- CameraControlCustom: 
 
 CameraControlCustom::CameraControlCustom() :
-    m_cameraId_ (0u) ,
+    m_cameraID_ (0u) ,
     m_power_ (0) ,
     m_light_ (0) ,
     m_focus_ (0.0f) ,
@@ -89,8 +89,8 @@ CameraControlCustom::CameraControlCustom() :
 
 }   
 
-CameraControlCustom::CameraControlCustom (uint32_t cameraId_,bool power_,bool light_,float focus_,float zoom_):
-    m_cameraId_(cameraId_), 
+CameraControlCustom::CameraControlCustom (uint32_t cameraID_,bool power_,bool light_,float focus_,float zoom_):
+    m_cameraID_(cameraID_), 
     m_power_(power_), 
     m_light_(light_), 
     m_focus_(focus_), 
@@ -100,7 +100,7 @@ CameraControlCustom::CameraControlCustom (uint32_t cameraId_,bool power_,bool li
 void CameraControlCustom::swap(CameraControlCustom& other_)  noexcept 
 {
     using std::swap;
-    swap(m_cameraId_, other_.m_cameraId_);
+    swap(m_cameraID_, other_.m_cameraID_);
     swap(m_power_, other_.m_power_);
     swap(m_light_, other_.m_light_);
     swap(m_focus_, other_.m_focus_);
@@ -108,7 +108,7 @@ void CameraControlCustom::swap(CameraControlCustom& other_)  noexcept
 }  
 
 bool CameraControlCustom::operator == (const CameraControlCustom& other_) const {
-    if (m_cameraId_ != other_.m_cameraId_) {
+    if (m_cameraID_ != other_.m_cameraID_) {
         return false;
     }
     if (m_power_ != other_.m_power_) {
@@ -136,7 +136,7 @@ std::ostream& operator << (std::ostream& o,const CameraControlCustom& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
-    o << "cameraId: " << sample.cameraId ()<<", ";
+    o << "cameraID: " << sample.cameraID ()<<", ";
     o << "power: " << sample.power ()<<", ";
     o << "light: " << sample.light ()<<", ";
     o << "focus: " << std::setprecision(9) << sample.focus ()<<", ";
@@ -148,13 +148,15 @@ std::ostream& operator << (std::ostream& o,const CameraControlCustom& sample)
 // ---- PanAndTiltControlCustom: 
 
 PanAndTiltControlCustom::PanAndTiltControlCustom() :
+    m_panandtiltID_ (0u) ,
     m_x_ (0.0f) ,
     m_y_ (0.0f) ,
     m_z_ (0.0f)  {
 
 }   
 
-PanAndTiltControlCustom::PanAndTiltControlCustom (float x_,float y_,float z_):
+PanAndTiltControlCustom::PanAndTiltControlCustom (uint32_t panandtiltID_,float x_,float y_,float z_):
+    m_panandtiltID_(panandtiltID_), 
     m_x_(x_), 
     m_y_(y_), 
     m_z_(z_) {
@@ -163,12 +165,16 @@ PanAndTiltControlCustom::PanAndTiltControlCustom (float x_,float y_,float z_):
 void PanAndTiltControlCustom::swap(PanAndTiltControlCustom& other_)  noexcept 
 {
     using std::swap;
+    swap(m_panandtiltID_, other_.m_panandtiltID_);
     swap(m_x_, other_.m_x_);
     swap(m_y_, other_.m_y_);
     swap(m_z_, other_.m_z_);
 }  
 
 bool PanAndTiltControlCustom::operator == (const PanAndTiltControlCustom& other_) const {
+    if (m_panandtiltID_ != other_.m_panandtiltID_) {
+        return false;
+    }
     if (std::fabs(m_x_ - other_.m_x_) > std::numeric_limits< float>::epsilon()
     && !(std::fabs(m_x_ - other_.m_x_) < (std::numeric_limits< float>::min)())) {
         return false;
@@ -192,6 +198,7 @@ std::ostream& operator << (std::ostream& o,const PanAndTiltControlCustom& sample
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
+    o << "panandtiltID: " << sample.panandtiltID ()<<", ";
     o << "x: " << std::setprecision(9) << sample.x ()<<", ";
     o << "y: " << std::setprecision(9) << sample.y ()<<", ";
     o << "z: " << std::setprecision(9) << sample.z ();
@@ -246,11 +253,13 @@ std::ostream& operator << (std::ostream& o,const Power& sample)
 // ---- LampControl: 
 
 LampControl::LampControl() :
+    m_lampID_ (0u) ,
     m_intensity_ (0.0f)  {
 
 }   
 
-LampControl::LampControl (float intensity_,const ::Power& power_):
+LampControl::LampControl (uint32_t lampID_,float intensity_,const ::Power& power_):
+    m_lampID_(lampID_), 
     m_intensity_(intensity_), 
     m_power_(power_) {
 }
@@ -258,11 +267,15 @@ LampControl::LampControl (float intensity_,const ::Power& power_):
 void LampControl::swap(LampControl& other_)  noexcept 
 {
     using std::swap;
+    swap(m_lampID_, other_.m_lampID_);
     swap(m_intensity_, other_.m_intensity_);
     swap(m_power_, other_.m_power_);
 }  
 
 bool LampControl::operator == (const LampControl& other_) const {
+    if (m_lampID_ != other_.m_lampID_) {
+        return false;
+    }
     if (std::fabs(m_intensity_ - other_.m_intensity_) > std::numeric_limits< float>::epsilon()
     && !(std::fabs(m_intensity_ - other_.m_intensity_) < (std::numeric_limits< float>::min)())) {
         return false;
@@ -281,6 +294,7 @@ std::ostream& operator << (std::ostream& o,const LampControl& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
+    o << "lampID: " << sample.lampID ()<<", ";
     o << "intensity: " << std::setprecision(9) << sample.intensity ()<<", ";
     o << "power: " << sample.power ();
     o <<"]";
@@ -289,11 +303,13 @@ std::ostream& operator << (std::ostream& o,const LampControl& sample)
 
 // ---- CameraControl: 
 
-CameraControl::CameraControl()  {
+CameraControl::CameraControl() :
+    m_cameraID_ (0u)  {
 
 }   
 
-CameraControl::CameraControl (const ::Power& focus_far_,const ::Power& focus_near_,const ::Power& LED_,const ::Power& power_,const ::Power& zoom_in_,const ::Power& zoom_out_):
+CameraControl::CameraControl (uint32_t cameraID_,const ::Power& focus_far_,const ::Power& focus_near_,const ::Power& LED_,const ::Power& power_,const ::Power& zoom_in_,const ::Power& zoom_out_):
+    m_cameraID_(cameraID_), 
     m_focus_far_(focus_far_), 
     m_focus_near_(focus_near_), 
     m_LED_(LED_), 
@@ -305,6 +321,7 @@ CameraControl::CameraControl (const ::Power& focus_far_,const ::Power& focus_nea
 void CameraControl::swap(CameraControl& other_)  noexcept 
 {
     using std::swap;
+    swap(m_cameraID_, other_.m_cameraID_);
     swap(m_focus_far_, other_.m_focus_far_);
     swap(m_focus_near_, other_.m_focus_near_);
     swap(m_LED_, other_.m_LED_);
@@ -314,6 +331,9 @@ void CameraControl::swap(CameraControl& other_)  noexcept
 }  
 
 bool CameraControl::operator == (const CameraControl& other_) const {
+    if (m_cameraID_ != other_.m_cameraID_) {
+        return false;
+    }
     if (m_focus_far_ != other_.m_focus_far_) {
         return false;
     }
@@ -343,6 +363,7 @@ std::ostream& operator << (std::ostream& o,const CameraControl& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
+    o << "cameraID: " << sample.cameraID ()<<", ";
     o << "focus_far: " << sample.focus_far ()<<", ";
     o << "focus_near: " << sample.focus_near ()<<", ";
     o << "LED: " << sample.LED ()<<", ";
@@ -355,11 +376,13 @@ std::ostream& operator << (std::ostream& o,const CameraControl& sample)
 
 // ---- PanAndTiltControl: 
 
-PanAndTiltControl::PanAndTiltControl()  {
+PanAndTiltControl::PanAndTiltControl() :
+    m_panandtiltID_ (0u)  {
 
 }   
 
-PanAndTiltControl::PanAndTiltControl (const ::Power& pan_left_,const ::Power& pan_right_,const ::Power& power_,const ::Power& tilt_down_,const ::Power& tilt_up_):
+PanAndTiltControl::PanAndTiltControl (uint32_t panandtiltID_,const ::Power& pan_left_,const ::Power& pan_right_,const ::Power& power_,const ::Power& tilt_down_,const ::Power& tilt_up_):
+    m_panandtiltID_(panandtiltID_), 
     m_pan_left_(pan_left_), 
     m_pan_right_(pan_right_), 
     m_power_(power_), 
@@ -370,6 +393,7 @@ PanAndTiltControl::PanAndTiltControl (const ::Power& pan_left_,const ::Power& pa
 void PanAndTiltControl::swap(PanAndTiltControl& other_)  noexcept 
 {
     using std::swap;
+    swap(m_panandtiltID_, other_.m_panandtiltID_);
     swap(m_pan_left_, other_.m_pan_left_);
     swap(m_pan_right_, other_.m_pan_right_);
     swap(m_power_, other_.m_power_);
@@ -378,6 +402,9 @@ void PanAndTiltControl::swap(PanAndTiltControl& other_)  noexcept
 }  
 
 bool PanAndTiltControl::operator == (const PanAndTiltControl& other_) const {
+    if (m_panandtiltID_ != other_.m_panandtiltID_) {
+        return false;
+    }
     if (m_pan_left_ != other_.m_pan_left_) {
         return false;
     }
@@ -404,6 +431,7 @@ std::ostream& operator << (std::ostream& o,const PanAndTiltControl& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
+    o << "panandtiltID: " << sample.panandtiltID ()<<", ";
     o << "pan_left: " << sample.pan_left ()<<", ";
     o << "pan_right: " << sample.pan_right ()<<", ";
     o << "power: " << sample.power ()<<", ";
@@ -649,7 +677,7 @@ namespace rti {
                 {
 
                     {
-                        (char *)"cameraId",/* Member name */
+                        (char *)"cameraID",/* Member name */
                         {
                             0,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -827,7 +855,7 @@ namespace rti {
                 }
 
                 CameraControlCustom_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->cameraId() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->cameraID() - (char *)sample);
 
                 CameraControlCustom_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
                 (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
@@ -909,11 +937,11 @@ namespace rti {
 
                 static RTIBool is_initialized = RTI_FALSE;
 
-                static DDS_TypeCode_Member PanAndTiltControlCustom_g_tc_members[3]=
+                static DDS_TypeCode_Member PanAndTiltControlCustom_g_tc_members[4]=
                 {
 
                     {
-                        (char *)"x",/* Member name */
+                        (char *)"panandtiltID",/* Member name */
                         {
                             0,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -924,14 +952,14 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        RTI_CDR_KEY_MEMBER , /* Is a key? */
                         DDS_PUBLIC_MEMBER,/* Member visibility */
                         1,
                         NULL, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"y",/* Member name */
+                        (char *)"x",/* Member name */
                         {
                             1,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -949,9 +977,27 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"z",/* Member name */
+                        (char *)"y",/* Member name */
                         {
                             2,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"z",/* Member name */
+                        {
+                            3,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
                             -1, /* Bitfield bits */
                             NULL/* Member type code is assigned later */
@@ -978,7 +1024,7 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        3, /* Number of members */
+                        4, /* Number of members */
                         PanAndTiltControlCustom_g_tc_members, /* Members */
                         DDS_VM_NONE, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER,
@@ -995,17 +1041,18 @@ namespace rti {
 
                 PanAndTiltControlCustom_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                PanAndTiltControlCustom_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+                PanAndTiltControlCustom_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_ulong;
                 PanAndTiltControlCustom_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
                 PanAndTiltControlCustom_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+                PanAndTiltControlCustom_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
 
                 /* Initialize the values for member annotations. */
-                PanAndTiltControlCustom_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
-                PanAndTiltControlCustom_g_tc_members[0]._annotations._defaultValue._u.float_value = 0.0f;
-                PanAndTiltControlCustom_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
-                PanAndTiltControlCustom_g_tc_members[0]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
-                PanAndTiltControlCustom_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
-                PanAndTiltControlCustom_g_tc_members[0]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
+                PanAndTiltControlCustom_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltControlCustom_g_tc_members[0]._annotations._defaultValue._u.ulong_value = 0u;
+                PanAndTiltControlCustom_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltControlCustom_g_tc_members[0]._annotations._minValue._u.ulong_value = RTIXCdrUnsignedLong_MIN;
+                PanAndTiltControlCustom_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltControlCustom_g_tc_members[0]._annotations._maxValue._u.ulong_value = RTIXCdrUnsignedLong_MAX;
                 PanAndTiltControlCustom_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
                 PanAndTiltControlCustom_g_tc_members[1]._annotations._defaultValue._u.float_value = 0.0f;
                 PanAndTiltControlCustom_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
@@ -1018,6 +1065,12 @@ namespace rti {
                 PanAndTiltControlCustom_g_tc_members[2]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
                 PanAndTiltControlCustom_g_tc_members[2]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
                 PanAndTiltControlCustom_g_tc_members[2]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
+                PanAndTiltControlCustom_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
+                PanAndTiltControlCustom_g_tc_members[3]._annotations._defaultValue._u.float_value = 0.0f;
+                PanAndTiltControlCustom_g_tc_members[3]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
+                PanAndTiltControlCustom_g_tc_members[3]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
+                PanAndTiltControlCustom_g_tc_members[3]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
+                PanAndTiltControlCustom_g_tc_members[3]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
 
                 PanAndTiltControlCustom_g_tc._data._sampleAccessInfo = sample_access_info();
                 PanAndTiltControlCustom_g_tc._data._typePlugin = type_plugin_info();    
@@ -1031,7 +1084,7 @@ namespace rti {
 
                 ::PanAndTiltControlCustom *sample;
 
-                static RTIXCdrMemberAccessInfo PanAndTiltControlCustom_g_memberAccessInfos[3] =
+                static RTIXCdrMemberAccessInfo PanAndTiltControlCustom_g_memberAccessInfos[4] =
                 {RTIXCdrMemberAccessInfo_INITIALIZER};
 
                 static RTIXCdrSampleAccessInfo PanAndTiltControlCustom_g_sampleAccessInfo = 
@@ -1049,12 +1102,15 @@ namespace rti {
                 }
 
                 PanAndTiltControlCustom_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->x() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->panandtiltID() - (char *)sample);
 
                 PanAndTiltControlCustom_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->y() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->x() - (char *)sample);
 
                 PanAndTiltControlCustom_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->y() - (char *)sample);
+
+                PanAndTiltControlCustom_g_memberAccessInfos[3].bindingMemberValueOffset[0] = 
                 (RTIXCdrUnsignedLong) ((char *)&sample->z() - (char *)sample);
 
                 PanAndTiltControlCustom_g_sampleAccessInfo.memberAccessInfos = 
@@ -1313,13 +1369,31 @@ namespace rti {
 
                 static RTIBool is_initialized = RTI_FALSE;
 
-                static DDS_TypeCode_Member LampControl_g_tc_members[2]=
+                static DDS_TypeCode_Member LampControl_g_tc_members[3]=
                 {
 
                     {
-                        (char *)"intensity",/* Member name */
+                        (char *)"lampID",/* Member name */
                         {
                             0,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_KEY_MEMBER , /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"intensity",/* Member name */
+                        {
+                            1,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
                             -1, /* Bitfield bits */
                             NULL/* Member type code is assigned later */
@@ -1337,7 +1411,7 @@ namespace rti {
                     {
                         (char *)"power",/* Member name */
                         {
-                            1,/* Representation ID */
+                            2,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
                             -1, /* Bitfield bits */
                             NULL/* Member type code is assigned later */
@@ -1364,7 +1438,7 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        2, /* Number of members */
+                        3, /* Number of members */
                         LampControl_g_tc_members, /* Members */
                         DDS_VM_NONE, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER,
@@ -1381,16 +1455,23 @@ namespace rti {
 
                 LampControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                LampControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
-                LampControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                LampControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_ulong;
+                LampControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+                LampControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
 
                 /* Initialize the values for member annotations. */
-                LampControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
-                LampControl_g_tc_members[0]._annotations._defaultValue._u.float_value = 0.0f;
-                LampControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
-                LampControl_g_tc_members[0]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
-                LampControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
-                LampControl_g_tc_members[0]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
+                LampControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_ULONG;
+                LampControl_g_tc_members[0]._annotations._defaultValue._u.ulong_value = 0u;
+                LampControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_ULONG;
+                LampControl_g_tc_members[0]._annotations._minValue._u.ulong_value = RTIXCdrUnsignedLong_MIN;
+                LampControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_ULONG;
+                LampControl_g_tc_members[0]._annotations._maxValue._u.ulong_value = RTIXCdrUnsignedLong_MAX;
+                LampControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
+                LampControl_g_tc_members[1]._annotations._defaultValue._u.float_value = 0.0f;
+                LampControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
+                LampControl_g_tc_members[1]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
+                LampControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
+                LampControl_g_tc_members[1]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
 
                 LampControl_g_tc._data._sampleAccessInfo = sample_access_info();
                 LampControl_g_tc._data._typePlugin = type_plugin_info();    
@@ -1404,7 +1485,7 @@ namespace rti {
 
                 ::LampControl *sample;
 
-                static RTIXCdrMemberAccessInfo LampControl_g_memberAccessInfos[2] =
+                static RTIXCdrMemberAccessInfo LampControl_g_memberAccessInfos[3] =
                 {RTIXCdrMemberAccessInfo_INITIALIZER};
 
                 static RTIXCdrSampleAccessInfo LampControl_g_sampleAccessInfo = 
@@ -1422,9 +1503,12 @@ namespace rti {
                 }
 
                 LampControl_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->intensity() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->lampID() - (char *)sample);
 
                 LampControl_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->intensity() - (char *)sample);
+
+                LampControl_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
                 (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
 
                 LampControl_g_sampleAccessInfo.memberAccessInfos = 
@@ -1495,11 +1579,11 @@ namespace rti {
 
                 static RTIBool is_initialized = RTI_FALSE;
 
-                static DDS_TypeCode_Member CameraControl_g_tc_members[6]=
+                static DDS_TypeCode_Member CameraControl_g_tc_members[7]=
                 {
 
                     {
-                        (char *)"focus_far",/* Member name */
+                        (char *)"cameraID",/* Member name */
                         {
                             0,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1510,14 +1594,14 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        RTI_CDR_KEY_MEMBER , /* Is a key? */
                         DDS_PUBLIC_MEMBER,/* Member visibility */
                         1,
                         NULL, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"focus_near",/* Member name */
+                        (char *)"focus_far",/* Member name */
                         {
                             1,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1535,7 +1619,7 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"LED",/* Member name */
+                        (char *)"focus_near",/* Member name */
                         {
                             2,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1553,7 +1637,7 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"power",/* Member name */
+                        (char *)"LED",/* Member name */
                         {
                             3,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1571,7 +1655,7 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"zoom_in",/* Member name */
+                        (char *)"power",/* Member name */
                         {
                             4,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1589,9 +1673,27 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"zoom_out",/* Member name */
+                        (char *)"zoom_in",/* Member name */
                         {
                             5,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"zoom_out",/* Member name */
+                        {
+                            6,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
                             -1, /* Bitfield bits */
                             NULL/* Member type code is assigned later */
@@ -1618,7 +1720,7 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        6, /* Number of members */
+                        7, /* Number of members */
                         CameraControl_g_tc_members, /* Members */
                         DDS_VM_NONE, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER,
@@ -1635,14 +1737,21 @@ namespace rti {
 
                 CameraControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                CameraControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                CameraControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_ulong;
                 CameraControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
                 CameraControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
                 CameraControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
                 CameraControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
                 CameraControl_g_tc_members[5]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                CameraControl_g_tc_members[6]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
 
                 /* Initialize the values for member annotations. */
+                CameraControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_ULONG;
+                CameraControl_g_tc_members[0]._annotations._defaultValue._u.ulong_value = 0u;
+                CameraControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_ULONG;
+                CameraControl_g_tc_members[0]._annotations._minValue._u.ulong_value = RTIXCdrUnsignedLong_MIN;
+                CameraControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_ULONG;
+                CameraControl_g_tc_members[0]._annotations._maxValue._u.ulong_value = RTIXCdrUnsignedLong_MAX;
 
                 CameraControl_g_tc._data._sampleAccessInfo = sample_access_info();
                 CameraControl_g_tc._data._typePlugin = type_plugin_info();    
@@ -1656,7 +1765,7 @@ namespace rti {
 
                 ::CameraControl *sample;
 
-                static RTIXCdrMemberAccessInfo CameraControl_g_memberAccessInfos[6] =
+                static RTIXCdrMemberAccessInfo CameraControl_g_memberAccessInfos[7] =
                 {RTIXCdrMemberAccessInfo_INITIALIZER};
 
                 static RTIXCdrSampleAccessInfo CameraControl_g_sampleAccessInfo = 
@@ -1674,21 +1783,24 @@ namespace rti {
                 }
 
                 CameraControl_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->focus_far() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->cameraID() - (char *)sample);
 
                 CameraControl_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->focus_near() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->focus_far() - (char *)sample);
 
                 CameraControl_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->LED() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->focus_near() - (char *)sample);
 
                 CameraControl_g_memberAccessInfos[3].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->LED() - (char *)sample);
 
                 CameraControl_g_memberAccessInfos[4].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->zoom_in() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
 
                 CameraControl_g_memberAccessInfos[5].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->zoom_in() - (char *)sample);
+
+                CameraControl_g_memberAccessInfos[6].bindingMemberValueOffset[0] = 
                 (RTIXCdrUnsignedLong) ((char *)&sample->zoom_out() - (char *)sample);
 
                 CameraControl_g_sampleAccessInfo.memberAccessInfos = 
@@ -1759,11 +1871,11 @@ namespace rti {
 
                 static RTIBool is_initialized = RTI_FALSE;
 
-                static DDS_TypeCode_Member PanAndTiltControl_g_tc_members[5]=
+                static DDS_TypeCode_Member PanAndTiltControl_g_tc_members[6]=
                 {
 
                     {
-                        (char *)"pan_left",/* Member name */
+                        (char *)"panandtiltID",/* Member name */
                         {
                             0,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1774,14 +1886,14 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        RTI_CDR_KEY_MEMBER , /* Is a key? */
                         DDS_PUBLIC_MEMBER,/* Member visibility */
                         1,
                         NULL, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"pan_right",/* Member name */
+                        (char *)"pan_left",/* Member name */
                         {
                             1,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1799,7 +1911,7 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"power",/* Member name */
+                        (char *)"pan_right",/* Member name */
                         {
                             2,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1817,7 +1929,7 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"tilt_down",/* Member name */
+                        (char *)"power",/* Member name */
                         {
                             3,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -1835,9 +1947,27 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"tilt_up",/* Member name */
+                        (char *)"tilt_down",/* Member name */
                         {
                             4,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"tilt_up",/* Member name */
+                        {
+                            5,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
                             -1, /* Bitfield bits */
                             NULL/* Member type code is assigned later */
@@ -1864,7 +1994,7 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        5, /* Number of members */
+                        6, /* Number of members */
                         PanAndTiltControl_g_tc_members, /* Members */
                         DDS_VM_NONE, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER,
@@ -1881,13 +2011,20 @@ namespace rti {
 
                 PanAndTiltControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                PanAndTiltControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                PanAndTiltControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_ulong;
                 PanAndTiltControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
                 PanAndTiltControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
                 PanAndTiltControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
                 PanAndTiltControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
+                PanAndTiltControl_g_tc_members[5]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Power>::get().native();
 
                 /* Initialize the values for member annotations. */
+                PanAndTiltControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltControl_g_tc_members[0]._annotations._defaultValue._u.ulong_value = 0u;
+                PanAndTiltControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltControl_g_tc_members[0]._annotations._minValue._u.ulong_value = RTIXCdrUnsignedLong_MIN;
+                PanAndTiltControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltControl_g_tc_members[0]._annotations._maxValue._u.ulong_value = RTIXCdrUnsignedLong_MAX;
 
                 PanAndTiltControl_g_tc._data._sampleAccessInfo = sample_access_info();
                 PanAndTiltControl_g_tc._data._typePlugin = type_plugin_info();    
@@ -1901,7 +2038,7 @@ namespace rti {
 
                 ::PanAndTiltControl *sample;
 
-                static RTIXCdrMemberAccessInfo PanAndTiltControl_g_memberAccessInfos[5] =
+                static RTIXCdrMemberAccessInfo PanAndTiltControl_g_memberAccessInfos[6] =
                 {RTIXCdrMemberAccessInfo_INITIALIZER};
 
                 static RTIXCdrSampleAccessInfo PanAndTiltControl_g_sampleAccessInfo = 
@@ -1919,18 +2056,21 @@ namespace rti {
                 }
 
                 PanAndTiltControl_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->pan_left() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->panandtiltID() - (char *)sample);
 
                 PanAndTiltControl_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->pan_right() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->pan_left() - (char *)sample);
 
                 PanAndTiltControl_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->pan_right() - (char *)sample);
 
                 PanAndTiltControl_g_memberAccessInfos[3].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->tilt_down() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->power() - (char *)sample);
 
                 PanAndTiltControl_g_memberAccessInfos[4].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->tilt_down() - (char *)sample);
+
+                PanAndTiltControl_g_memberAccessInfos[5].bindingMemberValueOffset[0] = 
                 (RTIXCdrUnsignedLong) ((char *)&sample->tilt_up() - (char *)sample);
 
                 PanAndTiltControl_g_sampleAccessInfo.memberAccessInfos = 
@@ -2118,7 +2258,7 @@ namespace dds {
 
         void topic_type_support< ::CameraControlCustom >::reset_sample(::CameraControlCustom& sample) 
         {
-            sample.cameraId(0u);
+            sample.cameraID(0u);
             sample.power(0);
             sample.light(0);
             sample.focus(0.0f);
@@ -2185,6 +2325,7 @@ namespace dds {
 
         void topic_type_support< ::PanAndTiltControlCustom >::reset_sample(::PanAndTiltControlCustom& sample) 
         {
+            sample.panandtiltID(0u);
             sample.x(0.0f);
             sample.y(0.0f);
             sample.z(0.0f);
@@ -2314,6 +2455,7 @@ namespace dds {
 
         void topic_type_support< ::LampControl >::reset_sample(::LampControl& sample) 
         {
+            sample.lampID(0u);
             sample.intensity(0.0f);
             ::rti::topic::reset_sample(sample.power());
         }
@@ -2378,6 +2520,7 @@ namespace dds {
 
         void topic_type_support< ::CameraControl >::reset_sample(::CameraControl& sample) 
         {
+            sample.cameraID(0u);
             ::rti::topic::reset_sample(sample.focus_far());
             ::rti::topic::reset_sample(sample.focus_near());
             ::rti::topic::reset_sample(sample.LED());
@@ -2451,6 +2594,7 @@ namespace dds {
 
         void topic_type_support< ::PanAndTiltControl >::reset_sample(::PanAndTiltControl& sample) 
         {
+            sample.panandtiltID(0u);
             ::rti::topic::reset_sample(sample.pan_left());
             ::rti::topic::reset_sample(sample.pan_right());
             ::rti::topic::reset_sample(sample.power());

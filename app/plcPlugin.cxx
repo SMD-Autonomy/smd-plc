@@ -1282,7 +1282,7 @@ CameraControlCustomPlugin_instance_to_key(
     try {
         if (endpoint_data) {} /* To avoid warnings */   
 
-        dst->cameraId() = src->cameraId();
+        dst->cameraID() = src->cameraID();
         return RTI_TRUE;
     } catch (...) {
         return RTI_FALSE;
@@ -1297,7 +1297,7 @@ CameraControlCustomPlugin_key_to_instance(
 {
     try {
         if (endpoint_data) {} /* To avoid warnings */   
-        dst->cameraId() = src->cameraId();
+        dst->cameraID() = src->cameraID();
         return RTI_TRUE;
     } catch (...) {
         return RTI_FALSE;
@@ -1518,6 +1518,19 @@ PanAndTiltControlCustomPluginSupport_copy_data(
     return RTI_TRUE;
 }
 
+PanAndTiltControlCustom *
+PanAndTiltControlCustomPluginSupport_create_key(void)
+{
+    return PanAndTiltControlCustomPluginSupport_create_data();
+}
+
+void 
+PanAndTiltControlCustomPluginSupport_destroy_key(
+    PanAndTiltControlCustomKeyHolder *key) 
+{
+    PanAndTiltControlCustomPluginSupport_destroy_data(key);
+}
+
 /* ----------------------------------------------------------------------------
 Callback functions:
 * ---------------------------------------------------------------------------- */
@@ -1604,6 +1617,9 @@ PanAndTiltControlCustomPlugin_on_endpoint_attached(
         PRESTypePluginEndpointData epd = NULL;
         unsigned int serializedSampleMaxSize = 0;
 
+        unsigned int serializedKeyMaxSize = 0;
+        unsigned int serializedKeyMaxSizeV2 = 0;
+
         if (top_level_registration) {} /* To avoid warnings */
         if (containerPluginContext) {} /* To avoid warnings */
 
@@ -1618,11 +1634,30 @@ PanAndTiltControlCustomPlugin_on_endpoint_attached(
             PanAndTiltControlCustomPluginSupport_create_data,
             (PRESTypePluginDefaultEndpointDataDestroySampleFunction)
             PanAndTiltControlCustomPluginSupport_destroy_data,
-            NULL , NULL );
+            (PRESTypePluginDefaultEndpointDataCreateKeyFunction)
+            ::PanAndTiltControlCustomPluginSupport_create_key ,                (PRESTypePluginDefaultEndpointDataDestroyKeyFunction)
+            ::PanAndTiltControlCustomPluginSupport_destroy_key);
 
         if (epd == NULL) {
             return NULL;
         } 
+
+        serializedKeyMaxSize =  ::PanAndTiltControlCustomPlugin_get_serialized_key_max_size(
+            epd,RTI_FALSE,RTI_CDR_ENCAPSULATION_ID_CDR_BE,0);
+        serializedKeyMaxSizeV2 = PanAndTiltControlCustomPlugin_get_serialized_key_max_size_for_keyhash(
+            epd,
+            RTI_CDR_ENCAPSULATION_ID_CDR2_BE,
+            0);
+
+        if(!PRESTypePluginDefaultEndpointData_createMD5StreamWithInfo(
+            epd,
+            endpoint_info,
+            serializedKeyMaxSize,
+            serializedKeyMaxSizeV2))  
+        {
+            PRESTypePluginDefaultEndpointData_delete(epd);
+            return NULL;
+        }
 
         if (endpoint_info->endpointKind == PRES_TYPEPLUGIN_ENDPOINT_WRITER) {
             serializedSampleMaxSize = ::PanAndTiltControlCustomPlugin_get_serialized_sample_max_size(
@@ -1871,7 +1906,7 @@ Key Management functions:
 PRESTypePluginKeyKind 
 PanAndTiltControlCustomPlugin_get_key_kind(void)
 {
-    return PRES_TYPEPLUGIN_NO_KEY;
+    return PRES_TYPEPLUGIN_USER_KEY;
 }
 
 RTIBool PanAndTiltControlCustomPlugin_deserialize_key(
@@ -1945,6 +1980,70 @@ PanAndTiltControlCustomPlugin_get_serialized_key_max_size_for_keyhash(
     return size;
 }
 
+RTIBool 
+PanAndTiltControlCustomPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControlCustomKeyHolder *dst, 
+    const PanAndTiltControlCustom *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+
+        dst->panandtiltID() = src->panandtiltID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+PanAndTiltControlCustomPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControlCustom *dst, const
+    PanAndTiltControlCustomKeyHolder *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+        dst->panandtiltID() = src->panandtiltID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+PanAndTiltControlCustomPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos)
+{
+    PanAndTiltControlCustom * sample = NULL;
+    sample = (PanAndTiltControlCustom *)
+    PRESTypePluginDefaultEndpointData_getTempSample(endpoint_data);
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedSerializedSampleToKey(
+        endpoint_data,
+        sample,
+        cdrStream, 
+        deserialize_encapsulation, 
+        RTI_TRUE,
+        endpoint_plugin_qos)) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedInstanceToKeyHash(
+        endpoint_data,
+        keyhash,
+        sample,
+        RTICdrStream_getEncapsulationKind(cdrStream))) {
+        return RTI_FALSE;
+    }
+    return RTI_TRUE;   
+}
+
 /* ------------------------------------------------------------------------
 * Plug-in Installation Methods
 * ------------------------------------------------------------------------ */
@@ -2007,19 +2106,40 @@ struct PRESTypePlugin *PanAndTiltControlCustomPlugin_new(void)
     (PRESTypePluginGetKeyKindFunction)
     ::PanAndTiltControlCustomPlugin_get_key_kind;
 
-    /* These functions are only used for keyed types. As this is not a keyed
-    type they are all set to NULL
-    */
-    plugin->serializeKeyFnc = NULL ;    
-    plugin->deserializeKeyFnc = NULL;  
-    plugin->getKeyFnc = NULL;
-    plugin->returnKeyFnc = NULL;
-    plugin->instanceToKeyFnc = NULL;
-    plugin->keyToInstanceFnc = NULL;
-    plugin->getSerializedKeyMaxSizeFnc = NULL;
-    plugin->instanceToKeyHashFnc = NULL;
-    plugin->serializedSampleToKeyHashFnc = NULL;
-    plugin->serializedKeyToKeyHashFnc = NULL;    
+    plugin->getSerializedKeyMaxSizeFnc =   
+    (PRESTypePluginGetSerializedKeyMaxSizeFunction)
+    ::PanAndTiltControlCustomPlugin_get_serialized_key_max_size;
+    plugin->serializeKeyFnc =
+    (PRESTypePluginSerializeKeyFunction)
+    PRESTypePlugin_interpretedSerializeKey;
+    plugin->deserializeKeyFnc =
+    (PRESTypePluginDeserializeKeyFunction)
+    ::PanAndTiltControlCustomPlugin_deserialize_key;
+    plugin->deserializeKeySampleFnc =
+    (PRESTypePluginDeserializeKeySampleFunction)
+    PRESTypePlugin_interpretedDeserializeKey;
+
+    plugin-> instanceToKeyHashFnc = 
+    (PRESTypePluginInstanceToKeyHashFunction)
+    PRESTypePlugin_interpretedInstanceToKeyHash;
+    plugin->serializedSampleToKeyHashFnc = 
+    (PRESTypePluginSerializedSampleToKeyHashFunction)
+    ::PanAndTiltControlCustomPlugin_serialized_sample_to_keyhash;
+
+    plugin->getKeyFnc =
+    (PRESTypePluginGetKeyFunction)
+    PanAndTiltControlCustomPlugin_get_key;
+    plugin->returnKeyFnc =
+    (PRESTypePluginReturnKeyFunction)
+    PanAndTiltControlCustomPlugin_return_key;
+
+    plugin->instanceToKeyFnc =
+    (PRESTypePluginInstanceToKeyFunction)
+    ::PanAndTiltControlCustomPlugin_instance_to_key;
+    plugin->keyToInstanceFnc =
+    (PRESTypePluginKeyToInstanceFunction)
+    ::PanAndTiltControlCustomPlugin_key_to_instance;
+    plugin->serializedKeyToKeyHashFnc = NULL; /* Not supported yet */
     #ifdef NDDS_STANDALONE_TYPE
     plugin->typeCode = NULL; 
     #else
@@ -2692,6 +2812,19 @@ LampControlPluginSupport_copy_data(
     return RTI_TRUE;
 }
 
+LampControl *
+LampControlPluginSupport_create_key(void)
+{
+    return LampControlPluginSupport_create_data();
+}
+
+void 
+LampControlPluginSupport_destroy_key(
+    LampControlKeyHolder *key) 
+{
+    LampControlPluginSupport_destroy_data(key);
+}
+
 /* ----------------------------------------------------------------------------
 Callback functions:
 * ---------------------------------------------------------------------------- */
@@ -2778,6 +2911,9 @@ LampControlPlugin_on_endpoint_attached(
         PRESTypePluginEndpointData epd = NULL;
         unsigned int serializedSampleMaxSize = 0;
 
+        unsigned int serializedKeyMaxSize = 0;
+        unsigned int serializedKeyMaxSizeV2 = 0;
+
         if (top_level_registration) {} /* To avoid warnings */
         if (containerPluginContext) {} /* To avoid warnings */
 
@@ -2792,11 +2928,30 @@ LampControlPlugin_on_endpoint_attached(
             LampControlPluginSupport_create_data,
             (PRESTypePluginDefaultEndpointDataDestroySampleFunction)
             LampControlPluginSupport_destroy_data,
-            NULL , NULL );
+            (PRESTypePluginDefaultEndpointDataCreateKeyFunction)
+            ::LampControlPluginSupport_create_key ,                (PRESTypePluginDefaultEndpointDataDestroyKeyFunction)
+            ::LampControlPluginSupport_destroy_key);
 
         if (epd == NULL) {
             return NULL;
         } 
+
+        serializedKeyMaxSize =  ::LampControlPlugin_get_serialized_key_max_size(
+            epd,RTI_FALSE,RTI_CDR_ENCAPSULATION_ID_CDR_BE,0);
+        serializedKeyMaxSizeV2 = LampControlPlugin_get_serialized_key_max_size_for_keyhash(
+            epd,
+            RTI_CDR_ENCAPSULATION_ID_CDR2_BE,
+            0);
+
+        if(!PRESTypePluginDefaultEndpointData_createMD5StreamWithInfo(
+            epd,
+            endpoint_info,
+            serializedKeyMaxSize,
+            serializedKeyMaxSizeV2))  
+        {
+            PRESTypePluginDefaultEndpointData_delete(epd);
+            return NULL;
+        }
 
         if (endpoint_info->endpointKind == PRES_TYPEPLUGIN_ENDPOINT_WRITER) {
             serializedSampleMaxSize = ::LampControlPlugin_get_serialized_sample_max_size(
@@ -3045,7 +3200,7 @@ Key Management functions:
 PRESTypePluginKeyKind 
 LampControlPlugin_get_key_kind(void)
 {
-    return PRES_TYPEPLUGIN_NO_KEY;
+    return PRES_TYPEPLUGIN_USER_KEY;
 }
 
 RTIBool LampControlPlugin_deserialize_key(
@@ -3119,6 +3274,70 @@ LampControlPlugin_get_serialized_key_max_size_for_keyhash(
     return size;
 }
 
+RTIBool 
+LampControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    LampControlKeyHolder *dst, 
+    const LampControl *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+
+        dst->lampID() = src->lampID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+LampControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    LampControl *dst, const
+    LampControlKeyHolder *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+        dst->lampID() = src->lampID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+LampControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos)
+{
+    LampControl * sample = NULL;
+    sample = (LampControl *)
+    PRESTypePluginDefaultEndpointData_getTempSample(endpoint_data);
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedSerializedSampleToKey(
+        endpoint_data,
+        sample,
+        cdrStream, 
+        deserialize_encapsulation, 
+        RTI_TRUE,
+        endpoint_plugin_qos)) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedInstanceToKeyHash(
+        endpoint_data,
+        keyhash,
+        sample,
+        RTICdrStream_getEncapsulationKind(cdrStream))) {
+        return RTI_FALSE;
+    }
+    return RTI_TRUE;   
+}
+
 /* ------------------------------------------------------------------------
 * Plug-in Installation Methods
 * ------------------------------------------------------------------------ */
@@ -3181,19 +3400,40 @@ struct PRESTypePlugin *LampControlPlugin_new(void)
     (PRESTypePluginGetKeyKindFunction)
     ::LampControlPlugin_get_key_kind;
 
-    /* These functions are only used for keyed types. As this is not a keyed
-    type they are all set to NULL
-    */
-    plugin->serializeKeyFnc = NULL ;    
-    plugin->deserializeKeyFnc = NULL;  
-    plugin->getKeyFnc = NULL;
-    plugin->returnKeyFnc = NULL;
-    plugin->instanceToKeyFnc = NULL;
-    plugin->keyToInstanceFnc = NULL;
-    plugin->getSerializedKeyMaxSizeFnc = NULL;
-    plugin->instanceToKeyHashFnc = NULL;
-    plugin->serializedSampleToKeyHashFnc = NULL;
-    plugin->serializedKeyToKeyHashFnc = NULL;    
+    plugin->getSerializedKeyMaxSizeFnc =   
+    (PRESTypePluginGetSerializedKeyMaxSizeFunction)
+    ::LampControlPlugin_get_serialized_key_max_size;
+    plugin->serializeKeyFnc =
+    (PRESTypePluginSerializeKeyFunction)
+    PRESTypePlugin_interpretedSerializeKey;
+    plugin->deserializeKeyFnc =
+    (PRESTypePluginDeserializeKeyFunction)
+    ::LampControlPlugin_deserialize_key;
+    plugin->deserializeKeySampleFnc =
+    (PRESTypePluginDeserializeKeySampleFunction)
+    PRESTypePlugin_interpretedDeserializeKey;
+
+    plugin-> instanceToKeyHashFnc = 
+    (PRESTypePluginInstanceToKeyHashFunction)
+    PRESTypePlugin_interpretedInstanceToKeyHash;
+    plugin->serializedSampleToKeyHashFnc = 
+    (PRESTypePluginSerializedSampleToKeyHashFunction)
+    ::LampControlPlugin_serialized_sample_to_keyhash;
+
+    plugin->getKeyFnc =
+    (PRESTypePluginGetKeyFunction)
+    LampControlPlugin_get_key;
+    plugin->returnKeyFnc =
+    (PRESTypePluginReturnKeyFunction)
+    LampControlPlugin_return_key;
+
+    plugin->instanceToKeyFnc =
+    (PRESTypePluginInstanceToKeyFunction)
+    ::LampControlPlugin_instance_to_key;
+    plugin->keyToInstanceFnc =
+    (PRESTypePluginKeyToInstanceFunction)
+    ::LampControlPlugin_key_to_instance;
+    plugin->serializedKeyToKeyHashFnc = NULL; /* Not supported yet */
     #ifdef NDDS_STANDALONE_TYPE
     plugin->typeCode = NULL; 
     #else
@@ -3277,6 +3517,19 @@ CameraControlPluginSupport_copy_data(
     }
 
     return RTI_TRUE;
+}
+
+CameraControl *
+CameraControlPluginSupport_create_key(void)
+{
+    return CameraControlPluginSupport_create_data();
+}
+
+void 
+CameraControlPluginSupport_destroy_key(
+    CameraControlKeyHolder *key) 
+{
+    CameraControlPluginSupport_destroy_data(key);
 }
 
 /* ----------------------------------------------------------------------------
@@ -3365,6 +3618,9 @@ CameraControlPlugin_on_endpoint_attached(
         PRESTypePluginEndpointData epd = NULL;
         unsigned int serializedSampleMaxSize = 0;
 
+        unsigned int serializedKeyMaxSize = 0;
+        unsigned int serializedKeyMaxSizeV2 = 0;
+
         if (top_level_registration) {} /* To avoid warnings */
         if (containerPluginContext) {} /* To avoid warnings */
 
@@ -3379,11 +3635,30 @@ CameraControlPlugin_on_endpoint_attached(
             CameraControlPluginSupport_create_data,
             (PRESTypePluginDefaultEndpointDataDestroySampleFunction)
             CameraControlPluginSupport_destroy_data,
-            NULL , NULL );
+            (PRESTypePluginDefaultEndpointDataCreateKeyFunction)
+            ::CameraControlPluginSupport_create_key ,                (PRESTypePluginDefaultEndpointDataDestroyKeyFunction)
+            ::CameraControlPluginSupport_destroy_key);
 
         if (epd == NULL) {
             return NULL;
         } 
+
+        serializedKeyMaxSize =  ::CameraControlPlugin_get_serialized_key_max_size(
+            epd,RTI_FALSE,RTI_CDR_ENCAPSULATION_ID_CDR_BE,0);
+        serializedKeyMaxSizeV2 = CameraControlPlugin_get_serialized_key_max_size_for_keyhash(
+            epd,
+            RTI_CDR_ENCAPSULATION_ID_CDR2_BE,
+            0);
+
+        if(!PRESTypePluginDefaultEndpointData_createMD5StreamWithInfo(
+            epd,
+            endpoint_info,
+            serializedKeyMaxSize,
+            serializedKeyMaxSizeV2))  
+        {
+            PRESTypePluginDefaultEndpointData_delete(epd);
+            return NULL;
+        }
 
         if (endpoint_info->endpointKind == PRES_TYPEPLUGIN_ENDPOINT_WRITER) {
             serializedSampleMaxSize = ::CameraControlPlugin_get_serialized_sample_max_size(
@@ -3632,7 +3907,7 @@ Key Management functions:
 PRESTypePluginKeyKind 
 CameraControlPlugin_get_key_kind(void)
 {
-    return PRES_TYPEPLUGIN_NO_KEY;
+    return PRES_TYPEPLUGIN_USER_KEY;
 }
 
 RTIBool CameraControlPlugin_deserialize_key(
@@ -3706,6 +3981,70 @@ CameraControlPlugin_get_serialized_key_max_size_for_keyhash(
     return size;
 }
 
+RTIBool 
+CameraControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    CameraControlKeyHolder *dst, 
+    const CameraControl *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+
+        dst->cameraID() = src->cameraID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+CameraControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    CameraControl *dst, const
+    CameraControlKeyHolder *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+        dst->cameraID() = src->cameraID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+CameraControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos)
+{
+    CameraControl * sample = NULL;
+    sample = (CameraControl *)
+    PRESTypePluginDefaultEndpointData_getTempSample(endpoint_data);
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedSerializedSampleToKey(
+        endpoint_data,
+        sample,
+        cdrStream, 
+        deserialize_encapsulation, 
+        RTI_TRUE,
+        endpoint_plugin_qos)) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedInstanceToKeyHash(
+        endpoint_data,
+        keyhash,
+        sample,
+        RTICdrStream_getEncapsulationKind(cdrStream))) {
+        return RTI_FALSE;
+    }
+    return RTI_TRUE;   
+}
+
 /* ------------------------------------------------------------------------
 * Plug-in Installation Methods
 * ------------------------------------------------------------------------ */
@@ -3768,19 +4107,40 @@ struct PRESTypePlugin *CameraControlPlugin_new(void)
     (PRESTypePluginGetKeyKindFunction)
     ::CameraControlPlugin_get_key_kind;
 
-    /* These functions are only used for keyed types. As this is not a keyed
-    type they are all set to NULL
-    */
-    plugin->serializeKeyFnc = NULL ;    
-    plugin->deserializeKeyFnc = NULL;  
-    plugin->getKeyFnc = NULL;
-    plugin->returnKeyFnc = NULL;
-    plugin->instanceToKeyFnc = NULL;
-    plugin->keyToInstanceFnc = NULL;
-    plugin->getSerializedKeyMaxSizeFnc = NULL;
-    plugin->instanceToKeyHashFnc = NULL;
-    plugin->serializedSampleToKeyHashFnc = NULL;
-    plugin->serializedKeyToKeyHashFnc = NULL;    
+    plugin->getSerializedKeyMaxSizeFnc =   
+    (PRESTypePluginGetSerializedKeyMaxSizeFunction)
+    ::CameraControlPlugin_get_serialized_key_max_size;
+    plugin->serializeKeyFnc =
+    (PRESTypePluginSerializeKeyFunction)
+    PRESTypePlugin_interpretedSerializeKey;
+    plugin->deserializeKeyFnc =
+    (PRESTypePluginDeserializeKeyFunction)
+    ::CameraControlPlugin_deserialize_key;
+    plugin->deserializeKeySampleFnc =
+    (PRESTypePluginDeserializeKeySampleFunction)
+    PRESTypePlugin_interpretedDeserializeKey;
+
+    plugin-> instanceToKeyHashFnc = 
+    (PRESTypePluginInstanceToKeyHashFunction)
+    PRESTypePlugin_interpretedInstanceToKeyHash;
+    plugin->serializedSampleToKeyHashFnc = 
+    (PRESTypePluginSerializedSampleToKeyHashFunction)
+    ::CameraControlPlugin_serialized_sample_to_keyhash;
+
+    plugin->getKeyFnc =
+    (PRESTypePluginGetKeyFunction)
+    CameraControlPlugin_get_key;
+    plugin->returnKeyFnc =
+    (PRESTypePluginReturnKeyFunction)
+    CameraControlPlugin_return_key;
+
+    plugin->instanceToKeyFnc =
+    (PRESTypePluginInstanceToKeyFunction)
+    ::CameraControlPlugin_instance_to_key;
+    plugin->keyToInstanceFnc =
+    (PRESTypePluginKeyToInstanceFunction)
+    ::CameraControlPlugin_key_to_instance;
+    plugin->serializedKeyToKeyHashFnc = NULL; /* Not supported yet */
     #ifdef NDDS_STANDALONE_TYPE
     plugin->typeCode = NULL; 
     #else
@@ -3864,6 +4224,19 @@ PanAndTiltControlPluginSupport_copy_data(
     }
 
     return RTI_TRUE;
+}
+
+PanAndTiltControl *
+PanAndTiltControlPluginSupport_create_key(void)
+{
+    return PanAndTiltControlPluginSupport_create_data();
+}
+
+void 
+PanAndTiltControlPluginSupport_destroy_key(
+    PanAndTiltControlKeyHolder *key) 
+{
+    PanAndTiltControlPluginSupport_destroy_data(key);
 }
 
 /* ----------------------------------------------------------------------------
@@ -3952,6 +4325,9 @@ PanAndTiltControlPlugin_on_endpoint_attached(
         PRESTypePluginEndpointData epd = NULL;
         unsigned int serializedSampleMaxSize = 0;
 
+        unsigned int serializedKeyMaxSize = 0;
+        unsigned int serializedKeyMaxSizeV2 = 0;
+
         if (top_level_registration) {} /* To avoid warnings */
         if (containerPluginContext) {} /* To avoid warnings */
 
@@ -3966,11 +4342,30 @@ PanAndTiltControlPlugin_on_endpoint_attached(
             PanAndTiltControlPluginSupport_create_data,
             (PRESTypePluginDefaultEndpointDataDestroySampleFunction)
             PanAndTiltControlPluginSupport_destroy_data,
-            NULL , NULL );
+            (PRESTypePluginDefaultEndpointDataCreateKeyFunction)
+            ::PanAndTiltControlPluginSupport_create_key ,                (PRESTypePluginDefaultEndpointDataDestroyKeyFunction)
+            ::PanAndTiltControlPluginSupport_destroy_key);
 
         if (epd == NULL) {
             return NULL;
         } 
+
+        serializedKeyMaxSize =  ::PanAndTiltControlPlugin_get_serialized_key_max_size(
+            epd,RTI_FALSE,RTI_CDR_ENCAPSULATION_ID_CDR_BE,0);
+        serializedKeyMaxSizeV2 = PanAndTiltControlPlugin_get_serialized_key_max_size_for_keyhash(
+            epd,
+            RTI_CDR_ENCAPSULATION_ID_CDR2_BE,
+            0);
+
+        if(!PRESTypePluginDefaultEndpointData_createMD5StreamWithInfo(
+            epd,
+            endpoint_info,
+            serializedKeyMaxSize,
+            serializedKeyMaxSizeV2))  
+        {
+            PRESTypePluginDefaultEndpointData_delete(epd);
+            return NULL;
+        }
 
         if (endpoint_info->endpointKind == PRES_TYPEPLUGIN_ENDPOINT_WRITER) {
             serializedSampleMaxSize = ::PanAndTiltControlPlugin_get_serialized_sample_max_size(
@@ -4219,7 +4614,7 @@ Key Management functions:
 PRESTypePluginKeyKind 
 PanAndTiltControlPlugin_get_key_kind(void)
 {
-    return PRES_TYPEPLUGIN_NO_KEY;
+    return PRES_TYPEPLUGIN_USER_KEY;
 }
 
 RTIBool PanAndTiltControlPlugin_deserialize_key(
@@ -4293,6 +4688,70 @@ PanAndTiltControlPlugin_get_serialized_key_max_size_for_keyhash(
     return size;
 }
 
+RTIBool 
+PanAndTiltControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControlKeyHolder *dst, 
+    const PanAndTiltControl *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+
+        dst->panandtiltID() = src->panandtiltID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+PanAndTiltControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControl *dst, const
+    PanAndTiltControlKeyHolder *src)
+{
+    try {
+        if (endpoint_data) {} /* To avoid warnings */   
+        dst->panandtiltID() = src->panandtiltID();
+        return RTI_TRUE;
+    } catch (...) {
+        return RTI_FALSE;
+    }    
+}
+
+RTIBool 
+PanAndTiltControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos)
+{
+    PanAndTiltControl * sample = NULL;
+    sample = (PanAndTiltControl *)
+    PRESTypePluginDefaultEndpointData_getTempSample(endpoint_data);
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedSerializedSampleToKey(
+        endpoint_data,
+        sample,
+        cdrStream, 
+        deserialize_encapsulation, 
+        RTI_TRUE,
+        endpoint_plugin_qos)) {
+        return RTI_FALSE;
+    }
+    if (!PRESTypePlugin_interpretedInstanceToKeyHash(
+        endpoint_data,
+        keyhash,
+        sample,
+        RTICdrStream_getEncapsulationKind(cdrStream))) {
+        return RTI_FALSE;
+    }
+    return RTI_TRUE;   
+}
+
 /* ------------------------------------------------------------------------
 * Plug-in Installation Methods
 * ------------------------------------------------------------------------ */
@@ -4355,19 +4814,40 @@ struct PRESTypePlugin *PanAndTiltControlPlugin_new(void)
     (PRESTypePluginGetKeyKindFunction)
     ::PanAndTiltControlPlugin_get_key_kind;
 
-    /* These functions are only used for keyed types. As this is not a keyed
-    type they are all set to NULL
-    */
-    plugin->serializeKeyFnc = NULL ;    
-    plugin->deserializeKeyFnc = NULL;  
-    plugin->getKeyFnc = NULL;
-    plugin->returnKeyFnc = NULL;
-    plugin->instanceToKeyFnc = NULL;
-    plugin->keyToInstanceFnc = NULL;
-    plugin->getSerializedKeyMaxSizeFnc = NULL;
-    plugin->instanceToKeyHashFnc = NULL;
-    plugin->serializedSampleToKeyHashFnc = NULL;
-    plugin->serializedKeyToKeyHashFnc = NULL;    
+    plugin->getSerializedKeyMaxSizeFnc =   
+    (PRESTypePluginGetSerializedKeyMaxSizeFunction)
+    ::PanAndTiltControlPlugin_get_serialized_key_max_size;
+    plugin->serializeKeyFnc =
+    (PRESTypePluginSerializeKeyFunction)
+    PRESTypePlugin_interpretedSerializeKey;
+    plugin->deserializeKeyFnc =
+    (PRESTypePluginDeserializeKeyFunction)
+    ::PanAndTiltControlPlugin_deserialize_key;
+    plugin->deserializeKeySampleFnc =
+    (PRESTypePluginDeserializeKeySampleFunction)
+    PRESTypePlugin_interpretedDeserializeKey;
+
+    plugin-> instanceToKeyHashFnc = 
+    (PRESTypePluginInstanceToKeyHashFunction)
+    PRESTypePlugin_interpretedInstanceToKeyHash;
+    plugin->serializedSampleToKeyHashFnc = 
+    (PRESTypePluginSerializedSampleToKeyHashFunction)
+    ::PanAndTiltControlPlugin_serialized_sample_to_keyhash;
+
+    plugin->getKeyFnc =
+    (PRESTypePluginGetKeyFunction)
+    PanAndTiltControlPlugin_get_key;
+    plugin->returnKeyFnc =
+    (PRESTypePluginReturnKeyFunction)
+    PanAndTiltControlPlugin_return_key;
+
+    plugin->instanceToKeyFnc =
+    (PRESTypePluginInstanceToKeyFunction)
+    ::PanAndTiltControlPlugin_instance_to_key;
+    plugin->keyToInstanceFnc =
+    (PRESTypePluginKeyToInstanceFunction)
+    ::PanAndTiltControlPlugin_key_to_instance;
+    plugin->serializedKeyToKeyHashFnc = NULL; /* Not supported yet */
     #ifdef NDDS_STANDALONE_TYPE
     plugin->typeCode = NULL; 
     #else
