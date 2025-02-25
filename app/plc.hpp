@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493952212_hpp
-#define plc_493952212_hpp
+#ifndef plc_493952328_hpp
+#define plc_493952328_hpp
 
 #include <iosfwd>
 
@@ -134,19 +134,19 @@ class NDDSUSERDllExport CameraControlCustom {
 
     CameraControlCustom();
 
-    CameraControlCustom(uint32_t cameraId_,bool power_,bool light_,float focus_,float zoom_);
+    CameraControlCustom(uint32_t cameraID_,bool power_,bool light_,float focus_,float zoom_);
 
-    uint32_t& cameraId() noexcept {
-        return m_cameraId_;
+    uint32_t& cameraID() noexcept {
+        return m_cameraID_;
     }
 
-    const uint32_t& cameraId() const noexcept {
-        return m_cameraId_;
+    const uint32_t& cameraID() const noexcept {
+        return m_cameraID_;
     }
 
-    void cameraId(uint32_t value) {
+    void cameraID(uint32_t value) {
 
-        m_cameraId_ = value;
+        m_cameraID_ = value;
     }
 
     bool& power() noexcept {
@@ -208,7 +208,7 @@ class NDDSUSERDllExport CameraControlCustom {
 
   private:
 
-    uint32_t m_cameraId_;
+    uint32_t m_cameraID_;
     bool m_power_;
     bool m_light_;
     float m_focus_;
@@ -228,7 +228,20 @@ class NDDSUSERDllExport PanAndTiltControlCustom {
 
     PanAndTiltControlCustom();
 
-    PanAndTiltControlCustom(float x_,float y_,float z_);
+    PanAndTiltControlCustom(uint32_t panandtiltID_,float x_,float y_,float z_);
+
+    uint32_t& panandtiltID() noexcept {
+        return m_panandtiltID_;
+    }
+
+    const uint32_t& panandtiltID() const noexcept {
+        return m_panandtiltID_;
+    }
+
+    void panandtiltID(uint32_t value) {
+
+        m_panandtiltID_ = value;
+    }
 
     float& x() noexcept {
         return m_x_;
@@ -276,6 +289,7 @@ class NDDSUSERDllExport PanAndTiltControlCustom {
 
   private:
 
+    uint32_t m_panandtiltID_;
     float m_x_;
     float m_y_;
     float m_z_;
@@ -346,7 +360,20 @@ class NDDSUSERDllExport LampControl {
 
     LampControl();
 
-    LampControl(float intensity_,const ::Power& power_);
+    LampControl(uint32_t lampID_,float intensity_,const ::Power& power_);
+
+    uint32_t& lampID() noexcept {
+        return m_lampID_;
+    }
+
+    const uint32_t& lampID() const noexcept {
+        return m_lampID_;
+    }
+
+    void lampID(uint32_t value) {
+
+        m_lampID_ = value;
+    }
 
     float& intensity() noexcept {
         return m_intensity_;
@@ -384,6 +411,7 @@ class NDDSUSERDllExport LampControl {
 
   private:
 
+    uint32_t m_lampID_;
     float m_intensity_;
     ::Power m_power_;
 
@@ -401,7 +429,20 @@ class NDDSUSERDllExport CameraControl {
 
     CameraControl();
 
-    CameraControl(const ::Power& focus_far_,const ::Power& focus_near_,const ::Power& LED_,const ::Power& power_,const ::Power& zoom_in_,const ::Power& zoom_out_);
+    CameraControl(uint32_t cameraID_,const ::Power& focus_far_,const ::Power& focus_near_,const ::Power& LED_,const ::Power& power_,const ::Power& zoom_in_,const ::Power& zoom_out_);
+
+    uint32_t& cameraID() noexcept {
+        return m_cameraID_;
+    }
+
+    const uint32_t& cameraID() const noexcept {
+        return m_cameraID_;
+    }
+
+    void cameraID(uint32_t value) {
+
+        m_cameraID_ = value;
+    }
 
     ::Power& focus_far() noexcept {
         return m_focus_far_;
@@ -506,6 +547,7 @@ class NDDSUSERDllExport CameraControl {
 
   private:
 
+    uint32_t m_cameraID_;
     ::Power m_focus_far_;
     ::Power m_focus_near_;
     ::Power m_LED_;
@@ -527,7 +569,20 @@ class NDDSUSERDllExport PanAndTiltControl {
 
     PanAndTiltControl();
 
-    PanAndTiltControl(const ::Power& pan_left_,const ::Power& pan_right_,const ::Power& power_,const ::Power& tilt_down_,const ::Power& tilt_up_);
+    PanAndTiltControl(uint32_t panandtiltID_,const ::Power& pan_left_,const ::Power& pan_right_,const ::Power& power_,const ::Power& tilt_down_,const ::Power& tilt_up_);
+
+    uint32_t& panandtiltID() noexcept {
+        return m_panandtiltID_;
+    }
+
+    const uint32_t& panandtiltID() const noexcept {
+        return m_panandtiltID_;
+    }
+
+    void panandtiltID(uint32_t value) {
+
+        m_panandtiltID_ = value;
+    }
 
     ::Power& pan_left() noexcept {
         return m_pan_left_;
@@ -616,6 +671,7 @@ class NDDSUSERDllExport PanAndTiltControl {
 
   private:
 
+    uint32_t m_panandtiltID_;
     ::Power m_pan_left_;
     ::Power m_pan_right_;
     ::Power m_power_;
@@ -977,7 +1033,6 @@ namespace rti {
 
     }
 }
-
 struct LampControlStruct {
 
     uint32_t lampID;
@@ -987,7 +1042,7 @@ struct LampControlStruct {
 
 struct CameraControlStruct {
 
-    uint32_t cameraId;
+    uint32_t cameraID;
     bool power;
     bool light;
     float focus;
@@ -997,13 +1052,12 @@ struct CameraControlStruct {
 
 struct PanAndTiltControlStruct {
 
+    uint32_t panandtiltID;
     float x;
     float y;
     float z;
     
 };
-
-
 #endif // NDDS_STANDALONE_TYPE
 #if (defined(RTI_WIN32) || defined (RTI_WINCE) || defined(RTI_INTIME)) && defined(NDDS_USER_DLL_EXPORT)
 /* If the code is building on Windows, stop exporting symbols.
@@ -1012,5 +1066,5 @@ struct PanAndTiltControlStruct {
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493952212_hpp
+#endif // plc_493952328_hpp
 

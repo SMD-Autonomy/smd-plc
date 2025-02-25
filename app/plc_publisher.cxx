@@ -88,6 +88,7 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
+        data.cameraID(ccstruct.cameraID);
         data.LED().CMD(var_light_oct);
         data.power().CMD(var_power_oct);
         if (var_zoom_bool)
@@ -141,6 +142,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
+        data.lampID(lcstruct.lampID);
         data.intensity(intensity);
         data.power().CMD(var_power_oct);
         std::cout << "Writing ::LampControl" << std::endl;
@@ -178,6 +180,7 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
+        data.panandtiltID(ptcstruct.panandtiltID);
         if (var_tilt_bool)
         {
             data.tilt_up().CMD(1);
@@ -224,9 +227,9 @@ int main(int argc, char *argv[])
     std::vector<std::exception_ptr> exceptions(3);
 
     // Sample control data for each publisher
-    CameraControlStruct camera_control_data = {1,true, true, 22, 25};
-    LampControlStruct lamp_control_data = {1, 75, true};
-    PanAndTiltControlStruct pan_and_tilt_control_data = {80, 20, 23};
+    CameraControlStruct camera_control_data = {8, true, true, 22, 25};
+    LampControlStruct lamp_control_data = {8, 75, true};
+    PanAndTiltControlStruct pan_and_tilt_control_data = {8, 80, 20, 23};
 
     // Lambda function to run a publisher and catch exceptions
     auto run_publisher = [&](auto publisher_func, int index, auto control_data) {

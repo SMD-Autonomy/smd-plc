@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plcPlugin_493952212_h
-#define plcPlugin_493952212_h
+#ifndef plcPlugin_493952328_h
+#define plcPlugin_493952328_h
 
 #include "plc.hpp"
 
@@ -446,10 +446,29 @@ CameraControlCustomPlugin_new(void);
 NDDSUSERDllExport extern void
 CameraControlCustomPlugin_delete(struct PRESTypePlugin *);
 
+/* The type used to store keys for instances of type struct
+* AnotherSimple.
+*
+* By default, this type is struct PanAndTiltControlCustom
+* itself. However, if for some reason this choice is not practical for your
+* system (e.g. if sizeof(struct PanAndTiltControlCustom)
+* is very large), you may redefine this typedef in terms of another type of
+* your choosing. HOWEVER, if you define the KeyHolder type to be something
+* other than struct AnotherSimple, the
+* following restriction applies: the key of struct
+* PanAndTiltControlCustom must consist of a
+* single field of your redefined KeyHolder type and that field must be the
+* first field in struct PanAndTiltControlCustom.
+*/
+typedef class PanAndTiltControlCustom PanAndTiltControlCustomKeyHolder;
+
 #define PanAndTiltControlCustomPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
 
 #define PanAndTiltControlCustomPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
 #define PanAndTiltControlCustomPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
+
+#define PanAndTiltControlCustomPlugin_get_key PRESTypePluginDefaultEndpointData_getKey 
+#define PanAndTiltControlCustomPlugin_return_key PRESTypePluginDefaultEndpointData_returnKey
 
 #define PanAndTiltControlCustomPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
 #define PanAndTiltControlCustomPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
@@ -491,6 +510,20 @@ PanAndTiltControlCustomPluginSupport_print_data(
     const PanAndTiltControlCustom *sample,
     const char *desc,
     unsigned int indent);
+
+NDDSUSERDllExport extern PanAndTiltControlCustom*
+PanAndTiltControlCustomPluginSupport_create_key_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern PanAndTiltControlCustom*
+PanAndTiltControlCustomPluginSupport_create_key(void);
+
+NDDSUSERDllExport extern void 
+PanAndTiltControlCustomPluginSupport_destroy_key_ex(
+    PanAndTiltControlCustomKeyHolder *key,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+PanAndTiltControlCustomPluginSupport_destroy_key(
+    PanAndTiltControlCustomKeyHolder *key);
 
 /* ----------------------------------------------------------------------------
 Callback functions:
@@ -594,6 +627,26 @@ PanAndTiltControlCustomPlugin_deserialize_key(
     RTIBool deserialize_encapsulation,
     RTIBool deserialize_key,
     void *endpoint_plugin_qos);
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltControlCustomPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControlCustomKeyHolder *key, 
+    const PanAndTiltControlCustom *instance);
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltControlCustomPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControlCustom *instance, 
+    const PanAndTiltControlCustomKeyHolder *key);
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltControlCustomPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos); 
 
 /* Plugin Functions */
 NDDSUSERDllExport extern struct PRESTypePlugin*
@@ -758,10 +811,29 @@ PowerPlugin_new(void);
 NDDSUSERDllExport extern void
 PowerPlugin_delete(struct PRESTypePlugin *);
 
+/* The type used to store keys for instances of type struct
+* AnotherSimple.
+*
+* By default, this type is struct LampControl
+* itself. However, if for some reason this choice is not practical for your
+* system (e.g. if sizeof(struct LampControl)
+* is very large), you may redefine this typedef in terms of another type of
+* your choosing. HOWEVER, if you define the KeyHolder type to be something
+* other than struct AnotherSimple, the
+* following restriction applies: the key of struct
+* LampControl must consist of a
+* single field of your redefined KeyHolder type and that field must be the
+* first field in struct LampControl.
+*/
+typedef class LampControl LampControlKeyHolder;
+
 #define LampControlPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
 
 #define LampControlPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
 #define LampControlPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
+
+#define LampControlPlugin_get_key PRESTypePluginDefaultEndpointData_getKey 
+#define LampControlPlugin_return_key PRESTypePluginDefaultEndpointData_returnKey
 
 #define LampControlPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
 #define LampControlPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
@@ -803,6 +875,20 @@ LampControlPluginSupport_print_data(
     const LampControl *sample,
     const char *desc,
     unsigned int indent);
+
+NDDSUSERDllExport extern LampControl*
+LampControlPluginSupport_create_key_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern LampControl*
+LampControlPluginSupport_create_key(void);
+
+NDDSUSERDllExport extern void 
+LampControlPluginSupport_destroy_key_ex(
+    LampControlKeyHolder *key,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+LampControlPluginSupport_destroy_key(
+    LampControlKeyHolder *key);
 
 /* ----------------------------------------------------------------------------
 Callback functions:
@@ -907,6 +993,26 @@ LampControlPlugin_deserialize_key(
     RTIBool deserialize_key,
     void *endpoint_plugin_qos);
 
+NDDSUSERDllExport extern RTIBool 
+LampControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    LampControlKeyHolder *key, 
+    const LampControl *instance);
+
+NDDSUSERDllExport extern RTIBool 
+LampControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    LampControl *instance, 
+    const LampControlKeyHolder *key);
+
+NDDSUSERDllExport extern RTIBool 
+LampControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos); 
+
 /* Plugin Functions */
 NDDSUSERDllExport extern struct PRESTypePlugin*
 LampControlPlugin_new(void);
@@ -914,10 +1020,29 @@ LampControlPlugin_new(void);
 NDDSUSERDllExport extern void
 LampControlPlugin_delete(struct PRESTypePlugin *);
 
+/* The type used to store keys for instances of type struct
+* AnotherSimple.
+*
+* By default, this type is struct CameraControl
+* itself. However, if for some reason this choice is not practical for your
+* system (e.g. if sizeof(struct CameraControl)
+* is very large), you may redefine this typedef in terms of another type of
+* your choosing. HOWEVER, if you define the KeyHolder type to be something
+* other than struct AnotherSimple, the
+* following restriction applies: the key of struct
+* CameraControl must consist of a
+* single field of your redefined KeyHolder type and that field must be the
+* first field in struct CameraControl.
+*/
+typedef class CameraControl CameraControlKeyHolder;
+
 #define CameraControlPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
 
 #define CameraControlPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
 #define CameraControlPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
+
+#define CameraControlPlugin_get_key PRESTypePluginDefaultEndpointData_getKey 
+#define CameraControlPlugin_return_key PRESTypePluginDefaultEndpointData_returnKey
 
 #define CameraControlPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
 #define CameraControlPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
@@ -959,6 +1084,20 @@ CameraControlPluginSupport_print_data(
     const CameraControl *sample,
     const char *desc,
     unsigned int indent);
+
+NDDSUSERDllExport extern CameraControl*
+CameraControlPluginSupport_create_key_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern CameraControl*
+CameraControlPluginSupport_create_key(void);
+
+NDDSUSERDllExport extern void 
+CameraControlPluginSupport_destroy_key_ex(
+    CameraControlKeyHolder *key,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+CameraControlPluginSupport_destroy_key(
+    CameraControlKeyHolder *key);
 
 /* ----------------------------------------------------------------------------
 Callback functions:
@@ -1063,6 +1202,26 @@ CameraControlPlugin_deserialize_key(
     RTIBool deserialize_key,
     void *endpoint_plugin_qos);
 
+NDDSUSERDllExport extern RTIBool 
+CameraControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    CameraControlKeyHolder *key, 
+    const CameraControl *instance);
+
+NDDSUSERDllExport extern RTIBool 
+CameraControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    CameraControl *instance, 
+    const CameraControlKeyHolder *key);
+
+NDDSUSERDllExport extern RTIBool 
+CameraControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos); 
+
 /* Plugin Functions */
 NDDSUSERDllExport extern struct PRESTypePlugin*
 CameraControlPlugin_new(void);
@@ -1070,10 +1229,29 @@ CameraControlPlugin_new(void);
 NDDSUSERDllExport extern void
 CameraControlPlugin_delete(struct PRESTypePlugin *);
 
+/* The type used to store keys for instances of type struct
+* AnotherSimple.
+*
+* By default, this type is struct PanAndTiltControl
+* itself. However, if for some reason this choice is not practical for your
+* system (e.g. if sizeof(struct PanAndTiltControl)
+* is very large), you may redefine this typedef in terms of another type of
+* your choosing. HOWEVER, if you define the KeyHolder type to be something
+* other than struct AnotherSimple, the
+* following restriction applies: the key of struct
+* PanAndTiltControl must consist of a
+* single field of your redefined KeyHolder type and that field must be the
+* first field in struct PanAndTiltControl.
+*/
+typedef class PanAndTiltControl PanAndTiltControlKeyHolder;
+
 #define PanAndTiltControlPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
 
 #define PanAndTiltControlPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
 #define PanAndTiltControlPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
+
+#define PanAndTiltControlPlugin_get_key PRESTypePluginDefaultEndpointData_getKey 
+#define PanAndTiltControlPlugin_return_key PRESTypePluginDefaultEndpointData_returnKey
 
 #define PanAndTiltControlPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
 #define PanAndTiltControlPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
@@ -1115,6 +1293,20 @@ PanAndTiltControlPluginSupport_print_data(
     const PanAndTiltControl *sample,
     const char *desc,
     unsigned int indent);
+
+NDDSUSERDllExport extern PanAndTiltControl*
+PanAndTiltControlPluginSupport_create_key_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern PanAndTiltControl*
+PanAndTiltControlPluginSupport_create_key(void);
+
+NDDSUSERDllExport extern void 
+PanAndTiltControlPluginSupport_destroy_key_ex(
+    PanAndTiltControlKeyHolder *key,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+PanAndTiltControlPluginSupport_destroy_key(
+    PanAndTiltControlKeyHolder *key);
 
 /* ----------------------------------------------------------------------------
 Callback functions:
@@ -1219,6 +1411,26 @@ PanAndTiltControlPlugin_deserialize_key(
     RTIBool deserialize_key,
     void *endpoint_plugin_qos);
 
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltControlPlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControlKeyHolder *key, 
+    const PanAndTiltControl *instance);
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltControlPlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltControl *instance, 
+    const PanAndTiltControlKeyHolder *key);
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltControlPlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *cdrStream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos); 
+
 /* Plugin Functions */
 NDDSUSERDllExport extern struct PRESTypePlugin*
 PanAndTiltControlPlugin_new(void);
@@ -1233,5 +1445,5 @@ PanAndTiltControlPlugin_delete(struct PRESTypePlugin *);
 #define NDDSUSERDllExport
 #endif
 
-#endif /* plcPlugin_493952212_h */
+#endif /* plcPlugin_493952328_h */
 
