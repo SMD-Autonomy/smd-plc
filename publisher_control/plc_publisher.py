@@ -10,6 +10,7 @@
 # to use the software.
 
 import time
+import argparse
 import sys
 import threading
 import rti.connextdds as dds
@@ -114,9 +115,9 @@ class ControlPublisher:
 
 
 if __name__ == "__main__":
-    func1 = threading.Thread(target=ControlPublisher.camera_publisher(domain_id=6,sample_count=50))
+    func1 = threading.Thread(target=ControlPublisher.camera_publisher(domain_id=6,sample_count=1))
     func1.start()
-    func2 = threading.Thread(target=ControlPublisher.lamp_publisher(domain_id=6,sample_count=50))
+    func2 = threading.Thread(target=ControlPublisher.lamp_publisher(domain_id=6,sample_count=1))
     func2.start()
-    func3 = threading.Thread(target=ControlPublisher.panandtilt_publisher(domain_id=6,sample_count=50))
+    func3 = threading.Thread(target=ControlPublisher.panandtilt_publisher(domain_id=6,sample_count=1))
     func3.start()
