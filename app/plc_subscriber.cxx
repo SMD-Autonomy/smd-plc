@@ -11,6 +11,8 @@
 */
 
 #include <algorithm>
+#include <thread>
+#include <vector>
 #include <iostream>
 
 #include <dds/sub/ddssub.hpp>
@@ -27,40 +29,101 @@
 //    https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/api/connext_dds/api_cpp2/group__DDSCpp2Conventions.html
 
 #include "plc.hpp"
-#include "application.hpp"  // for command line parsing and ctrl-c
+#include "application.hpp"
+#include "plc_publisher.hpp"  // for command line parsing and ctrl-c
 
-int process_data(dds::sub::DataReader< ::PanAndTiltControl> reader)
+
+
+PanAndTiltControlStruct pan_and_tilt_control_data;
+
+int process_camera_data(dds::sub::DataReader< ::CameraControlCustom> reader,unsigned int domain_id, unsigned int sample_count)
 {
-    // Take all samples
     int count = 0;
-    dds::sub::LoanedSamples< ::PanAndTiltControl> samples = reader.take();
+    dds::sub::LoanedSamples< ::CameraControlCustom> samples = reader.take();
     for (auto sample : samples) {
         if (sample.info().valid()) {
             count++;
             std::cout << sample.data() << std::endl;
+            
+            // Copy data to CameraControlStruct
+            CameraControlStruct camera_data;
+            camera_data.cameraID = sample.data().cameraID();
+            camera_data.power = sample.data().power();
+            camera_data.light = sample.data().light();
+            camera_data.focus = sample.data().focus();
+            camera_data.zoom = sample.data().zoom();
+            
+            camera_publisher(domain_id, sample_count, camera_data);
+
+            
         } else {
             std::cout << "Instance state changed to "
             << sample.info().state().instance_state() << std::endl;
         }
     }
+    return count;
+}
 
-    return count; 
-} // The LoanedSamples destructor returns the loan
-
-void run_subscriber_application(unsigned int domain_id, unsigned int sample_count)
+int process_lamp_data(dds::sub::DataReader< ::LampControlCustom> reader, unsigned int domain_id, unsigned int sample_count)
 {
-    // DDS objects behave like shared pointers or value types
-    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
+    int count = 0;
+    dds::sub::LoanedSamples< ::LampControlCustom> samples = reader.take();
+    for (auto sample : samples) {
+        if (sample.info().valid()) {
+            count++;
+            std::cout << sample.data() << std::endl;
+            
+            LampControlStruct lamp_data;
+            lamp_data.lampID = sample.data().lampID();
+            lamp_data.intensity = sample.data().intensity();
+            lamp_data.power = sample.data().power();
 
-    // Start communicating in a domain, usually one participant per application
+            lamp_publisher(domain_id, sample_count, lamp_data);
+            
+        } else {
+            std::cout << "Instance state changed to "
+            << sample.info().state().instance_state() << std::endl;
+        }
+    }
+    return count;
+}
+
+int process_panandtilt_data(dds::sub::DataReader< ::PanAndTiltControlCustom> reader,unsigned int domain_id, unsigned int sample_count)
+{
+    int count = 0;
+    dds::sub::LoanedSamples< ::PanAndTiltControlCustom> samples = reader.take();
+    for (auto sample : samples) {
+        if (sample.info().valid()) {
+            count++;
+            std::cout << sample.data() << std::endl;
+            
+            PanAndTiltControlStruct pan_and_tilt_data;
+            pan_and_tilt_data.panandtiltID = sample.data().panandtiltID();
+            pan_and_tilt_data.x = sample.data().x();
+            pan_and_tilt_data.y = sample.data().y();
+            pan_and_tilt_data.z = sample.data().z();
+            panandtilt_publisher(domain_id, sample_count, pan_and_tilt_data);
+            
+        } else {
+            std::cout << "Instance state changed to "
+            << sample.info().state().instance_state() << std::endl;
+        }
+    }
+    return count;
+}
+
+
+void camera_subscriber(unsigned int domain_id, unsigned int sample_count)
+{
+
     dds::domain::DomainParticipant participant(domain_id);
 
     // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PanAndTiltControl> topic(participant, "Example PanAndTiltControl");
+    dds::topic::Topic< ::CameraControlCustom> topic(participant, "CameraSetterTopic");
 
     // Create a Subscriber and DataReader with default Qos
     dds::sub::Subscriber subscriber(participant);
-    dds::sub::DataReader< ::PanAndTiltControl> reader(subscriber, topic);
+    dds::sub::DataReader< ::CameraControlCustom> reader(subscriber, topic); 
 
     // Create a ReadCondition for any data received on this reader and set a
     // handler to process the data
@@ -68,19 +131,84 @@ void run_subscriber_application(unsigned int domain_id, unsigned int sample_coun
     dds::sub::cond::ReadCondition read_condition(
         reader,
         dds::sub::status::DataState::any(),
-        [reader, &samples_read]() { samples_read += process_data(reader); });
+        [&, reader]() { samples_read += process_camera_data(reader,domain_id,sample_count); });
 
     // WaitSet will be woken when the attached condition is triggered
     dds::core::cond::WaitSet waitset;
     waitset += read_condition;
 
     while (!application::shutdown_requested && samples_read < sample_count) {
-        std::cout << "::PanAndTiltControl subscriber sleeping up to 1 sec..." << std::endl;
+        std::cout << "::CameraControlCustom subscriber sleeping up to 1 sec..." << std::endl;
 
         // Run the handlers of the active conditions. Wait for up to 1 second.
         waitset.dispatch(dds::core::Duration(1));
     }
 }
+
+void lamp_subscriber(unsigned int domain_id, unsigned int sample_count)
+{
+
+    dds::domain::DomainParticipant participant(domain_id);
+
+    // Create a Topic with a name and a datatype
+    dds::topic::Topic< ::LampControlCustom> topic(participant, "LampSetterTopic");
+
+    // Create a Subscriber and DataReader with default Qos
+    dds::sub::Subscriber subscriber(participant);
+    dds::sub::DataReader< ::LampControlCustom> reader(subscriber, topic); 
+
+    // Create a ReadCondition for any data received on this reader and set a
+    // handler to process the data
+    unsigned int samples_read = 0;
+    dds::sub::cond::ReadCondition read_condition(
+        reader,
+        dds::sub::status::DataState::any(),
+        [&, reader]() { samples_read += process_lamp_data(reader,domain_id,sample_count); });
+
+    // WaitSet will be woken when the attached condition is triggered
+    dds::core::cond::WaitSet waitset;
+    waitset += read_condition;
+
+    while (!application::shutdown_requested && samples_read < sample_count) {
+        std::cout << "::LampControlCustom subscriber sleeping up to 1 sec..." << std::endl;
+
+        // Run the handlers of the active conditions. Wait for up to 1 second.
+        waitset.dispatch(dds::core::Duration(1));
+    }
+}
+
+void panandtilt_subscriber(unsigned int domain_id, unsigned int sample_count)
+{
+
+    dds::domain::DomainParticipant participant(domain_id);
+
+    // Create a Topic with a name and a datatype
+    dds::topic::Topic< ::PanAndTiltControlCustom> topic(participant, "PanAndTiltSetterTopic");
+
+    // Create a Subscriber and DataReader with default Qos
+    dds::sub::Subscriber subscriber(participant);
+    dds::sub::DataReader< ::PanAndTiltControlCustom> reader(subscriber, topic); 
+
+    // Create a ReadCondition for any data received on this reader and set a
+    // handler to process the data
+    unsigned int samples_read = 0;
+    dds::sub::cond::ReadCondition read_condition(
+        reader,
+        dds::sub::status::DataState::any(),
+        [&, reader]() { samples_read += process_panandtilt_data(reader,domain_id,sample_count); });
+
+    // WaitSet will be woken when the attached condition is triggered
+    dds::core::cond::WaitSet waitset;
+    waitset += read_condition;
+
+    while (!application::shutdown_requested && samples_read < sample_count) {
+        std::cout << "::PanAndTiltControlCustom subscriber sleeping up to 1 sec..." << std::endl;
+
+        // Run the handlers of the active conditions. Wait for up to 1 second.
+        waitset.dispatch(dds::core::Duration(1));
+    }
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -99,13 +227,38 @@ int main(int argc, char *argv[])
     // Sets Connext verbosity to help debugging
     rti::config::Logger::instance().verbosity(arguments.verbosity);
 
-    try {
-        run_subscriber_application(arguments.domain_id, arguments.sample_count);
-    } catch (const std::exception& ex) {
-        // This will catch DDS exceptions
-        std::cerr << "Exception in run_subscriber_application(): " << ex.what()
-        << std::endl;
-        return EXIT_FAILURE;
+    std::vector<std::thread> threads;
+    std::vector<std::exception_ptr> exceptions(3);
+
+    // Lambda function to run a publisher and catch exceptions
+    auto run_subscriber = [&](auto subscriber_func, int index) {
+        try {
+            subscriber_func(arguments.domain_id, arguments.sample_count);
+        } catch (...) {
+            exceptions[index] = std::current_exception();
+        }
+    };
+
+    // Create threads for each publisher, passing the control data
+    threads.emplace_back(run_subscriber, camera_subscriber, 0);
+    threads.emplace_back(run_subscriber, lamp_subscriber, 1);
+    threads.emplace_back(run_subscriber, panandtilt_subscriber, 2);
+
+    // Wait for all threads to complete
+    for (auto& thread : threads) {
+        thread.join();
+    }
+
+    // Check for exceptions
+    for (int i = 0; i < 3; ++i) {
+        if (exceptions[i]) {
+            try {
+                std::rethrow_exception(exceptions[i]);
+            } catch (const std::exception& ex) {
+                std::cerr << "Exception in subscriber " << i << ": " << ex.what() << std::endl;
+                return EXIT_FAILURE;
+            }
+        }
     }
 
     // Releases the memory used by the participant factory.  Optional at
