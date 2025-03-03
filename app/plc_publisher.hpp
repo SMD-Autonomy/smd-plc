@@ -21,6 +21,32 @@
 #include "application.hpp"  // for command line parsing and ctrl-c
 #include "plc.hpp"
 
+
+struct LampControlStruct {
+
+    uint32_t lampID;
+    float intensity;
+    bool power;
+};
+
+struct CameraControlStruct {
+
+    uint32_t cameraID;
+    bool power;
+    bool light;
+    float focus;
+    float zoom;
+
+};
+
+struct PanAndTiltControlStruct {
+
+    uint32_t panandtiltID;
+    float x;
+    float y;
+    float z;
+    
+};
 class HelperMethods
 {
     public:

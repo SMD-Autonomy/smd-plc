@@ -34,8 +34,6 @@
 
 
 
-PanAndTiltControlStruct pan_and_tilt_control_data;
-
 int process_camera_data(dds::sub::DataReader< ::CameraControlCustom> reader,unsigned int domain_id, unsigned int sample_count)
 {
     int count = 0;

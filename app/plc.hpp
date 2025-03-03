@@ -1033,35 +1033,6 @@ namespace rti {
 
     }
 }
-struct LampControlStruct {
-
-    uint32_t lampID;
-    float intensity;
-    bool power;
-};
-
-struct CameraControlStruct {
-
-    uint32_t cameraID;
-    bool power;
-    bool light;
-    float focus;
-    float zoom;
-
-};
-
-struct PanAndTiltControlStruct {
-
-    uint32_t panandtiltID;
-    float x;
-    float y;
-    float z;
-    
-};
-
-extern CameraControlStruct camera_control_data;
-extern LampControlStruct lamp_control_data;
-extern PanAndTiltControlStruct pan_and_tilt_control_data;
 
 #endif // NDDS_STANDALONE_TYPE
 #if (defined(RTI_WIN32) || defined (RTI_WINCE) || defined(RTI_INTIME)) && defined(NDDS_USER_DLL_EXPORT)
