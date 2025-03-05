@@ -44,7 +44,7 @@ int process_camera_data(dds::sub::DataReader< ::CameraControlCustom> reader,unsi
             std::cout << sample.data() << std::endl;
             
             // Copy data to CameraControlStruct
-            CameraControlStruct camera_data;
+            helpermethods.CameraControlStruct camera_data;
             camera_data.cameraID = sample.data().cameraID();
             camera_data.power = sample.data().power();
             camera_data.light = sample.data().light();
@@ -71,7 +71,7 @@ int process_lamp_data(dds::sub::DataReader< ::LampControlCustom> reader, unsigne
             count++;
             std::cout << sample.data() << std::endl;
             
-            LampControlStruct lamp_data;
+            helpermethods.LampControlStruct lamp_data;
             lamp_data.lampID = sample.data().lampID();
             lamp_data.intensity = sample.data().intensity();
             lamp_data.power = sample.data().power();
@@ -95,7 +95,7 @@ int process_panandtilt_data(dds::sub::DataReader< ::PanAndTiltControlCustom> rea
             count++;
             std::cout << sample.data() << std::endl;
             
-            PanAndTiltControlStruct pan_and_tilt_data;
+            helpermethods.PanAndTiltControlStruct pan_and_tilt_data;
             pan_and_tilt_data.panandtiltID = sample.data().panandtiltID();
             pan_and_tilt_data.x = sample.data().x();
             pan_and_tilt_data.y = sample.data().y();

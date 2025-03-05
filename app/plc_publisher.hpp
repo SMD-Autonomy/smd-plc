@@ -14,6 +14,7 @@
 #include <thread>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 #include <dds/pub/ddspub.hpp>
 #include <rti/util/util.hpp>      // for sleep()
@@ -22,34 +23,45 @@
 #include "plc.hpp"
 
 
-struct LampControlStruct {
 
-    uint32_t lampID;
-    float intensity;
-    bool power;
-};
 
-struct CameraControlStruct {
+const float PI = 3.141;
 
-    uint32_t cameraID;
-    bool power;
-    bool light;
-    float focus;
-    float zoom;
 
-};
-
-struct PanAndTiltControlStruct {
-
-    uint32_t panandtiltID;
-    float x;
-    float y;
-    float z;
-    
-};
 class HelperMethods
 {
     public:
+    struct Quaternion {
+        float x, y, z, w;
+    };
+    
+    
+    struct LampControlStruct {
+    
+        uint32_t lampID;
+        float intensity;
+        bool power;
+    };
+    
+    struct CameraControlStruct {
+    
+        uint32_t cameraID;
+        bool power;
+        bool light;
+        float focus;
+        float zoom;
+    
+    };
+    
+    struct PanAndTiltControlStruct {
+    
+        uint32_t panandtiltID;
+        float x;
+        float y;
+        float z;
+        
+    };
+
     uint8_t bool_to_octet(bool message)
     {
         uint8_t oct_val;
@@ -63,15 +75,24 @@ class HelperMethods
         }
     }
     
-    bool float_to_bool(float message)
+    bool float_to_bool(float message, std::string type)
     {
         bool bool_val;
-        message = clamp(message, -100, 100); 
-        if (message > 0){
+        if (type == "tilt")
+        {
+            message = clamp(message, -90, 90);
+        }
+        if (type == "pan")
+        {
+            message = clamp(message, -180, 180);
+        } 
+        if (message > 0)
+        {
             bool_val = true;
             return bool_val;
         }
-        else {
+        else 
+        {
             bool_val = false;
             return bool_val;
         }
@@ -80,6 +101,31 @@ class HelperMethods
     float clamp(float v, float lo, float hi)
     {
         return (v < lo) ? lo : (hi < v) ? hi : v;
+    }
+
+    Quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
+    {
+        // Convert degrees to radians
+        // Roll, pitch, yaw are Roll, Tilt, Pan
+        float rollRad = roll * PI / 180.0;
+        float pitchRad = pitch * PI / 180.0;
+        float yawRad = yaw * PI / 180.0;
+    
+        // Calculate cosine and sine of half angles
+        float cr = cos(rollRad * 0.5);
+        float sr = sin(rollRad * 0.5);
+        float cp = cos(pitchRad * 0.5);
+        float sp = sin(pitchRad * 0.5);
+        float cy = cos(yawRad * 0.5);
+        float sy = sin(yawRad * 0.5);
+    
+        Quaternion q;
+        q.x = sr * cp * cy - cr * sp * sy;
+        q.y = cr * sp * cy + sr * cp * sy;
+        q.z = cr * cp * sy - sr * sp * cy;
+        q.w = cr * cp * cy + sr * sp * sy;
+    
+        return q;
     }
     
 };
@@ -197,8 +243,8 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::PanAndTiltControl> writer(publisher, topic);
 
-    bool var_tilt_bool = helpermethods.float_to_bool(ptcstruct.x);
-    bool var_pan_bool = helpermethods.float_to_bool(ptcstruct.z);
+    bool var_tilt_bool = helpermethods.float_to_bool(ptcstruct.x, "tilt");
+    bool var_pan_bool = helpermethods.float_to_bool(ptcstruct.z, "pan");
 
     ::PanAndTiltControl data;
     // Main loop, write data
