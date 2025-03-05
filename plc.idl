@@ -93,7 +93,6 @@ struct Quaternion {
 struct PanAndTiltPositionPublisher {
 
     @key uint32 panandtiltID;
-    Quaternion pan;
-    Quaternion tilt;
+    Quaternion angle;
 
 };

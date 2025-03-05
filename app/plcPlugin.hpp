@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plcPlugin_493952928_h
-#define plcPlugin_493952928_h
+#ifndef plcPlugin_493952908_h
+#define plcPlugin_493952908_h
 
 #include "plc.hpp"
 
@@ -1966,5 +1966,5 @@ PanAndTiltPositionPublisherPlugin_delete(struct PRESTypePlugin *);
 #define NDDSUSERDllExport
 #endif
 
-#endif /* plcPlugin_493952928_h */
+#endif /* plcPlugin_493952908_h */
 

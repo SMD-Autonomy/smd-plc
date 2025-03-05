@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493952928_hpp
-#define plc_493952928_hpp
+#ifndef plc_493952908_hpp
+#define plc_493952908_hpp
 
 #include <iosfwd>
 
@@ -1020,7 +1020,7 @@ class NDDSUSERDllExport PanAndTiltPositionPublisher {
 
     PanAndTiltPositionPublisher();
 
-    PanAndTiltPositionPublisher(uint32_t panandtiltID_,const ::Quaternion& pan_,const ::Quaternion& tilt_);
+    PanAndTiltPositionPublisher(uint32_t panandtiltID_,const ::Quaternion& angle_);
 
     uint32_t& panandtiltID() noexcept {
         return m_panandtiltID_;
@@ -1035,37 +1035,21 @@ class NDDSUSERDllExport PanAndTiltPositionPublisher {
         m_panandtiltID_ = value;
     }
 
-    ::Quaternion& pan() noexcept {
-        return m_pan_;
+    ::Quaternion& angle() noexcept {
+        return m_angle_;
     }
 
-    const ::Quaternion& pan() const noexcept {
-        return m_pan_;
+    const ::Quaternion& angle() const noexcept {
+        return m_angle_;
     }
 
-    void pan(const ::Quaternion& value) {
+    void angle(const ::Quaternion& value) {
 
-        m_pan_ = value;
+        m_angle_ = value;
     }
 
-    void pan(::Quaternion&& value) {
-        m_pan_ = std::move(value);
-    }
-    ::Quaternion& tilt() noexcept {
-        return m_tilt_;
-    }
-
-    const ::Quaternion& tilt() const noexcept {
-        return m_tilt_;
-    }
-
-    void tilt(const ::Quaternion& value) {
-
-        m_tilt_ = value;
-    }
-
-    void tilt(::Quaternion&& value) {
-        m_tilt_ = std::move(value);
+    void angle(::Quaternion&& value) {
+        m_angle_ = std::move(value);
     }
     bool operator == (const PanAndTiltPositionPublisher& other_) const;
     bool operator != (const PanAndTiltPositionPublisher& other_) const;
@@ -1075,8 +1059,7 @@ class NDDSUSERDllExport PanAndTiltPositionPublisher {
   private:
 
     uint32_t m_panandtiltID_;
-    ::Quaternion m_pan_;
-    ::Quaternion m_tilt_;
+    ::Quaternion m_angle_;
 
 };
 
@@ -1580,5 +1563,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493952928_hpp
+#endif // plc_493952908_hpp
 

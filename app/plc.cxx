@@ -668,28 +668,23 @@ PanAndTiltPositionPublisher::PanAndTiltPositionPublisher() :
 
 }   
 
-PanAndTiltPositionPublisher::PanAndTiltPositionPublisher (uint32_t panandtiltID_,const ::Quaternion& pan_,const ::Quaternion& tilt_):
+PanAndTiltPositionPublisher::PanAndTiltPositionPublisher (uint32_t panandtiltID_,const ::Quaternion& angle_):
     m_panandtiltID_(panandtiltID_), 
-    m_pan_(pan_), 
-    m_tilt_(tilt_) {
+    m_angle_(angle_) {
 }
 
 void PanAndTiltPositionPublisher::swap(PanAndTiltPositionPublisher& other_)  noexcept 
 {
     using std::swap;
     swap(m_panandtiltID_, other_.m_panandtiltID_);
-    swap(m_pan_, other_.m_pan_);
-    swap(m_tilt_, other_.m_tilt_);
+    swap(m_angle_, other_.m_angle_);
 }  
 
 bool PanAndTiltPositionPublisher::operator == (const PanAndTiltPositionPublisher& other_) const {
     if (m_panandtiltID_ != other_.m_panandtiltID_) {
         return false;
     }
-    if (m_pan_ != other_.m_pan_) {
-        return false;
-    }
-    if (m_tilt_ != other_.m_tilt_) {
+    if (m_angle_ != other_.m_angle_) {
         return false;
     }
     return true;
@@ -704,8 +699,7 @@ std::ostream& operator << (std::ostream& o,const PanAndTiltPositionPublisher& sa
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
     o << "panandtiltID: " << sample.panandtiltID ()<<", ";
-    o << "pan: " << sample.pan ()<<", ";
-    o << "tilt: " << sample.tilt ();
+    o << "angle: " << sample.angle ();
     o <<"]";
     return o;
 }
@@ -3234,7 +3228,7 @@ namespace rti {
 
                 static RTIBool is_initialized = RTI_FALSE;
 
-                static DDS_TypeCode_Member PanAndTiltPositionPublisher_g_tc_members[3]=
+                static DDS_TypeCode_Member PanAndTiltPositionPublisher_g_tc_members[2]=
                 {
 
                     {
@@ -3256,27 +3250,9 @@ namespace rti {
                         RTICdrTypeCodeAnnotations_INITIALIZER
                     }, 
                     {
-                        (char *)"pan",/* Member name */
+                        (char *)"angle",/* Member name */
                         {
                             1,/* Representation ID */
-                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
-                            -1, /* Bitfield bits */
-                            NULL/* Member type code is assigned later */
-                        },
-                        0, /* Ignored */
-                        0, /* Ignored */
-                        0, /* Ignored */
-                        NULL, /* Ignored */
-                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
-                        DDS_PUBLIC_MEMBER,/* Member visibility */
-                        1,
-                        NULL, /* Ignored */
-                        RTICdrTypeCodeAnnotations_INITIALIZER
-                    }, 
-                    {
-                        (char *)"tilt",/* Member name */
-                        {
-                            2,/* Representation ID */
                             DDS_BOOLEAN_FALSE,/* Is a pointer? */
                             -1, /* Bitfield bits */
                             NULL/* Member type code is assigned later */
@@ -3303,7 +3279,7 @@ namespace rti {
                         0, /* Ignored */
                         0, /* Ignored */
                         NULL, /* Ignored */
-                        3, /* Number of members */
+                        2, /* Number of members */
                         PanAndTiltPositionPublisher_g_tc_members, /* Members */
                         DDS_VM_NONE, /* Ignored */
                         RTICdrTypeCodeAnnotations_INITIALIZER,
@@ -3322,7 +3298,6 @@ namespace rti {
 
                 PanAndTiltPositionPublisher_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_ulong;
                 PanAndTiltPositionPublisher_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Quaternion>::get().native();
-                PanAndTiltPositionPublisher_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Quaternion>::get().native();
 
                 /* Initialize the values for member annotations. */
                 PanAndTiltPositionPublisher_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_ULONG;
@@ -3344,7 +3319,7 @@ namespace rti {
 
                 ::PanAndTiltPositionPublisher *sample;
 
-                static RTIXCdrMemberAccessInfo PanAndTiltPositionPublisher_g_memberAccessInfos[3] =
+                static RTIXCdrMemberAccessInfo PanAndTiltPositionPublisher_g_memberAccessInfos[2] =
                 {RTIXCdrMemberAccessInfo_INITIALIZER};
 
                 static RTIXCdrSampleAccessInfo PanAndTiltPositionPublisher_g_sampleAccessInfo = 
@@ -3365,10 +3340,7 @@ namespace rti {
                 (RTIXCdrUnsignedLong) ((char *)&sample->panandtiltID() - (char *)sample);
 
                 PanAndTiltPositionPublisher_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->pan() - (char *)sample);
-
-                PanAndTiltPositionPublisher_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
-                (RTIXCdrUnsignedLong) ((char *)&sample->tilt() - (char *)sample);
+                (RTIXCdrUnsignedLong) ((char *)&sample->angle() - (char *)sample);
 
                 PanAndTiltPositionPublisher_g_sampleAccessInfo.memberAccessInfos = 
                 PanAndTiltPositionPublisher_g_memberAccessInfos;
@@ -4108,14 +4080,12 @@ namespace dds {
         void topic_type_support< ::PanAndTiltPositionPublisher >::reset_sample(::PanAndTiltPositionPublisher& sample) 
         {
             sample.panandtiltID(0u);
-            ::rti::topic::reset_sample(sample.pan());
-            ::rti::topic::reset_sample(sample.tilt());
+            ::rti::topic::reset_sample(sample.angle());
         }
 
         void topic_type_support< ::PanAndTiltPositionPublisher >::allocate_sample(::PanAndTiltPositionPublisher& sample, int, int) 
         {
-            ::rti::topic::allocate_sample(sample.pan(),  -1, -1);
-            ::rti::topic::allocate_sample(sample.tilt(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.angle(),  -1, -1);
         }
     }
 }  

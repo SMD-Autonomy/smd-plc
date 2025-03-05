@@ -334,8 +334,7 @@ void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, He
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
 
-    ::Quaternion pan = helpermethods.eulerToQuaternion(0, 0, pub_data.pan);
-    ::Quaternion tilt = helpermethods.eulerToQuaternion(0, pub_data.tilt, 0);
+    ::Quaternion angle = helpermethods.eulerToQuaternion(0, pub_data.tilt, pub_data.pan);
 
     ::PanAndTiltPositionPublisher data;
     // Main loop, write data
@@ -344,8 +343,7 @@ void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, He
     samples_written++) {
 
         data.panandtiltID(pub_data.panandtiltID);
-        data.pan(pan);
-        data.tilt(tilt);
+        data.angle(angle);
         writer.write(data);
 
         // Send once every second

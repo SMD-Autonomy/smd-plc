@@ -99,7 +99,7 @@
               <node_id>
                 <namespace_index>6</namespace_index>
                 <string_identifier>4</string_identifier>
-              <node_id>
+              </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_two">

@@ -347,6 +347,7 @@ int main(int argc, char *argv[])
     threads.emplace_back(run_subscriber, camera_subscriber, 0);
     threads.emplace_back(run_subscriber, lamp_subscriber, 1);
     threads.emplace_back(run_subscriber, panandtilt_subscriber, 2);
+    threads.emplace_back(run_subscriber, panandtilt_position_subscriber, 3);
 
     // Wait for all threads to complete
     for (auto& thread : threads) {
@@ -354,7 +355,7 @@ int main(int argc, char *argv[])
     }
 
     // Check for exceptions
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
         if (exceptions[i]) {
             try {
                 std::rethrow_exception(exceptions[i]);
