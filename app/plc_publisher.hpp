@@ -31,10 +31,6 @@ const float PI = 3.141;
 class HelperMethods
 {
     public:
-    struct quaternion {
-        float x, y, z, w;
-    };
-    
     struct LampControlStruct {
     
         uint32_t lampID;
@@ -126,12 +122,26 @@ class HelperMethods
         }
     }
 
+    bool float_to_bool(float message)
+    {
+        bool bool_val;
+        message = clamp(message, -100, 100); 
+        if (message > 0){
+            bool_val = true;
+            return bool_val;
+        }
+        else {
+            bool_val = false;
+            return bool_val;
+        }
+    }
+
     float clamp(float v, float lo, float hi)
     {
         return (v < lo) ? lo : (hi < v) ? hi : v;
     }
 
-    quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
+    ::Quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
     {
         // Convert degrees to radians
         // Roll, pitch, yaw are Roll, Tilt, Pan
@@ -147,11 +157,11 @@ class HelperMethods
         float cy = cos(yawRad * 0.5);
         float sy = sin(yawRad * 0.5);
     
-        quaternion q;
-        q.x = sr * cp * cy - cr * sp * sy;
-        q.y = cr * sp * cy + sr * cp * sy;
-        q.z = cr * cp * sy - sr * sp * cy;
-        q.w = cr * cp * cy + sr * sp * sy;
+        ::Quaternion q;
+        q.x() = sr * cp * cy - cr * sp * sy;
+        q.y() = cr * sp * cy + sr * cp * sy;
+        q.z() = cr * cp * sy - sr * sp * cy;
+        q.w() = cr * cp * cy + sr * sp * sy;
     
         return q;
     }
@@ -324,8 +334,8 @@ void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, He
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
 
-    HelperMethods::quaternion pan = helpermethods.eulerToQuaternion(0, 0, pub_data.pan);
-    HelperMethods::quaternion tilt = helpermethods.eulerToQuaternion(0, pub_data.tilt, 0);
+    ::Quaternion pan = helpermethods.eulerToQuaternion(0, 0, pub_data.pan);
+    ::Quaternion tilt = helpermethods.eulerToQuaternion(0, pub_data.tilt, 0);
 
     ::PanAndTiltPositionPublisher data;
     // Main loop, write data

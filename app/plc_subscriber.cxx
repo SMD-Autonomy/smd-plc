@@ -44,7 +44,7 @@ int process_camera_data(dds::sub::DataReader< ::CameraControlCustom> reader,unsi
             std::cout << sample.data() << std::endl;
             
             // Copy data to CameraControlStruct
-            helpermethods.CameraControlStruct camera_data;
+            HelperMethods::CameraControlStruct camera_data;
             camera_data.cameraID = sample.data().cameraID();
             camera_data.power = sample.data().power();
             camera_data.light = sample.data().light();
@@ -71,7 +71,7 @@ int process_lamp_data(dds::sub::DataReader< ::LampControlCustom> reader, unsigne
             count++;
             std::cout << sample.data() << std::endl;
             
-            helpermethods.LampControlStruct lamp_data;
+            HelperMethods::LampControlStruct lamp_data;
             lamp_data.lampID = sample.data().lampID();
             lamp_data.intensity = sample.data().intensity();
             lamp_data.power = sample.data().power();
@@ -95,7 +95,7 @@ int process_panandtilt_data(dds::sub::DataReader< ::PanAndTiltControlCustom> rea
             count++;
             std::cout << sample.data() << std::endl;
             
-            helpermethods.PanAndTiltControlStruct pan_and_tilt_data;
+            HelperMethods::PanAndTiltControlStruct pan_and_tilt_data;
             pan_and_tilt_data.panandtiltID = sample.data().panandtiltID();
             pan_and_tilt_data.x = sample.data().x();
             pan_and_tilt_data.y = sample.data().y();
@@ -119,7 +119,7 @@ int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber
             count++;
             std::cout << sample.data() << std::endl;
             
-            helpermethods.PanAndTiltPositionStruct pt_position_data;
+            HelperMethods::PanAndTiltPositionStruct pt_position_data;
             pt_position_data.pan_one = sample.data().pan_one();
             pt_position_data.tilt_one = sample.data().tilt_one();
             pt_position_data.pan_two = sample.data().pan_two();
@@ -138,7 +138,7 @@ int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber
             pt_position_data.tilt_eight = sample.data().tilt_eight();
 
             for (int i = 1; i <= 8; i++) {
-                helpermethods.PanAndTiltPositionPublisherStruct pub_data;
+                HelperMethods::PanAndTiltPositionPublisherStruct pub_data;
                 pub_data.panandtiltID = i;
                 
                 switch(i) {
@@ -175,15 +175,14 @@ int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber
                         pub_data.tilt = pt_position_data.tilt_eight;
                         break;
                 }
-                panandtilt_position_publisher(domain_id, sample_count, pub_data);
-            
+                pt_position_publisher(domain_id, sample_count, pub_data);
+            }
         } else {
             std::cout << "Instance state changed to "
             << sample.info().state().instance_state() << std::endl;
         }
     }
     return count;
-   }
 }
 
 void camera_subscriber(unsigned int domain_id, unsigned int sample_count)
@@ -288,11 +287,11 @@ void panandtilt_position_subscriber(unsigned int domain_id, unsigned int sample_
     dds::domain::DomainParticipant participant(domain_id);
 
     // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PanAndTiltControlCustom> topic(participant, "PanAndTiltPositionSubscriberTopic");
+    dds::topic::Topic< ::PanAndTiltPositionSubscriber> topic(participant, "PanAndTiltPositionSubscriberTopic");
 
     // Create a Subscriber and DataReader with default Qos
     dds::sub::Subscriber subscriber(participant);
-    dds::sub::DataReader< ::PanAndTiltControlCustom> reader(subscriber, topic); 
+    dds::sub::DataReader< ::PanAndTiltPositionSubscriber> reader(subscriber, topic); 
 
     // Create a ReadCondition for any data received on this reader and set a
     // handler to process the data
@@ -307,7 +306,7 @@ void panandtilt_position_subscriber(unsigned int domain_id, unsigned int sample_
     waitset += read_condition;
 
     while (!application::shutdown_requested && samples_read < sample_count) {
-        std::cout << "::PanAndTiltControlCustom subscriber sleeping up to 1 sec..." << std::endl;
+        std::cout << "::PanAndTiltPositionSubscriber subscriber sleeping up to 1 sec..." << std::endl;
 
         // Run the handlers of the active conditions. Wait for up to 1 second.
         waitset.dispatch(dds::core::Duration(1));
