@@ -29,6 +29,25 @@
             <member name="tilt_down" type="nonBasic" nonBasicTypeName="Power"/>
             <member name="tilt_up" type="nonBasic" nonBasicTypeName="Power"/>
         </struct>
+
+        <struct name="PanAndTiltPositionSubscriberType" nested="true">
+            <member name="pan_one" type="float32"/>
+            <member name="tilt_one" type="float32"/>
+            <member name="pan_two" type="float32"/>
+            <member name="tilt_two" type="float32"/>
+            <member name="pan_three" type="float32"/>
+            <member name="tilt_three" type="float32"/>
+            <member name="pan_four" type="float32"/>
+            <member name="tilt_four" type="float32"/>
+            <member name="pan_five" type="float32"/>
+            <member name="tilt_five" type="float32"/>
+            <member name="pan_six" type="float32"/>
+            <member name="tilt_six" type="float32"/>
+            <member name="pan_seven" type="float32"/>
+            <member name="tilt_seven" type="float32"/>
+            <member name="pan_eight" type="float32"/>
+            <member name="tilt_eight" type="float32"/>
+        </struct>
   </types>
 
   <ddsopcua_service name="PLCcontrolService">
@@ -41,6 +60,7 @@
       <register_type name="CameraControl" type_ref="CameraControlType"/>  
       <register_type name="LampControl" type_ref="LampControlType"/>   
       <register_type name="PanAndTiltControl" type_ref="PanAndTiltControlType"/>
+      <register_type name="PanAndTiltPositionSubscriber" type_ref="PanAndTiltPositionSubscriberType"/>
     </domain_participant>
 
     <opcua_to_dds_bridge name="PLCControlBridge">
@@ -51,6 +71,137 @@
           <enabled>false</enabled>
         </attribute_service_set>
       </service_set>
+
+      <subscription name="PanAndTiltOPCUASubscription">
+        <opcua_input name="pantiltPositionInput" opcua_connection_ref="PLCServerConnection">
+                    
+          <subscription_protocol>
+            <requested_publishing_interval>10</requested_publishing_interval>
+            <publishing_enabled>true</publishing_enabled>
+          </subscription_protocol>
+
+          <monitored_items>            
+            <node_attribute dds_topic_field_name="pan_one">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>2</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>            
+            <node_attribute dds_topic_field_name="tilt_one">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>3</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>	    
+            <node_attribute dds_topic_field_name="pan_two">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>4</string_identifier>
+              <node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_two">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>4</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_three">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>6</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_three">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>7</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_four">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>8</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_four">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>9</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_five">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>10</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_five">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>11</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_six">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>12</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_six">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>13</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_seven">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>14</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_seven">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>15</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_eight">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>16</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_eight">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>17</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+          </monitored_items>
+        </opcua_input>
+
+        <dds_output name="pantiltPositionOutput" domain_participant_ref="PLCDomainParticipant">
+          <topic_name>PanAndTiltPositionSubscriberTopic</topic_name>
+          <registered_type_name>PanAndTiltPositionSubscriber</registered_type_name>
+        </dds_output>
+
+      </subscription>
 
       <publication name="CameraControlPublicationOne">
         <dds_input name="PLCDDSInput" domain_participant_ref="PLCDomainParticipant">

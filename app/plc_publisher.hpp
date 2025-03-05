@@ -31,10 +31,9 @@ const float PI = 3.141;
 class HelperMethods
 {
     public:
-    struct Quaternion {
+    struct quaternion {
         float x, y, z, w;
     };
-    
     
     struct LampControlStruct {
     
@@ -60,6 +59,35 @@ class HelperMethods
         float y;
         float z;
         
+    };
+
+    struct PanAndTiltPositionStruct {
+
+        float pan_one;
+        float tilt_one;
+        float pan_two;
+        float tilt_two;
+        float pan_three;
+        float tilt_three;
+        float pan_four;
+        float tilt_four;
+        float pan_five;
+        float tilt_five;
+        float pan_six;
+        float tilt_six;
+        float pan_seven;
+        float tilt_seven;
+        float pan_eight;
+        float tilt_eight;
+    
+    };
+
+    struct PanAndTiltPositionPublisherStruct {
+    
+        uint32_t panandtiltID;
+        float pan;
+        float tilt;
+    
     };
 
     uint8_t bool_to_octet(bool message)
@@ -103,7 +131,7 @@ class HelperMethods
         return (v < lo) ? lo : (hi < v) ? hi : v;
     }
 
-    Quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
+    quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
     {
         // Convert degrees to radians
         // Roll, pitch, yaw are Roll, Tilt, Pan
@@ -119,7 +147,7 @@ class HelperMethods
         float cy = cos(yawRad * 0.5);
         float sy = sin(yawRad * 0.5);
     
-        Quaternion q;
+        quaternion q;
         q.x = sr * cp * cy - cr * sp * sy;
         q.y = cr * sp * cy + sr * cp * sy;
         q.z = cr * cp * sy - sr * sp * cy;
@@ -132,7 +160,7 @@ class HelperMethods
 
 HelperMethods helpermethods;
 
-void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraControlStruct ccstruct)
+void camera_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::CameraControlStruct ccstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -188,7 +216,7 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     }
 }
 
-void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampControlStruct lcstruct)
+void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::LampControlStruct lcstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -226,7 +254,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     }
 }
 
-void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanAndTiltControlStruct ptcstruct)
+void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,HelperMethods::PanAndTiltControlStruct ptcstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -272,6 +300,42 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
         
         std::cout << "Writing ::PanAndTiltControl " << std::endl;
 
+        writer.write(data);
+
+        // Send once every second
+        rti::util::sleep(dds::core::Duration(1));
+    }
+}
+
+void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::PanAndTiltPositionPublisherStruct pub_data)
+{
+    // DDS objects behave like shared pointers or value types
+    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
+
+    // Start communicating in a domain, usually one participant per application
+    dds::domain::DomainParticipant participant(domain_id);
+
+    // Create a Topic with a name and a datatype
+    dds::topic::Topic< ::PanAndTiltPositionPublisher> topic(participant, "PanAndTiltPositionTopic");
+
+    // Create a Publisher
+    dds::pub::Publisher publisher(participant);
+
+    // Create a DataWriter with default QoS
+    dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
+
+    HelperMethods::quaternion pan = helpermethods.eulerToQuaternion(0, 0, pub_data.pan);
+    HelperMethods::quaternion tilt = helpermethods.eulerToQuaternion(0, pub_data.tilt, 0);
+
+    ::PanAndTiltPositionPublisher data;
+    // Main loop, write data
+    for (unsigned int samples_written = 0;
+    !application::shutdown_requested && samples_written < sample_count;
+    samples_written++) {
+
+        data.panandtiltID(pub_data.panandtiltID);
+        data.pan(pan);
+        data.tilt(tilt);
         writer.write(data);
 
         // Send once every second
