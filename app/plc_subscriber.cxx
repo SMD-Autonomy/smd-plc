@@ -22,7 +22,7 @@ int process_camera_data(dds::sub::DataReader< ::CameraControlCustom> reader, uns
             
             
             // Copy data to CameraControlStruct
-            CameraControlStruct camera_data;
+            HelperMethods::CameraControlStruct camera_data;
             camera_data.cameraID = sample.data().cameraID();
             camera_data.power = sample.data().power();
             camera_data.light = sample.data().light();
@@ -48,7 +48,7 @@ int process_lamp_data(dds::sub::DataReader< ::LampControlCustom> reader, unsigne
             count++;
             std::cout << sample.data() << std::endl;
             
-            LampControlStruct lamp_data;
+            HelperMethods::LampControlStruct lamp_data;
             lamp_data.lampID = sample.data().lampID();
             lamp_data.intensity = sample.data().intensity();
             lamp_data.power = sample.data().power();
@@ -84,7 +84,7 @@ int process_panandtilt_data(dds::sub::DataReader< ::PanAndTiltControlCustom> rea
             count++;
             std::cout << sample.data() << std::endl;
             
-            PanAndTiltControlStruct pan_and_tilt_data;
+            HelperMethods::PanAndTiltControlStruct pan_and_tilt_data;
             pan_and_tilt_data.panandtiltID = sample.data().panandtiltID();
             pan_and_tilt_data.x = sample.data().x();
             pan_and_tilt_data.y = sample.data().y();
@@ -98,6 +98,80 @@ int process_panandtilt_data(dds::sub::DataReader< ::PanAndTiltControlCustom> rea
     return count;
 }
 
+int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber> reader,unsigned int domain_id, unsigned int sample_count)
+{
+    int count = 0;
+    dds::sub::LoanedSamples< ::PanAndTiltPositionSubscriber> samples = reader.take();
+    for (auto sample : samples) {
+        if (sample.info().valid()) {
+            count++;
+            std::cout << sample.data() << std::endl;
+            
+            HelperMethods::PanAndTiltPositionStruct pt_position_data;
+            pt_position_data.pan_one = sample.data().pan_one();
+            pt_position_data.tilt_one = sample.data().tilt_one();
+            pt_position_data.pan_two = sample.data().pan_two();
+            pt_position_data.tilt_two = sample.data().tilt_two();
+            pt_position_data.pan_three = sample.data().pan_three();
+            pt_position_data.tilt_three = sample.data().tilt_three();
+            pt_position_data.pan_four = sample.data().pan_four();
+            pt_position_data.tilt_four = sample.data().tilt_four();
+            pt_position_data.pan_five = sample.data().pan_five();
+            pt_position_data.tilt_five = sample.data().tilt_five();
+            pt_position_data.pan_six = sample.data().pan_six();
+            pt_position_data.tilt_six = sample.data().tilt_six();
+            pt_position_data.pan_seven = sample.data().pan_seven();
+            pt_position_data.tilt_seven = sample.data().tilt_seven();
+            pt_position_data.pan_eight = sample.data().pan_eight();
+            pt_position_data.tilt_eight = sample.data().tilt_eight();
+
+            for (int i = 1; i <= 8; i++) {
+                HelperMethods::PanAndTiltPositionPublisherStruct pub_data;
+                pub_data.panandtiltID = i;
+                
+                switch(i) {
+                    case 1:
+                        pub_data.pan = pt_position_data.pan_one;
+                        pub_data.tilt = pt_position_data.tilt_one;
+                        break;
+                    case 2:
+                        pub_data.pan = pt_position_data.pan_two;
+                        pub_data.tilt = pt_position_data.tilt_two;
+                        break;
+                    case 3:
+                        pub_data.pan = pt_position_data.pan_three;
+                        pub_data.tilt = pt_position_data.tilt_three;
+                        break;
+                    case 4:
+                        pub_data.pan = pt_position_data.pan_four;
+                        pub_data.tilt = pt_position_data.tilt_four;
+                        break;
+                    case 5:
+                        pub_data.pan = pt_position_data.pan_five;
+                        pub_data.tilt = pt_position_data.tilt_five;
+                        break;
+                    case 6:
+                        pub_data.pan = pt_position_data.pan_six;
+                        pub_data.tilt = pt_position_data.tilt_six;
+                        break;
+                    case 7:
+                        pub_data.pan = pt_position_data.pan_seven;
+                        pub_data.tilt = pt_position_data.tilt_seven;
+                        break;
+                    case 8: 
+                        pub_data.pan = pt_position_data.pan_eight;
+                        pub_data.tilt = pt_position_data.tilt_eight;
+                        break;
+                }
+                pt_position_publisher(domain_id, sample_count, pub_data);
+            }
+        } else {
+            std::cout << "Instance state changed to "
+            << sample.info().state().instance_state() << std::endl;
+        }
+    }
+    return count;
+}
 
 void camera_subscriber(dds::domain::DomainParticipant& participant, dds::topic::Topic< ::CameraControlCustom>& topic, unsigned int domain_id, unsigned int sample_count)
 {
@@ -159,6 +233,32 @@ void panandtilt_subscriber(dds::domain::DomainParticipant& participant, dds::top
     }
 }
 
+void panandtilt_position_subscriber(unsigned int domain_id, unsigned int sample_count)
+{
+
+    dds::sub::DataReader< ::PanAndTiltPositionSubscriber> reader(subscriber, topic); 
+
+    // Create a ReadCondition for any data received on this reader and set a
+    // handler to process the data
+    unsigned int samples_read = 0;
+    dds::sub::cond::ReadCondition read_condition(
+        reader,
+        dds::sub::status::DataState::any(),
+        [&, reader]() { samples_read += process_ptposition_data(reader,domain_id,sample_count); });
+
+    // WaitSet will be woken when the attached condition is triggered
+    dds::core::cond::WaitSet waitset;
+    waitset += read_condition;
+
+    while (!application::shutdown_requested && samples_read < sample_count) {
+        std::cout << "::PanAndTiltPositionSubscriber subscriber sleeping up to 1 sec..." << std::endl;
+
+        // Run the handlers of the active conditions. Wait for up to 1 second.
+        waitset.dispatch(dds::core::Duration(1));
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
     using namespace application;
@@ -178,6 +278,7 @@ int main(int argc, char *argv[])
     dds::topic::Topic< ::CameraControlCustom> camera_topic(participant, "CameraSetterTopic");
     dds::topic::Topic< ::LampControlCustom> lamp_topic(participant, "LampSetterTopic");
     dds::topic::Topic< ::PanAndTiltControlCustom> panandtilt_topic(participant, "PanAndTiltSetterTopic");
+    dds::topic::Topic< ::PanAndTiltPositionSubscriber> panandtilt_position_topic(participant, "PanAndTiltPositionSubscriberTopic");
 
     std::vector<std::thread> threads;
     std::vector<std::exception_ptr> exceptions(3);
@@ -190,15 +291,18 @@ int main(int argc, char *argv[])
         }
     };
 
-    threads.emplace_back(run_subscriber, camera_subscriber, std::ref(camera_topic), 0);
-    threads.emplace_back(run_subscriber, lamp_subscriber, std::ref(lamp_topic), 1);
-    threads.emplace_back(run_subscriber, panandtilt_subscriber, std::ref(panandtilt_topic), 2);
+    // Create threads for each publisher, passing the control data
+    threads.emplace_back(run_subscriber, camera_subscriber,std::ref(camera_topic), 0);
+    threads.emplace_back(run_subscriber, lamp_subscriber,std::ref(lamp_topic), 1);
+    threads.emplace_back(run_subscriber, panandtilt_subscriber,std::ref(panandtilt_topic), 2);
+    threads.emplace_back(run_subscriber, panandtilt_position_topic,std::ref(panandtilt_topic), 3);
 
     for (auto& thread : threads) {
         thread.join();
     }
 
-    for (int i = 0; i < 3; ++i) {
+    // Check for exceptions
+    for (int i = 0; i < 4; ++i) {
         if (exceptions[i]) {
             try {
                 std::rethrow_exception(exceptions[i]);

@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493952328_hpp
-#define plc_493952328_hpp
+#ifndef plc_493952908_hpp
+#define plc_493952908_hpp
 
 #include <iosfwd>
 
@@ -687,6 +687,389 @@ inline void swap(PanAndTiltControl& a, PanAndTiltControl& b)  noexcept
 
 NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const PanAndTiltControl& sample);
 
+class NDDSUSERDllExport PanAndTiltPositionSubscriber {
+  public:
+
+    PanAndTiltPositionSubscriber();
+
+    PanAndTiltPositionSubscriber(float pan_one_,float tilt_one_,float pan_two_,float tilt_two_,float pan_three_,float tilt_three_,float pan_four_,float tilt_four_,float pan_five_,float tilt_five_,float pan_six_,float tilt_six_,float pan_seven_,float tilt_seven_,float pan_eight_,float tilt_eight_);
+
+    float& pan_one() noexcept {
+        return m_pan_one_;
+    }
+
+    const float& pan_one() const noexcept {
+        return m_pan_one_;
+    }
+
+    void pan_one(float value) {
+
+        m_pan_one_ = value;
+    }
+
+    float& tilt_one() noexcept {
+        return m_tilt_one_;
+    }
+
+    const float& tilt_one() const noexcept {
+        return m_tilt_one_;
+    }
+
+    void tilt_one(float value) {
+
+        m_tilt_one_ = value;
+    }
+
+    float& pan_two() noexcept {
+        return m_pan_two_;
+    }
+
+    const float& pan_two() const noexcept {
+        return m_pan_two_;
+    }
+
+    void pan_two(float value) {
+
+        m_pan_two_ = value;
+    }
+
+    float& tilt_two() noexcept {
+        return m_tilt_two_;
+    }
+
+    const float& tilt_two() const noexcept {
+        return m_tilt_two_;
+    }
+
+    void tilt_two(float value) {
+
+        m_tilt_two_ = value;
+    }
+
+    float& pan_three() noexcept {
+        return m_pan_three_;
+    }
+
+    const float& pan_three() const noexcept {
+        return m_pan_three_;
+    }
+
+    void pan_three(float value) {
+
+        m_pan_three_ = value;
+    }
+
+    float& tilt_three() noexcept {
+        return m_tilt_three_;
+    }
+
+    const float& tilt_three() const noexcept {
+        return m_tilt_three_;
+    }
+
+    void tilt_three(float value) {
+
+        m_tilt_three_ = value;
+    }
+
+    float& pan_four() noexcept {
+        return m_pan_four_;
+    }
+
+    const float& pan_four() const noexcept {
+        return m_pan_four_;
+    }
+
+    void pan_four(float value) {
+
+        m_pan_four_ = value;
+    }
+
+    float& tilt_four() noexcept {
+        return m_tilt_four_;
+    }
+
+    const float& tilt_four() const noexcept {
+        return m_tilt_four_;
+    }
+
+    void tilt_four(float value) {
+
+        m_tilt_four_ = value;
+    }
+
+    float& pan_five() noexcept {
+        return m_pan_five_;
+    }
+
+    const float& pan_five() const noexcept {
+        return m_pan_five_;
+    }
+
+    void pan_five(float value) {
+
+        m_pan_five_ = value;
+    }
+
+    float& tilt_five() noexcept {
+        return m_tilt_five_;
+    }
+
+    const float& tilt_five() const noexcept {
+        return m_tilt_five_;
+    }
+
+    void tilt_five(float value) {
+
+        m_tilt_five_ = value;
+    }
+
+    float& pan_six() noexcept {
+        return m_pan_six_;
+    }
+
+    const float& pan_six() const noexcept {
+        return m_pan_six_;
+    }
+
+    void pan_six(float value) {
+
+        m_pan_six_ = value;
+    }
+
+    float& tilt_six() noexcept {
+        return m_tilt_six_;
+    }
+
+    const float& tilt_six() const noexcept {
+        return m_tilt_six_;
+    }
+
+    void tilt_six(float value) {
+
+        m_tilt_six_ = value;
+    }
+
+    float& pan_seven() noexcept {
+        return m_pan_seven_;
+    }
+
+    const float& pan_seven() const noexcept {
+        return m_pan_seven_;
+    }
+
+    void pan_seven(float value) {
+
+        m_pan_seven_ = value;
+    }
+
+    float& tilt_seven() noexcept {
+        return m_tilt_seven_;
+    }
+
+    const float& tilt_seven() const noexcept {
+        return m_tilt_seven_;
+    }
+
+    void tilt_seven(float value) {
+
+        m_tilt_seven_ = value;
+    }
+
+    float& pan_eight() noexcept {
+        return m_pan_eight_;
+    }
+
+    const float& pan_eight() const noexcept {
+        return m_pan_eight_;
+    }
+
+    void pan_eight(float value) {
+
+        m_pan_eight_ = value;
+    }
+
+    float& tilt_eight() noexcept {
+        return m_tilt_eight_;
+    }
+
+    const float& tilt_eight() const noexcept {
+        return m_tilt_eight_;
+    }
+
+    void tilt_eight(float value) {
+
+        m_tilt_eight_ = value;
+    }
+
+    bool operator == (const PanAndTiltPositionSubscriber& other_) const;
+    bool operator != (const PanAndTiltPositionSubscriber& other_) const;
+
+    void swap(PanAndTiltPositionSubscriber& other_) noexcept ;
+
+  private:
+
+    float m_pan_one_;
+    float m_tilt_one_;
+    float m_pan_two_;
+    float m_tilt_two_;
+    float m_pan_three_;
+    float m_tilt_three_;
+    float m_pan_four_;
+    float m_tilt_four_;
+    float m_pan_five_;
+    float m_tilt_five_;
+    float m_pan_six_;
+    float m_tilt_six_;
+    float m_pan_seven_;
+    float m_tilt_seven_;
+    float m_pan_eight_;
+    float m_tilt_eight_;
+
+};
+
+inline void swap(PanAndTiltPositionSubscriber& a, PanAndTiltPositionSubscriber& b)  noexcept 
+{
+    a.swap(b);
+}
+
+NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const PanAndTiltPositionSubscriber& sample);
+
+class NDDSUSERDllExport Quaternion {
+  public:
+
+    Quaternion();
+
+    Quaternion(float x_,float y_,float z_,float w_);
+
+    float& x() noexcept {
+        return m_x_;
+    }
+
+    const float& x() const noexcept {
+        return m_x_;
+    }
+
+    void x(float value) {
+
+        m_x_ = value;
+    }
+
+    float& y() noexcept {
+        return m_y_;
+    }
+
+    const float& y() const noexcept {
+        return m_y_;
+    }
+
+    void y(float value) {
+
+        m_y_ = value;
+    }
+
+    float& z() noexcept {
+        return m_z_;
+    }
+
+    const float& z() const noexcept {
+        return m_z_;
+    }
+
+    void z(float value) {
+
+        m_z_ = value;
+    }
+
+    float& w() noexcept {
+        return m_w_;
+    }
+
+    const float& w() const noexcept {
+        return m_w_;
+    }
+
+    void w(float value) {
+
+        m_w_ = value;
+    }
+
+    bool operator == (const Quaternion& other_) const;
+    bool operator != (const Quaternion& other_) const;
+
+    void swap(Quaternion& other_) noexcept ;
+
+  private:
+
+    float m_x_;
+    float m_y_;
+    float m_z_;
+    float m_w_;
+
+};
+
+inline void swap(Quaternion& a, Quaternion& b)  noexcept 
+{
+    a.swap(b);
+}
+
+NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const Quaternion& sample);
+
+class NDDSUSERDllExport PanAndTiltPositionPublisher {
+  public:
+
+    PanAndTiltPositionPublisher();
+
+    PanAndTiltPositionPublisher(uint32_t panandtiltID_,const ::Quaternion& angle_);
+
+    uint32_t& panandtiltID() noexcept {
+        return m_panandtiltID_;
+    }
+
+    const uint32_t& panandtiltID() const noexcept {
+        return m_panandtiltID_;
+    }
+
+    void panandtiltID(uint32_t value) {
+
+        m_panandtiltID_ = value;
+    }
+
+    ::Quaternion& angle() noexcept {
+        return m_angle_;
+    }
+
+    const ::Quaternion& angle() const noexcept {
+        return m_angle_;
+    }
+
+    void angle(const ::Quaternion& value) {
+
+        m_angle_ = value;
+    }
+
+    void angle(::Quaternion&& value) {
+        m_angle_ = std::move(value);
+    }
+    bool operator == (const PanAndTiltPositionPublisher& other_) const;
+    bool operator != (const PanAndTiltPositionPublisher& other_) const;
+
+    void swap(PanAndTiltPositionPublisher& other_) noexcept ;
+
+  private:
+
+    uint32_t m_panandtiltID_;
+    ::Quaternion m_angle_;
+
+};
+
+inline void swap(PanAndTiltPositionPublisher& a, PanAndTiltPositionPublisher& b)  noexcept 
+{
+    a.swap(b);
+}
+
+NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const PanAndTiltPositionPublisher& sample);
+
 #ifdef NDDS_STANDALONE_TYPE
 namespace rti { 
     namespace topic {
@@ -948,6 +1331,111 @@ namespace dds {
             static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
             ::rti::topic::TypePluginKind::STL;
         };
+        template<>
+        struct topic_type_name< ::PanAndTiltPositionSubscriber > {
+            NDDSUSERDllExport static std::string value() {
+                return "PanAndTiltPositionSubscriber";
+            }
+        };
+
+        template<>
+        struct is_topic_type< ::PanAndTiltPositionSubscriber > : public ::dds::core::true_type {};
+
+        template<>
+        struct topic_type_support< ::PanAndTiltPositionSubscriber > {
+            NDDSUSERDllExport 
+            static void register_type(
+                ::dds::domain::DomainParticipant& participant,
+                const std::string & type_name);
+
+            NDDSUSERDllExport 
+            static std::vector<char>& to_cdr_buffer(
+                std::vector<char>& buffer, 
+                const ::PanAndTiltPositionSubscriber& sample,
+                ::dds::core::policy::DataRepresentationId representation 
+                = ::dds::core::policy::DataRepresentation::auto_id());
+
+            NDDSUSERDllExport 
+            static void from_cdr_buffer(::PanAndTiltPositionSubscriber& sample, const std::vector<char>& buffer);
+            NDDSUSERDllExport 
+            static void reset_sample(::PanAndTiltPositionSubscriber& sample);
+
+            NDDSUSERDllExport 
+            static void allocate_sample(::PanAndTiltPositionSubscriber& sample, int, int);
+
+            static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
+            ::rti::topic::TypePluginKind::STL;
+        };
+        template<>
+        struct topic_type_name< ::Quaternion > {
+            NDDSUSERDllExport static std::string value() {
+                return "Quaternion";
+            }
+        };
+
+        template<>
+        struct is_topic_type< ::Quaternion > : public ::dds::core::true_type {};
+
+        template<>
+        struct topic_type_support< ::Quaternion > {
+            NDDSUSERDllExport 
+            static void register_type(
+                ::dds::domain::DomainParticipant& participant,
+                const std::string & type_name);
+
+            NDDSUSERDllExport 
+            static std::vector<char>& to_cdr_buffer(
+                std::vector<char>& buffer, 
+                const ::Quaternion& sample,
+                ::dds::core::policy::DataRepresentationId representation 
+                = ::dds::core::policy::DataRepresentation::auto_id());
+
+            NDDSUSERDllExport 
+            static void from_cdr_buffer(::Quaternion& sample, const std::vector<char>& buffer);
+            NDDSUSERDllExport 
+            static void reset_sample(::Quaternion& sample);
+
+            NDDSUSERDllExport 
+            static void allocate_sample(::Quaternion& sample, int, int);
+
+            static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
+            ::rti::topic::TypePluginKind::STL;
+        };
+        template<>
+        struct topic_type_name< ::PanAndTiltPositionPublisher > {
+            NDDSUSERDllExport static std::string value() {
+                return "PanAndTiltPositionPublisher";
+            }
+        };
+
+        template<>
+        struct is_topic_type< ::PanAndTiltPositionPublisher > : public ::dds::core::true_type {};
+
+        template<>
+        struct topic_type_support< ::PanAndTiltPositionPublisher > {
+            NDDSUSERDllExport 
+            static void register_type(
+                ::dds::domain::DomainParticipant& participant,
+                const std::string & type_name);
+
+            NDDSUSERDllExport 
+            static std::vector<char>& to_cdr_buffer(
+                std::vector<char>& buffer, 
+                const ::PanAndTiltPositionPublisher& sample,
+                ::dds::core::policy::DataRepresentationId representation 
+                = ::dds::core::policy::DataRepresentation::auto_id());
+
+            NDDSUSERDllExport 
+            static void from_cdr_buffer(::PanAndTiltPositionPublisher& sample, const std::vector<char>& buffer);
+            NDDSUSERDllExport 
+            static void reset_sample(::PanAndTiltPositionPublisher& sample);
+
+            NDDSUSERDllExport 
+            static void allocate_sample(::PanAndTiltPositionPublisher& sample, int, int);
+
+            static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
+            ::rti::topic::TypePluginKind::STL;
+        };
     }
 }
 
@@ -1031,37 +1519,41 @@ namespace rti {
             static const ::dds::core::xtypes::ExtensibilityKind::type kind =
             ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
 
+        template<>
+        struct dynamic_type< ::PanAndTiltPositionSubscriber > {
+            typedef ::dds::core::xtypes::StructType type;
+            NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
+        };
+
+        template <>
+        struct extensibility< ::PanAndTiltPositionSubscriber > {
+            static const ::dds::core::xtypes::ExtensibilityKind::type kind =
+            ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
+
+        template<>
+        struct dynamic_type< ::Quaternion > {
+            typedef ::dds::core::xtypes::StructType type;
+            NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
+        };
+
+        template <>
+        struct extensibility< ::Quaternion > {
+            static const ::dds::core::xtypes::ExtensibilityKind::type kind =
+            ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
+
+        template<>
+        struct dynamic_type< ::PanAndTiltPositionPublisher > {
+            typedef ::dds::core::xtypes::StructType type;
+            NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
+        };
+
+        template <>
+        struct extensibility< ::PanAndTiltPositionPublisher > {
+            static const ::dds::core::xtypes::ExtensibilityKind::type kind =
+            ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
+
     }
 }
-struct LampControlStruct {
-
-    uint32_t lampID;
-    float intensity;
-    bool power;
-};
-
-struct CameraControlStruct {
-
-    uint32_t cameraID;
-    bool power;
-    bool light;
-    float focus;
-    float zoom;
-
-};
-
-struct PanAndTiltControlStruct {
-
-    uint32_t panandtiltID;
-    float x;
-    float y;
-    float z;
-    
-};
-
-extern CameraControlStruct camera_control_data;
-extern LampControlStruct lamp_control_data;
-extern PanAndTiltControlStruct pan_and_tilt_control_data;
 
 #endif // NDDS_STANDALONE_TYPE
 #if (defined(RTI_WIN32) || defined (RTI_WINCE) || defined(RTI_INTIME)) && defined(NDDS_USER_DLL_EXPORT)
@@ -1071,5 +1563,5 @@ extern PanAndTiltControlStruct pan_and_tilt_control_data;
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493952328_hpp
+#endif // plc_493952908_hpp
 
