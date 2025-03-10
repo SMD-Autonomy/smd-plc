@@ -1,15 +1,3 @@
-/*
-* (c) Copyright, Real-Time Innovations, 2020.  All rights reserved.
-* RTI grants Licensee a license to use, modify, compile, and create derivative
-* works of the software solely for use with RTI Connext DDS. Licensee may
-* redistribute copies of the software provided that all such copies are subject
-* to this license. The software is provided "as is", with no warranty of any
-* type, including any warranty for fitness for any purpose. RTI is under no
-* obligation to maintain or support the software. RTI shall not be liable for
-* any incidental or consequential damages arising out of the use or inability
-* to use the software.
-*/
-
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -60,22 +48,17 @@ class HelperMethods
 
 HelperMethods helpermethods;
 
-void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraControlStruct ccstruct)
+// Global DDS entities
+dds::domain::DomainParticipant participant(0);
+dds::pub::Publisher publisher(participant);
+dds::topic::Topic< ::CameraControl> camera_topic(participant, "CameraControlTopic");
+dds::topic::Topic< ::LampControl> lamp_topic(participant, "LampControlTopic");
+dds::topic::Topic< ::PanAndTiltControl> panandtilt_topic(participant, "PanAndTiltControlTopic");
+
+void camera_publisher(unsigned int sample_count, CameraControlStruct ccstruct)
 {
-    // DDS objects behave like shared pointers or value types
-    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
-
-    // Start communicating in a domain, usually one participant per application
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::CameraControl> topic(participant, "CameraControlTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
     // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::CameraControl> writer(publisher, topic);
+    dds::pub::DataWriter< ::CameraControl> writer(publisher, camera_topic);
 
     uint8_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light);
     uint8_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power);
@@ -116,22 +99,10 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     }
 }
 
-void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampControlStruct lcstruct)
+void lamp_publisher(unsigned int sample_count, LampControlStruct lcstruct)
 {
-    // DDS objects behave like shared pointers or value types
-    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
-
-    // Start communicating in a domain, usually one participant per application
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::LampControl> topic(participant, "LampControlTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
     // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
+    dds::pub::DataWriter< ::LampControl> writer(publisher, lamp_topic);
 
     uint8_t var_power_oct = helpermethods.bool_to_octet(lcstruct.power);
     float intensity = lcstruct.intensity;
@@ -154,22 +125,10 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     }
 }
 
-void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanAndTiltControlStruct ptcstruct)
+void panandtilt_publisher(unsigned int sample_count, PanAndTiltControlStruct ptcstruct)
 {
-    // DDS objects behave like shared pointers or value types
-    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
-
-    // Start communicating in a domain, usually one participant per application
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PanAndTiltControl> topic(participant, "PanAndTiltControlTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
     // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::PanAndTiltControl> writer(publisher, topic);
+    dds::pub::DataWriter< ::PanAndTiltControl> writer(publisher, panandtilt_topic);
 
     bool var_tilt_bool = helpermethods.float_to_bool(ptcstruct.x);
     bool var_pan_bool = helpermethods.float_to_bool(ptcstruct.z);
