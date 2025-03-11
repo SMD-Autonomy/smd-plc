@@ -25,4 +25,6 @@ Run the tmux terminal which launches all the publishers and subscribers with the
 ./run_tmux.sh
 ```
 
-
+```bash
+ros2 run plc_publisher plc_publisher --ros-args -p camera_id:=10 -p lamp_intensity:=90.0 -p panandtilt_x:=100.0
+```

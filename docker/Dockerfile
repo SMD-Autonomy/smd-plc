@@ -66,15 +66,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists
 
-
 WORKDIR /root
-
 
 RUN mkdir -p /root/smd-plc/app
 RUN mkdir -p /root/smd-plc/publisher_control
 WORKDIR /root/smd-plc
 
-COPY plc.idl plc_control_service.xml requirements.txt run_tmux.sh /root/smd-plc/
+COPY plc.idl plc_control_service.xml requirements.txt run_tmux.sh ros2_install.sh /root/smd-plc/
 COPY publisher_control/ /root/smd-plc/publisher_control/
 COPY app/ /root/smd-plc/app/
 
