@@ -75,6 +75,7 @@ WORKDIR /root/smd-plc
 COPY plc.idl plc_control_service.xml requirements.txt run_tmux.sh ros2_install.sh /root/smd-plc/
 COPY publisher_control/ /root/smd-plc/publisher_control/
 COPY app/ /root/smd-plc/app/
+COPY ros2_publisher/ /root/smd-plc/ros2_publisher/
 
 # Install the required Python packages
 RUN python3 -m pip install --upgrade pip
