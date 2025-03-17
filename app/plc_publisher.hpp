@@ -92,19 +92,19 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
         data.power().CMD(var_power_oct);
         if (var_zoom_bool)
         {
-            data.zoom_in().CMD(static_cast<uint8_t>(ccstruct.cameraID));
+            data.zoom_in(static_cast<uint8_t>(ccstruct.cameraID));
         }
         if (var_zoom_bool == false)
         {
-            data.zoom_out().CMD(static_cast<uint8_t>(ccstruct.cameraID));
+            data.zoom_out(static_cast<uint8_t>(ccstruct.cameraID));
         }
         if (var_focus_bool)
         {
-            data.focus_far().CMD(static_cast<uint8_t>(ccstruct.cameraID));
+            data.focus_far(static_cast<uint8_t>(ccstruct.cameraID));
         }
         if (var_zoom_bool == false)
         {
-            data.focus_near().CMD(static_cast<uint8_t>(ccstruct.cameraID));
+            data.focus_near(static_cast<uint8_t>(ccstruct.cameraID));
         }
         std::cout << "Writing ::CameraControl Status" << std::endl;
 
@@ -142,7 +142,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     samples_written++) {
         // Modify the data to be written here
         data.intensity(intensity);
-        data.power().CMD(var_power_oct);
+        data.power(var_power_oct);
         std::cout << "Writing ::LampControl" << std::endl;
 
         writer.write(data);
@@ -181,19 +181,19 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
         data.panandtiltID(ptcstruct.panandtiltID);
         if (var_tilt_bool)
         {
-            data.tilt_up().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.tilt_up(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         if (var_tilt_bool == false)
         {
-            data.tilt_down().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.tilt_down(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         if (var_pan_bool)
         {
-            data.pan_right().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.pan_right(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         if (var_pan_bool == false)
         {
-            data.pan_left().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.pan_left(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         
         std::cout << "Writing ::PanAndTiltControl " << std::endl;
