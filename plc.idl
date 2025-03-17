@@ -25,38 +25,29 @@ struct PanAndTiltControlCustom {
     
 };
 
-struct Power {
-
-    octet CMD;
-    octet On;
-};
-
 struct LampControl {
 
-    @key uint32 lampID;
     float intensity;
-    Power power;
+    octet power;
 };
 
 struct CameraControl {
 
-    @key uint32 cameraID;
-    Power focus_far;
-    Power focus_near;
-    Power LED;
-    Power power;
-    Power zoom_in;
-    Power zoom_out;
+    octet focus_far;
+    octet focus_near;
+    octet LED;
+    octet power;
+    octet zoom_in;
+    octet zoom_out;
 
 };
 
 struct PanAndTiltControl {
 
-    @key uint32 panandtiltID;
-    Power pan_left;
-    Power pan_right;
-    Power power;
-    Power tilt_down;
-    Power tilt_up;
+    octet pan_left;
+    octet pan_right;
+    octet power;
+    octet tilt_down;
+    octet tilt_up;
     
 };
