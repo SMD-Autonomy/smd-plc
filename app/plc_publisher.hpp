@@ -24,11 +24,11 @@
 class HelperMethods
 {
     public:
-    uint8_t bool_to_octet(bool message)
+    uint8_t bool_to_octet(bool message,uint32_t id)
     {
         uint8_t oct_val;
         if (message==true){
-            oct_val = 1;
+            oct_val = static_cast<uint8_t>(id);
             return oct_val;
         }
         else {
@@ -77,8 +77,8 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::CameraControl> writer(publisher, topic);
 
-    uint8_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light);
-    uint8_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power);
+    uint8_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,ccstruct.cameraID);
+    uint8_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power,ccstruct.cameraID);
     bool var_focus_bool = helpermethods.float_to_bool(ccstruct.focus);
     bool var_zoom_bool = helpermethods.float_to_bool(ccstruct.zoom);
 
@@ -88,24 +88,23 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.cameraID(ccstruct.cameraID);
         data.LED().CMD(var_light_oct);
         data.power().CMD(var_power_oct);
         if (var_zoom_bool)
         {
-            data.zoom_in().CMD(1);
+            data.zoom_in().CMD(static_cast<uint8_t>(ccstruct.cameraID));
         }
         if (var_zoom_bool == false)
         {
-            data.zoom_out().CMD(1);
+            data.zoom_out().CMD(static_cast<uint8_t>(ccstruct.cameraID));
         }
         if (var_focus_bool)
         {
-            data.focus_far().CMD(1);
+            data.focus_far().CMD(static_cast<uint8_t>(ccstruct.cameraID));
         }
         if (var_zoom_bool == false)
         {
-            data.focus_near().CMD(1);
+            data.focus_near().CMD(static_cast<uint8_t>(ccstruct.cameraID));
         }
         std::cout << "Writing ::CameraControl Status" << std::endl;
 
@@ -133,7 +132,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
 
-    uint8_t var_power_oct = helpermethods.bool_to_octet(lcstruct.power);
+    uint8_t var_power_oct = helpermethods.bool_to_octet(lcstruct.power,lcstruct.lampID);
     float intensity = lcstruct.intensity;
 
     ::LampControl data;
@@ -142,7 +141,6 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.lampID(lcstruct.lampID);
         data.intensity(intensity);
         data.power().CMD(var_power_oct);
         std::cout << "Writing ::LampControl" << std::endl;
@@ -183,19 +181,19 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
         data.panandtiltID(ptcstruct.panandtiltID);
         if (var_tilt_bool)
         {
-            data.tilt_up().CMD(1);
+            data.tilt_up().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         if (var_tilt_bool == false)
         {
-            data.tilt_down().CMD(1);
+            data.tilt_down().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         if (var_pan_bool)
         {
-            data.pan_right().CMD(1);
+            data.pan_right().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         if (var_pan_bool == false)
         {
-            data.pan_left().CMD(1);
+            data.pan_left().CMD(static_cast<uint8_t>(ptcstruct.panandtiltID));
         }
         
         std::cout << "Writing ::PanAndTiltControl " << std::endl;
