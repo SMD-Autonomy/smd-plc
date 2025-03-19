@@ -24,11 +24,11 @@
 class HelperMethods
 {
     public:
-    uint8_t bool_to_octet(bool message,uint32_t id)
+    int16_t bool_to_octet(bool message,uint32_t id)
     {
-        uint8_t oct_val;
+        int16_t oct_val;
         if (message==true){
-            oct_val = static_cast<uint8_t>(id);
+            oct_val = static_cast<int16_t>(id);
             return oct_val;
         }
         else {
@@ -56,6 +56,7 @@ class HelperMethods
         return (v < lo) ? lo : (hi < v) ? hi : v;
     }
     
+
 };
 
 HelperMethods helpermethods;
@@ -77,8 +78,8 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::CameraControl> writer(publisher, topic);
 
-    uint8_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,ccstruct.cameraID);
-    uint8_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power,ccstruct.cameraID);
+    int16_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,ccstruct.cameraID);
+    int16_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power,ccstruct.cameraID);
     bool var_focus_bool = helpermethods.float_to_bool(ccstruct.focus);
     bool var_zoom_bool = helpermethods.float_to_bool(ccstruct.zoom);
 
@@ -88,23 +89,23 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.LED().CMD(var_light_oct);
-        data.power().CMD(var_power_oct);
+        data.LED(var_light_oct);
+        data.power(var_power_oct);
         if (var_zoom_bool)
         {
-            data.zoom_in(static_cast<uint8_t>(ccstruct.cameraID));
+            data.zoom_in(static_cast<int16_t>(ccstruct.cameraID));
         }
         if (var_zoom_bool == false)
         {
-            data.zoom_out(static_cast<uint8_t>(ccstruct.cameraID));
+            data.zoom_out(static_cast<int16_t>(ccstruct.cameraID));
         }
         if (var_focus_bool)
         {
-            data.focus_far(static_cast<uint8_t>(ccstruct.cameraID));
+            data.focus_far(static_cast<int16_t>(ccstruct.cameraID));
         }
         if (var_zoom_bool == false)
         {
-            data.focus_near(static_cast<uint8_t>(ccstruct.cameraID));
+            data.focus_near(static_cast<int16_t>(ccstruct.cameraID));
         }
         std::cout << "Writing ::CameraControl Status" << std::endl;
 
@@ -132,7 +133,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
 
-    uint8_t var_power_oct = helpermethods.bool_to_octet(lcstruct.power,lcstruct.lampID);
+    int16_t var_power_oct = helpermethods.bool_to_octet(lcstruct.power,lcstruct.lampID);
     float intensity = lcstruct.intensity;
 
     ::LampControl data;
@@ -141,8 +142,19 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.intensity(intensity);
-        data.power(var_power_oct);
+        
+        if (intensity > 0)
+        {   
+            data.intensity(intensity);
+            data.power(static_cast<int16_t>(lcstruct.lampID));
+        }
+        if (intensity == 0)
+        {
+            data.power(static_cast<int16_t>(lcstruct.lampID));
+            writer.write(data);
+            rti::util::sleep(dds::core::Duration(1));
+            data.power(static_cast<int16_t>(lcstruct.lampID));
+        }
         std::cout << "Writing ::LampControl" << std::endl;
 
         writer.write(data);
@@ -178,22 +190,21 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
     !application::shutdown_requested && samples_written < sample_count;
     samples_written++) {
         // Modify the data to be written here
-        data.panandtiltID(ptcstruct.panandtiltID);
         if (var_tilt_bool)
         {
-            data.tilt_up(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.tilt_up(static_cast<int16_t>(ptcstruct.panandtiltID));
         }
         if (var_tilt_bool == false)
         {
-            data.tilt_down(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.tilt_down(static_cast<int16_t>(ptcstruct.panandtiltID));
         }
         if (var_pan_bool)
         {
-            data.pan_right(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.pan_right(static_cast<int16_t>(ptcstruct.panandtiltID));
         }
         if (var_pan_bool == false)
         {
-            data.pan_left(static_cast<uint8_t>(ptcstruct.panandtiltID));
+            data.pan_left(static_cast<int16_t>(ptcstruct.panandtiltID));
         }
         
         std::cout << "Writing ::PanAndTiltControl " << std::endl;

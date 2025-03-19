@@ -308,7 +308,7 @@ class NDDSUSERDllExport LampControl {
 
     LampControl();
 
-    LampControl(float intensity_,uint8_t power_);
+    LampControl(float intensity_,int16_t power_);
 
     float& intensity() noexcept {
         return m_intensity_;
@@ -323,15 +323,15 @@ class NDDSUSERDllExport LampControl {
         m_intensity_ = value;
     }
 
-    uint8_t& power() noexcept {
+    int16_t& power() noexcept {
         return m_power_;
     }
 
-    const uint8_t& power() const noexcept {
+    const int16_t& power() const noexcept {
         return m_power_;
     }
 
-    void power(uint8_t value) {
+    void power(int16_t value) {
 
         m_power_ = value;
     }
@@ -344,7 +344,7 @@ class NDDSUSERDllExport LampControl {
   private:
 
     float m_intensity_;
-    uint8_t m_power_;
+    int16_t m_power_;
 
 };
 
@@ -360,82 +360,82 @@ class NDDSUSERDllExport CameraControl {
 
     CameraControl();
 
-    CameraControl(uint8_t focus_far_,uint8_t focus_near_,uint8_t LED_,uint8_t power_,uint8_t zoom_in_,uint8_t zoom_out_);
+    CameraControl(int16_t focus_far_,int16_t focus_near_,int16_t LED_,int16_t power_,int16_t zoom_in_,int16_t zoom_out_);
 
-    uint8_t& focus_far() noexcept {
+    int16_t& focus_far() noexcept {
         return m_focus_far_;
     }
 
-    const uint8_t& focus_far() const noexcept {
+    const int16_t& focus_far() const noexcept {
         return m_focus_far_;
     }
 
-    void focus_far(uint8_t value) {
+    void focus_far(int16_t value) {
 
         m_focus_far_ = value;
     }
 
-    uint8_t& focus_near() noexcept {
+    int16_t& focus_near() noexcept {
         return m_focus_near_;
     }
 
-    const uint8_t& focus_near() const noexcept {
+    const int16_t& focus_near() const noexcept {
         return m_focus_near_;
     }
 
-    void focus_near(uint8_t value) {
+    void focus_near(int16_t value) {
 
         m_focus_near_ = value;
     }
 
-    uint8_t& LED() noexcept {
+    int16_t& LED() noexcept {
         return m_LED_;
     }
 
-    const uint8_t& LED() const noexcept {
+    const int16_t& LED() const noexcept {
         return m_LED_;
     }
 
-    void LED(uint8_t value) {
+    void LED(int16_t value) {
 
         m_LED_ = value;
     }
 
-    uint8_t& power() noexcept {
+    int16_t& power() noexcept {
         return m_power_;
     }
 
-    const uint8_t& power() const noexcept {
+    const int16_t& power() const noexcept {
         return m_power_;
     }
 
-    void power(uint8_t value) {
+    void power(int16_t value) {
 
         m_power_ = value;
     }
 
-    uint8_t& zoom_in() noexcept {
+    int16_t& zoom_in() noexcept {
         return m_zoom_in_;
     }
 
-    const uint8_t& zoom_in() const noexcept {
+    const int16_t& zoom_in() const noexcept {
         return m_zoom_in_;
     }
 
-    void zoom_in(uint8_t value) {
+    void zoom_in(int16_t value) {
 
         m_zoom_in_ = value;
     }
 
-    uint8_t& zoom_out() noexcept {
+    int16_t& zoom_out() noexcept {
         return m_zoom_out_;
     }
 
-    const uint8_t& zoom_out() const noexcept {
+    const int16_t& zoom_out() const noexcept {
         return m_zoom_out_;
     }
 
-    void zoom_out(uint8_t value) {
+    void zoom_out(int16_t value) {
 
         m_zoom_out_ = value;
     }
@@ -447,12 +447,12 @@ class NDDSUSERDllExport CameraControl {
 
   private:
 
-    uint8_t m_focus_far_;
-    uint8_t m_focus_near_;
-    uint8_t m_LED_;
-    uint8_t m_power_;
-    uint8_t m_zoom_in_;
-    uint8_t m_zoom_out_;
+    int16_t m_focus_far_;
+    int16_t m_focus_near_;
+    int16_t m_LED_;
+    int16_t m_power_;
+    int16_t m_zoom_in_;
+    int16_t m_zoom_out_;
 
 };
 
@@ -468,69 +468,69 @@ class NDDSUSERDllExport PanAndTiltControl {
 
     PanAndTiltControl();
 
-    PanAndTiltControl(uint8_t pan_left_,uint8_t pan_right_,uint8_t power_,uint8_t tilt_down_,uint8_t tilt_up_);
+    PanAndTiltControl(int16_t pan_left_,int16_t pan_right_,int16_t power_,int16_t tilt_down_,int16_t tilt_up_);
 
-    uint8_t& pan_left() noexcept {
+    int16_t& pan_left() noexcept {
         return m_pan_left_;
     }
 
-    const uint8_t& pan_left() const noexcept {
+    const int16_t& pan_left() const noexcept {
         return m_pan_left_;
     }
 
-    void pan_left(uint8_t value) {
+    void pan_left(int16_t value) {
 
         m_pan_left_ = value;
     }
 
-    uint8_t& pan_right() noexcept {
+    int16_t& pan_right() noexcept {
         return m_pan_right_;
     }
 
-    const uint8_t& pan_right() const noexcept {
+    const int16_t& pan_right() const noexcept {
         return m_pan_right_;
     }
 
-    void pan_right(uint8_t value) {
+    void pan_right(int16_t value) {
 
         m_pan_right_ = value;
     }
 
-    uint8_t& power() noexcept {
+    int16_t& power() noexcept {
         return m_power_;
     }
 
-    const uint8_t& power() const noexcept {
+    const int16_t& power() const noexcept {
         return m_power_;
     }
 
-    void power(uint8_t value) {
+    void power(int16_t value) {
 
         m_power_ = value;
     }
 
-    uint8_t& tilt_down() noexcept {
+    int16_t& tilt_down() noexcept {
         return m_tilt_down_;
     }
 
-    const uint8_t& tilt_down() const noexcept {
+    const int16_t& tilt_down() const noexcept {
         return m_tilt_down_;
     }
 
-    void tilt_down(uint8_t value) {
+    void tilt_down(int16_t value) {
 
         m_tilt_down_ = value;
     }
 
-    uint8_t& tilt_up() noexcept {
+    int16_t& tilt_up() noexcept {
         return m_tilt_up_;
     }
 
-    const uint8_t& tilt_up() const noexcept {
+    const int16_t& tilt_up() const noexcept {
         return m_tilt_up_;
     }
 
-    void tilt_up(uint8_t value) {
+    void tilt_up(int16_t value) {
 
         m_tilt_up_ = value;
     }
@@ -542,11 +542,11 @@ class NDDSUSERDllExport PanAndTiltControl {
 
   private:
 
-    uint8_t m_pan_left_;
-    uint8_t m_pan_right_;
-    uint8_t m_power_;
-    uint8_t m_tilt_down_;
-    uint8_t m_tilt_up_;
+    int16_t m_pan_left_;
+    int16_t m_pan_right_;
+    int16_t m_power_;
+    int16_t m_tilt_down_;
+    int16_t m_tilt_up_;
 
 };
 

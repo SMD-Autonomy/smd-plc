@@ -214,7 +214,7 @@ LampControl::LampControl() :
 
 }   
 
-LampControl::LampControl (float intensity_,uint8_t power_):
+LampControl::LampControl (float intensity_,int16_t power_):
     m_intensity_(intensity_), 
     m_power_(power_) {
 }
@@ -246,7 +246,7 @@ std::ostream& operator << (std::ostream& o,const LampControl& sample)
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
     o << "intensity: " << std::setprecision(9) << sample.intensity ()<<", ";
-    o << "power: " << std::hex<<(int) sample.power ();
+    o << "power: " << sample.power ();
     o <<"]";
     return o;
 }
@@ -263,7 +263,7 @@ CameraControl::CameraControl() :
 
 }   
 
-CameraControl::CameraControl (uint8_t focus_far_,uint8_t focus_near_,uint8_t LED_,uint8_t power_,uint8_t zoom_in_,uint8_t zoom_out_):
+CameraControl::CameraControl (int16_t focus_far_,int16_t focus_near_,int16_t LED_,int16_t power_,int16_t zoom_in_,int16_t zoom_out_):
     m_focus_far_(focus_far_), 
     m_focus_near_(focus_near_), 
     m_LED_(LED_), 
@@ -313,12 +313,12 @@ std::ostream& operator << (std::ostream& o,const CameraControl& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
-    o << "focus_far: " << std::hex<<(int) sample.focus_far ()<<", ";
-    o << "focus_near: " << std::hex<<(int) sample.focus_near ()<<", ";
-    o << "LED: " << std::hex<<(int) sample.LED ()<<", ";
-    o << "power: " << std::hex<<(int) sample.power ()<<", ";
-    o << "zoom_in: " << std::hex<<(int) sample.zoom_in ()<<", ";
-    o << "zoom_out: " << std::hex<<(int) sample.zoom_out ();
+    o << "focus_far: " << sample.focus_far ()<<", ";
+    o << "focus_near: " << sample.focus_near ()<<", ";
+    o << "LED: " << sample.LED ()<<", ";
+    o << "power: " << sample.power ()<<", ";
+    o << "zoom_in: " << sample.zoom_in ()<<", ";
+    o << "zoom_out: " << sample.zoom_out ();
     o <<"]";
     return o;
 }
@@ -334,7 +334,7 @@ PanAndTiltControl::PanAndTiltControl() :
 
 }   
 
-PanAndTiltControl::PanAndTiltControl (uint8_t pan_left_,uint8_t pan_right_,uint8_t power_,uint8_t tilt_down_,uint8_t tilt_up_):
+PanAndTiltControl::PanAndTiltControl (int16_t pan_left_,int16_t pan_right_,int16_t power_,int16_t tilt_down_,int16_t tilt_up_):
     m_pan_left_(pan_left_), 
     m_pan_right_(pan_right_), 
     m_power_(power_), 
@@ -379,11 +379,11 @@ std::ostream& operator << (std::ostream& o,const PanAndTiltControl& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
-    o << "pan_left: " << std::hex<<(int) sample.pan_left ()<<", ";
-    o << "pan_right: " << std::hex<<(int) sample.pan_right ()<<", ";
-    o << "power: " << std::hex<<(int) sample.power ()<<", ";
-    o << "tilt_down: " << std::hex<<(int) sample.tilt_down ()<<", ";
-    o << "tilt_up: " << std::hex<<(int) sample.tilt_up ();
+    o << "pan_left: " << sample.pan_left ()<<", ";
+    o << "pan_right: " << sample.pan_right ()<<", ";
+    o << "power: " << sample.power ()<<", ";
+    o << "tilt_down: " << sample.tilt_down ()<<", ";
+    o << "tilt_up: " << sample.tilt_up ();
     o <<"]";
     return o;
 }
@@ -1197,7 +1197,7 @@ namespace rti {
                 LampControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
                 LampControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
-                LampControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
+                LampControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
 
                 /* Initialize the values for member annotations. */
                 LampControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
@@ -1206,12 +1206,12 @@ namespace rti {
                 LampControl_g_tc_members[0]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
                 LampControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
                 LampControl_g_tc_members[0]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
-                LampControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                LampControl_g_tc_members[1]._annotations._defaultValue._u.octet_value = 0;
-                LampControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                LampControl_g_tc_members[1]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                LampControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                LampControl_g_tc_members[1]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
+                LampControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                LampControl_g_tc_members[1]._annotations._defaultValue._u.short_value = 0;
+                LampControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                LampControl_g_tc_members[1]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                LampControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                LampControl_g_tc_members[1]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
 
                 LampControl_g_tc._data._sampleAccessInfo = sample_access_info();
                 LampControl_g_tc._data._typePlugin = type_plugin_info();    
@@ -1456,50 +1456,50 @@ namespace rti {
 
                 CameraControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                CameraControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                CameraControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                CameraControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                CameraControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                CameraControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                CameraControl_g_tc_members[5]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
+                CameraControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                CameraControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                CameraControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                CameraControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                CameraControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                CameraControl_g_tc_members[5]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
 
                 /* Initialize the values for member annotations. */
-                CameraControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[0]._annotations._defaultValue._u.octet_value = 0;
-                CameraControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[0]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                CameraControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[0]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                CameraControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[1]._annotations._defaultValue._u.octet_value = 0;
-                CameraControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[1]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                CameraControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[1]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                CameraControl_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[2]._annotations._defaultValue._u.octet_value = 0;
-                CameraControl_g_tc_members[2]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[2]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                CameraControl_g_tc_members[2]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[2]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                CameraControl_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[3]._annotations._defaultValue._u.octet_value = 0;
-                CameraControl_g_tc_members[3]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[3]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                CameraControl_g_tc_members[3]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[3]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                CameraControl_g_tc_members[4]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[4]._annotations._defaultValue._u.octet_value = 0;
-                CameraControl_g_tc_members[4]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[4]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                CameraControl_g_tc_members[4]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[4]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                CameraControl_g_tc_members[5]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[5]._annotations._defaultValue._u.octet_value = 0;
-                CameraControl_g_tc_members[5]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[5]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                CameraControl_g_tc_members[5]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                CameraControl_g_tc_members[5]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
+                CameraControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[0]._annotations._defaultValue._u.short_value = 0;
+                CameraControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[0]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                CameraControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[0]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                CameraControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[1]._annotations._defaultValue._u.short_value = 0;
+                CameraControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[1]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                CameraControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[1]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                CameraControl_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[2]._annotations._defaultValue._u.short_value = 0;
+                CameraControl_g_tc_members[2]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[2]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                CameraControl_g_tc_members[2]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[2]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                CameraControl_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[3]._annotations._defaultValue._u.short_value = 0;
+                CameraControl_g_tc_members[3]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[3]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                CameraControl_g_tc_members[3]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[3]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                CameraControl_g_tc_members[4]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[4]._annotations._defaultValue._u.short_value = 0;
+                CameraControl_g_tc_members[4]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[4]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                CameraControl_g_tc_members[4]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[4]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                CameraControl_g_tc_members[5]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[5]._annotations._defaultValue._u.short_value = 0;
+                CameraControl_g_tc_members[5]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[5]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                CameraControl_g_tc_members[5]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                CameraControl_g_tc_members[5]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
 
                 CameraControl_g_tc._data._sampleAccessInfo = sample_access_info();
                 CameraControl_g_tc._data._typePlugin = type_plugin_info();    
@@ -1738,43 +1738,43 @@ namespace rti {
 
                 PanAndTiltControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                PanAndTiltControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                PanAndTiltControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                PanAndTiltControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                PanAndTiltControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
-                PanAndTiltControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_octet;
+                PanAndTiltControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                PanAndTiltControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                PanAndTiltControl_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                PanAndTiltControl_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
+                PanAndTiltControl_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
 
                 /* Initialize the values for member annotations. */
-                PanAndTiltControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[0]._annotations._defaultValue._u.octet_value = 0;
-                PanAndTiltControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[0]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                PanAndTiltControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[0]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                PanAndTiltControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[1]._annotations._defaultValue._u.octet_value = 0;
-                PanAndTiltControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[1]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                PanAndTiltControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[1]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                PanAndTiltControl_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[2]._annotations._defaultValue._u.octet_value = 0;
-                PanAndTiltControl_g_tc_members[2]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[2]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                PanAndTiltControl_g_tc_members[2]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[2]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                PanAndTiltControl_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[3]._annotations._defaultValue._u.octet_value = 0;
-                PanAndTiltControl_g_tc_members[3]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[3]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                PanAndTiltControl_g_tc_members[3]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[3]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
-                PanAndTiltControl_g_tc_members[4]._annotations._defaultValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[4]._annotations._defaultValue._u.octet_value = 0;
-                PanAndTiltControl_g_tc_members[4]._annotations._minValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[4]._annotations._minValue._u.octet_value = RTIXCdrOctet_MIN;
-                PanAndTiltControl_g_tc_members[4]._annotations._maxValue._d = RTI_XCDR_TK_OCTET;
-                PanAndTiltControl_g_tc_members[4]._annotations._maxValue._u.octet_value = RTIXCdrOctet_MAX;
+                PanAndTiltControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[0]._annotations._defaultValue._u.short_value = 0;
+                PanAndTiltControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[0]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                PanAndTiltControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[0]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                PanAndTiltControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[1]._annotations._defaultValue._u.short_value = 0;
+                PanAndTiltControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[1]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                PanAndTiltControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[1]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                PanAndTiltControl_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[2]._annotations._defaultValue._u.short_value = 0;
+                PanAndTiltControl_g_tc_members[2]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[2]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                PanAndTiltControl_g_tc_members[2]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[2]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                PanAndTiltControl_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[3]._annotations._defaultValue._u.short_value = 0;
+                PanAndTiltControl_g_tc_members[3]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[3]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                PanAndTiltControl_g_tc_members[3]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[3]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
+                PanAndTiltControl_g_tc_members[4]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[4]._annotations._defaultValue._u.short_value = 0;
+                PanAndTiltControl_g_tc_members[4]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[4]._annotations._minValue._u.short_value = RTIXCdrShort_MIN;
+                PanAndTiltControl_g_tc_members[4]._annotations._maxValue._d = RTI_XCDR_TK_SHORT;
+                PanAndTiltControl_g_tc_members[4]._annotations._maxValue._u.short_value = RTIXCdrShort_MAX;
 
                 PanAndTiltControl_g_tc._data._sampleAccessInfo = sample_access_info();
                 PanAndTiltControl_g_tc._data._typePlugin = type_plugin_info();    

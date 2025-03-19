@@ -28,26 +28,26 @@ struct PanAndTiltControlCustom {
 struct LampControl {
 
     float intensity;
-    octet power;
+    int16 power;
 };
 
 struct CameraControl {
 
-    octet focus_far;
-    octet focus_near;
-    octet LED;
-    octet power;
-    octet zoom_in;
-    octet zoom_out;
+    int16 focus_far;
+    int16 focus_near;
+    int16 LED;
+    int16 power;
+    int16 zoom_in;
+    int16 zoom_out;
 
 };
 
 struct PanAndTiltControl {
 
-    octet pan_left;
-    octet pan_right;
-    octet power;
-    octet tilt_down;
-    octet tilt_up;
+    int16 pan_left;
+    int16 pan_right;
+    int16 power;
+    int16 tilt_down;
+    int16 tilt_up;
     
 };

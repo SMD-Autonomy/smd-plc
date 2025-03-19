@@ -91,7 +91,7 @@ CDRSOURCES    = plc.idl
 SOURCES = $(SOURCE_DIR)plcPlugin.cxx $(SOURCE_DIR)plc.cxx
 COMMONSOURCES = $(notdir $(SOURCES))
 
-EXEC          = plc_subscriber plc_publisher
+EXEC          = plc_subscriber
 DIRECTORIES   = objs.dir objs/$(TARGET_ARCH).dir
 COMMONOBJS    = $(COMMONSOURCES:%.cxx=objs/$(TARGET_ARCH)/%.o)
 
