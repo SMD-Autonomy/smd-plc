@@ -137,45 +137,53 @@ int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber
             pt_position_data.pan_eight = sample.data().pan_eight();
             pt_position_data.tilt_eight = sample.data().tilt_eight();
 
-            for (int i = 1; i <= 8; i++) {
+            for (int i = 0; i <= 7; i++) {
                 HelperMethods::PanAndTiltPositionPublisherStruct pub_data;
                 pub_data.panandtiltID = i;
-                
+                std::cout << "Executed case: " << i << std::endl;
                 switch(i) {
-                    case 1:
+                    case 0:
                         pub_data.pan = pt_position_data.pan_one;
                         pub_data.tilt = pt_position_data.tilt_one;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
-                    case 2:
+                    case 1:
                         pub_data.pan = pt_position_data.pan_two;
                         pub_data.tilt = pt_position_data.tilt_two;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
-                    case 3:
+                    case 2:
                         pub_data.pan = pt_position_data.pan_three;
                         pub_data.tilt = pt_position_data.tilt_three;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
-                    case 4:
+                    case 3:
                         pub_data.pan = pt_position_data.pan_four;
                         pub_data.tilt = pt_position_data.tilt_four;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
-                    case 5:
+                    case 4:
                         pub_data.pan = pt_position_data.pan_five;
                         pub_data.tilt = pt_position_data.tilt_five;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
-                    case 6:
+                    case 5:
                         pub_data.pan = pt_position_data.pan_six;
                         pub_data.tilt = pt_position_data.tilt_six;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
-                    case 7:
+                    case 6:
                         pub_data.pan = pt_position_data.pan_seven;
                         pub_data.tilt = pt_position_data.tilt_seven;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
-                    case 8: 
+                    case 7: 
                         pub_data.pan = pt_position_data.pan_eight;
                         pub_data.tilt = pt_position_data.tilt_eight;
+                        pt_position_publisher(domain_id, sample_count, pub_data);
                         break;
                 }
-                pt_position_publisher(domain_id, sample_count, pub_data);
+                
             }
         } else {
             std::cout << "Instance state changed to "

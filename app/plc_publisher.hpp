@@ -22,7 +22,13 @@
 #include "application.hpp"  // for command line parsing and ctrl-c
 #include "plc.hpp"
 
+dds::domain::DomainParticipant participant(6);
 
+dds::topic::Topic< ::PanAndTiltPositionPublisher> topic(participant, "PanAndTiltPositionTopic");
+
+dds::pub::Publisher publisher(participant);
+
+dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
 
 
 const float PI = 3.141;
@@ -323,30 +329,36 @@ void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, He
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
 
     // Start communicating in a domain, usually one participant per application
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PanAndTiltPositionPublisher> topic(participant, "PanAndTiltPositionTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
-    // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
+   
 
     ::Quaternion angle = helpermethods.eulerToQuaternion(0, pub_data.tilt, pub_data.pan);
 
     ::PanAndTiltPositionPublisher data;
     // Main loop, write data
-    for (unsigned int samples_written = 0;
-    !application::shutdown_requested && samples_written < sample_count;
-    samples_written++) {
+    // for (unsigned int samples_written = 0;
+    // !application::shutdown_requested && samples_written < sample_count;
+    // samples_written++) {
 
-        data.panandtiltID(pub_data.panandtiltID);
-        data.angle(angle);
-        writer.write(data);
+    //     std::cout << "Writing ::PanAndTiltPosition with ID: " << pub_data.panandtiltID 
+    //     << ", pan: " << pub_data.pan 
+    //     << ", tilt: " << pub_data.tilt 
+    //     << ", quaternion: (" << angle.x() << ", " << angle.y() << ", " << angle.z() << ", " << angle.w() << ")" 
+    //     << std::endl;
+    //     data.panandtiltID(pub_data.panandtiltID);
+    //     data.angle(angle);
+    //     writer.write(data);
+    //     // Send once every second
+    //     rti::util::sleep(dds::core::Duration(1));
+    // }
 
-        // Send once every second
-        rti::util::sleep(dds::core::Duration(1));
-    }
+    std::cout << "Writing ::PanAndTiltPosition with ID: " << pub_data.panandtiltID 
+    << ", pan: " << pub_data.pan 
+    << ", tilt: " << pub_data.tilt 
+    << ", quaternion: (" << angle.x() << ", " << angle.y() << ", " << angle.z() << ", " << angle.w() << ")" 
+    << std::endl;
+    data.panandtiltID(pub_data.panandtiltID);
+    data.angle(angle);
+    writer.write(data);
+    // Send once every second
+    // rti::util::sleep(dds::core::Duration(1));
 }

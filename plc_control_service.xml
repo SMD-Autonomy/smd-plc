@@ -84,112 +84,112 @@
             <node_attribute dds_topic_field_name="pan_one">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>2</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[0]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>            
             <node_attribute dds_topic_field_name="tilt_one">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>3</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[0]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>	    
             <node_attribute dds_topic_field_name="pan_two">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>4</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[1]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_two">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>4</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[1]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="pan_three">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>6</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[2]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_three">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>7</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[2]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="pan_four">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>8</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[3]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_four">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>9</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[3]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="pan_five">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>10</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[4]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_five">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>11</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[4]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="pan_six">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>12</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[5]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_six">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>13</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[5]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="pan_seven">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>14</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[6]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_seven">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>15</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[6]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="pan_eight">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>16</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[7]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
             <node_attribute dds_topic_field_name="tilt_eight">
               <node_id>
                 <namespace_index>6</namespace_index>
-                <string_identifier>17</string_identifier>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[7]</string_identifier>
               </node_id>
               <attribute_id>VALUE</attribute_id>
             </node_attribute>
