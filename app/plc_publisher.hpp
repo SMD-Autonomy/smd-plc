@@ -14,6 +14,7 @@
 #include <thread>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 #include <dds/pub/ddspub.hpp>
 #include <rti/util/util.hpp>      // for sleep()
@@ -21,9 +22,96 @@
 #include "application.hpp"  // for command line parsing and ctrl-c
 #include "plc.hpp"
 
+
+const float PI = 3.141;
+
 class HelperMethods
 {
     public:
+    struct LampControlStruct {
+    
+        uint32_t lampID;
+        float intensity;
+        bool power;
+    };
+    
+    struct CameraControlStruct {
+    
+        uint32_t cameraID;
+        bool power;
+        bool light;
+        float focus;
+        float zoom;
+    
+    };
+    
+    struct PanAndTiltControlStruct {
+    
+        uint32_t panandtiltID;
+        float x;
+        float y;
+        float z;
+        
+    };
+
+    struct PanAndTiltPositionStruct {
+
+        float pan_one;
+        float tilt_one;
+        float pan_two;
+        float tilt_two;
+        float pan_three;
+        float tilt_three;
+        float pan_four;
+        float tilt_four;
+        float pan_five;
+        float tilt_five;
+        float pan_six;
+        float tilt_six;
+        float pan_seven;
+        float tilt_seven;
+        float pan_eight;
+        float tilt_eight;
+    
+    };
+
+    struct PanAndTiltPositionPublisherStruct {
+    
+        uint32_t panandtiltID;
+        float pan;
+        float tilt;
+    
+    };
+    
+    bool float_to_bool(float message, std::string type)
+    {
+        bool bool_val;
+        if (type == "tilt")
+        {
+            message = clamp(message, -90, 90);
+        }
+        if (type == "pan")
+        {
+            message = clamp(message, -180, 180);
+        } 
+        if (message > 0)
+        {
+            bool_val = true;
+            return bool_val;
+        }
+        else 
+        {
+            bool_val = false;
+            return bool_val;
+        }
+    }
+
+
+    float clamp(float v, float lo, float hi)
+    {
+        return (v < lo) ? lo : (hi < v) ? hi : v;
+    }
+
     int16_t bool_to_octet(bool message,uint32_t id)
     {
         int16_t oct_val;
@@ -51,17 +139,36 @@ class HelperMethods
         }
     }
 
-    float clamp(float v, float lo, float hi)
+    ::Quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
     {
-        return (v < lo) ? lo : (hi < v) ? hi : v;
+        // Convert degrees to radians
+        // Roll, pitch, yaw are Roll, Tilt, Pan
+        float rollRad = roll * PI / 180.0;
+        float pitchRad = pitch * PI / 180.0;
+        float yawRad = yaw * PI / 180.0;
+    
+        // Calculate cosine and sine of half angles
+        float cr = cos(rollRad * 0.5);
+        float sr = sin(rollRad * 0.5);
+        float cp = cos(pitchRad * 0.5);
+        float sp = sin(pitchRad * 0.5);
+        float cy = cos(yawRad * 0.5);
+        float sy = sin(yawRad * 0.5);
+    
+        ::Quaternion q;
+        q.x() = sr * cp * cy - cr * sp * sy;
+        q.y() = cr * sp * cy + sr * cp * sy;
+        q.z() = cr * cp * sy - sr * sp * cy;
+        q.w() = cr * cp * cy + sr * sp * sy;
+    
+        return q;
     }
     
-
 };
 
 HelperMethods helpermethods;
 
-void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraControlStruct ccstruct)
+void camera_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::CameraControlStruct ccstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -116,7 +223,7 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     }
 }
 
-void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampControlStruct lcstruct)
+void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::LampControlStruct lcstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -133,7 +240,6 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
 
-    int16_t var_power_oct = helpermethods.bool_to_octet(lcstruct.power,lcstruct.lampID);
     float intensity = lcstruct.intensity;
 
     ::LampControl data;
@@ -164,7 +270,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     }
 }
 
-void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanAndTiltControlStruct ptcstruct)
+void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,HelperMethods::PanAndTiltControlStruct ptcstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -214,4 +320,42 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
         // Send once every second
         rti::util::sleep(dds::core::Duration(1));
     }
+}
+
+void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::PanAndTiltPositionPublisherStruct pub_data)
+{
+    // DDS objects behave like shared pointers or value types
+    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
+
+    // Start communicating in a domain, usually one participant per application
+   
+    dds::domain::DomainParticipant participant(domain_id);
+
+    // Create a Topic with a name and a datatype
+    dds::topic::Topic< ::PanAndTiltPositionPublisher> topic(participant, "PanAndTiltPositionTopic");
+
+    // Create a Publisher
+    dds::pub::Publisher publisher(participant);
+
+    // Create a DataWriter with default QoS
+    dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
+
+    ::Quaternion angle = helpermethods.eulerToQuaternion(0, pub_data.tilt, pub_data.pan);
+
+    ::PanAndTiltPositionPublisher data;
+    // Main loop, write data
+    // for (unsigned int samples_written = 0;
+    // !application::shutdown_requested && samples_written < sample_count;
+    // samples_written++) {
+
+    std::cout << "Writing ::PanAndTiltPosition with ID: " << pub_data.panandtiltID 
+    << ", pan: " << pub_data.pan 
+    << ", tilt: " << pub_data.tilt 
+    << ", quaternion: (" << angle.x() << ", " << angle.y() << ", " << angle.z() << ", " << angle.w() << ")" 
+    << std::endl;
+    data.panandtiltID(pub_data.panandtiltID);
+    data.angle(angle);
+    writer.write(data);
+    // Send once every second
+    // rti::util::sleep(dds::core::Duration(1));
 }
