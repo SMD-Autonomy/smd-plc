@@ -44,7 +44,7 @@
 
   <ddsopcua_service name="PLCcontrolService">
 
-    <opcua_connection name="PLCServerConnection" server_endpoint_url="opc.tcp://192.168.1.1:4840">
+    <opcua_connection name="PLCServerConnection" server_endpoint_url="opc.tcp://192.168.110.1:4840">
       <timeout>5000</timeout>
     </opcua_connection>
 
@@ -320,7 +320,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_3">
-              <filter>lampID = 3</filter>
+              <filter>lampID = 4</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -341,7 +341,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_4">
-              <filter>lampID = 4</filter>
+              <filter>lampID = 8</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -362,7 +362,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_5">
-              <filter>lampID = 5</filter>
+              <filter>lampID = 16</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -383,7 +383,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_6">
-              <filter>lampID = 6</filter>
+              <filter>lampID = 32</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -404,7 +404,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_7">
-              <filter>lampID = 7</filter>
+              <filter>lampID = 64</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -425,7 +425,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_8">
-              <filter>lampID = 8</filter>
+              <filter>lampID = 128</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -446,7 +446,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_9">
-              <filter>lampID = 9</filter>
+              <filter>lampID = 256</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -467,7 +467,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_10">
-              <filter>lampID = 10</filter>
+              <filter>lampID = 512</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -488,7 +488,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_11">
-              <filter>lampID = 11</filter>
+              <filter>lampID = 1024</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -509,7 +509,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_12">
-              <filter>lampID = 12</filter>
+              <filter>lampID = 2048</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -530,7 +530,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_13">
-              <filter>lampID = 13</filter>
+              <filter>lampID = 4096</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -551,7 +551,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_14">
-              <filter>lampID = 14</filter>
+              <filter>lampID = 8192</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -572,7 +572,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_15">
-              <filter>lampID = 15</filter>
+              <filter>lampID = 16384</filter>
             </selector>
           </sample_selectors>
         </dds_input>

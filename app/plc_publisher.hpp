@@ -14,8 +14,10 @@
 #include <thread>
 #include <vector>
 #include <algorithm>
+#include <map>
+#include <string> 
 #include <cmath>
-
+#include <mutex>
 #include <dds/pub/ddspub.hpp>
 #include <rti/util/util.hpp>      // for sleep()
 #include <rti/config/Logger.hpp>  // for logging
@@ -112,7 +114,7 @@ class HelperMethods
         return (v < lo) ? lo : (hi < v) ? hi : v;
     }
 
-    int16_t bool_to_octet(bool message,uint32_t id)
+    int16_t bool_to_octet(bool message,int16_t id)
     {
         int16_t oct_val;
         if (message==true){
@@ -137,6 +139,33 @@ class HelperMethods
             bool_val = false;
             return bool_val;
         }
+    }
+
+    int16_t id_to_tag(uint32_t id)
+    {   
+        //id 1 is 0; so last id is 15
+        std::map<int, std::string>  m{
+        {1,"0000000000000000"}, //0
+        {2,"0000000000000001"}, //1
+        {3,"0000000000000010"}, //2
+        {4,"0000000000000100"}, //4
+        {5,"0000000000001000"}, //8
+        {6,"0000000000010000"}, //16
+        {7,"0000000000100000"}, //32
+        {8,"0000000001000000"}, //64
+        {9,"0000000010000000"}, //128
+        {10,"0000000100000000"}, //256
+        {11,"0000001000000000"}, //512
+        {12,"0000010000000000"}, //1024
+        {13,"0000100000000000"}, //2048
+        {14,"0001000000000000"}, //4096
+        {15,"0010000000000000"}, //8192
+        {16,"0100000000000000"} //16384
+        };
+
+        std::string bin = m[id];
+        int16_t i_bin = std::stoi(bin,nullptr,2);
+        return i_bin;
     }
 
     ::Quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
@@ -185,8 +214,9 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, HelperM
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::CameraControl> writer(publisher, topic);
 
-    int16_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,ccstruct.cameraID);
-    int16_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power,ccstruct.cameraID);
+    int16_t id = helpermethods.id_to_tag(ccstruct.cameraID);
+    int16_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,id);
+    int16_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power,id);
     bool var_focus_bool = helpermethods.float_to_bool(ccstruct.focus);
     bool var_zoom_bool = helpermethods.float_to_bool(ccstruct.zoom);
 
@@ -200,21 +230,21 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, HelperM
         data.power(var_power_oct);
         if (var_zoom_bool)
         {
-            data.zoom_in(static_cast<int16_t>(ccstruct.cameraID));
+            data.zoom_in(static_cast<int16_t>(id));
         }
         if (var_zoom_bool == false)
         {
-            data.zoom_out(static_cast<int16_t>(ccstruct.cameraID));
+            data.zoom_out(static_cast<int16_t>(id));
         }
         if (var_focus_bool)
         {
-            data.focus_far(static_cast<int16_t>(ccstruct.cameraID));
+            data.focus_far(static_cast<int16_t>(id));
         }
         if (var_zoom_bool == false)
         {
-            data.focus_near(static_cast<int16_t>(ccstruct.cameraID));
+            data.focus_near(static_cast<int16_t>(id));
         }
-        std::cout << "Writing ::CameraControl Status" << std::endl;
+        std::cout << "Writing ::CameraControl" << std::endl;
 
         writer.write(data);
 
@@ -240,6 +270,8 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMet
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
 
+    int16_t id = helpermethods.id_to_tag(lcstruct.lampID);
+
     float intensity = lcstruct.intensity;
 
     ::LampControl data;
@@ -252,14 +284,14 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMet
         if (intensity > 0)
         {   
             data.intensity(intensity);
-            data.power(static_cast<int16_t>(lcstruct.lampID));
+            data.power(static_cast<int16_t>(id));
         }
         if (intensity == 0)
         {
-            data.power(static_cast<int16_t>(lcstruct.lampID));
+            data.power(static_cast<int16_t>(id));
             writer.write(data);
             rti::util::sleep(dds::core::Duration(1));
-            data.power(static_cast<int16_t>(lcstruct.lampID));
+            data.power(static_cast<int16_t>(id));
         }
         std::cout << "Writing ::LampControl" << std::endl;
 
@@ -287,6 +319,7 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,Help
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::PanAndTiltControl> writer(publisher, topic);
 
+    int16_t id = helpermethods.id_to_tag(ptcstruct.panandtiltID);
     bool var_tilt_bool = helpermethods.float_to_bool(ptcstruct.x);
     bool var_pan_bool = helpermethods.float_to_bool(ptcstruct.z);
 
@@ -298,19 +331,19 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,Help
         // Modify the data to be written here
         if (var_tilt_bool)
         {
-            data.tilt_up(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.tilt_up(static_cast<int16_t>(id));
         }
         if (var_tilt_bool == false)
         {
-            data.tilt_down(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.tilt_down(static_cast<int16_t>(id));
         }
         if (var_pan_bool)
         {
-            data.pan_right(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.pan_right(static_cast<int16_t>(id));
         }
         if (var_pan_bool == false)
         {
-            data.pan_left(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.pan_left(static_cast<int16_t>(id));
         }
         
         std::cout << "Writing ::PanAndTiltControl " << std::endl;
