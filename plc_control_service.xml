@@ -21,11 +21,30 @@
             <member name="tilt_down" type="int16"/>
             <member name="tilt_up" type="int16"/>
         </struct>
+
+        <struct name="PanAndTiltPositionSubscriberType" nested="true">
+            <member name="pan_one" type="float32"/>
+            <member name="tilt_one" type="float32"/>
+            <member name="pan_two" type="float32"/>
+            <member name="tilt_two" type="float32"/>
+            <member name="pan_three" type="float32"/>
+            <member name="tilt_three" type="float32"/>
+            <member name="pan_four" type="float32"/>
+            <member name="tilt_four" type="float32"/>
+            <member name="pan_five" type="float32"/>
+            <member name="tilt_five" type="float32"/>
+            <member name="pan_six" type="float32"/>
+            <member name="tilt_six" type="float32"/>
+            <member name="pan_seven" type="float32"/>
+            <member name="tilt_seven" type="float32"/>
+            <member name="pan_eight" type="float32"/>
+            <member name="tilt_eight" type="float32"/>
+        </struct>
   </types>
 
   <ddsopcua_service name="PLCcontrolService">
 
-    <opcua_connection name="PLCServerConnection" server_endpoint_url="opc.tcp://192.168.1.1:4840">
+    <opcua_connection name="PLCServerConnection" server_endpoint_url="opc.tcp://192.168.110.1:4840">
       <timeout>5000</timeout>
     </opcua_connection>
 
@@ -43,6 +62,137 @@
           <enabled>false</enabled>
         </attribute_service_set>
       </service_set>
+
+      <subscription name="PanAndTiltOPCUASubscription">
+        <opcua_input name="pantiltPositionInput" opcua_connection_ref="PLCServerConnection">
+                    
+          <subscription_protocol>
+            <requested_publishing_interval>10</requested_publishing_interval>
+            <publishing_enabled>true</publishing_enabled>
+          </subscription_protocol>
+
+          <monitored_items>            
+            <node_attribute dds_topic_field_name="pan_one">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[0]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>            
+            <node_attribute dds_topic_field_name="tilt_one">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[0]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>	    
+            <node_attribute dds_topic_field_name="pan_two">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[1]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_two">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[1]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_three">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[2]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_three">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[2]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_four">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[3]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_four">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[3]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_five">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[4]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_five">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[4]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_six">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[5]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_six">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[5]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_seven">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[6]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_seven">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[6]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="pan_eight">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Pan_Position.Pan_Position[7]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+            <node_attribute dds_topic_field_name="tilt_eight">
+              <node_id>
+                <namespace_index>6</namespace_index>
+                <string_identifier>Root.Objects.00, ControlLogix 5580 Controller, SB_MDC_AQ_EROV.Adv_Control.Adv_Control[2].ROV.IO_PanTilt_Control.Tilt_Position.Tilt_Position[7]</string_identifier>
+              </node_id>
+              <attribute_id>VALUE</attribute_id>
+            </node_attribute>
+          </monitored_items>
+        </opcua_input>
+
+        <dds_output name="pantiltPositionOutput" domain_participant_ref="PLCDomainParticipant">
+          <topic_name>PanAndTiltPositionSubscriberTopic</topic_name>
+          <registered_type_name>PanAndTiltPositionSubscriber</registered_type_name>
+        </dds_output>
+
+      </subscription>
 
       <publication name="CameraControlPublicationOne">
         <dds_input name="PLCDDSInput" domain_participant_ref="PLCDomainParticipant">
@@ -170,7 +320,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_3">
-              <filter>lampID = 3</filter>
+              <filter>lampID = 4</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -191,7 +341,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_4">
-              <filter>lampID = 4</filter>
+              <filter>lampID = 8</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -212,7 +362,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_5">
-              <filter>lampID = 5</filter>
+              <filter>lampID = 16</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -233,7 +383,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_6">
-              <filter>lampID = 6</filter>
+              <filter>lampID = 32</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -254,7 +404,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_7">
-              <filter>lampID = 7</filter>
+              <filter>lampID = 64</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -275,7 +425,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_8">
-              <filter>lampID = 8</filter>
+              <filter>lampID = 128</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -296,7 +446,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_9">
-              <filter>lampID = 9</filter>
+              <filter>lampID = 256</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -317,7 +467,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_10">
-              <filter>lampID = 10</filter>
+              <filter>lampID = 512</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -338,7 +488,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_11">
-              <filter>lampID = 11</filter>
+              <filter>lampID = 1024</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -359,7 +509,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_12">
-              <filter>lampID = 12</filter>
+              <filter>lampID = 2048</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -380,7 +530,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_13">
-              <filter>lampID = 13</filter>
+              <filter>lampID = 4096</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -401,7 +551,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_14">
-              <filter>lampID = 14</filter>
+              <filter>lampID = 8192</filter>
             </selector>
           </sample_selectors>
         </dds_input>
@@ -422,7 +572,7 @@
           <registered_type_name>LampControl</registered_type_name>
           <sample_selectors>
             <selector name="Lamp_ID_15">
-              <filter>lampID = 15</filter>
+              <filter>lampID = 16384</filter>
             </selector>
           </sample_selectors>
         </dds_input>

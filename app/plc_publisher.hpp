@@ -14,17 +14,107 @@
 #include <thread>
 #include <vector>
 #include <algorithm>
-
+#include <map>
+#include <string> 
+#include <cmath>
+#include <mutex>
 #include <dds/pub/ddspub.hpp>
 #include <rti/util/util.hpp>      // for sleep()
 #include <rti/config/Logger.hpp>  // for logging
 #include "application.hpp"  // for command line parsing and ctrl-c
 #include "plc.hpp"
 
+
+const float PI = 3.141;
+
 class HelperMethods
 {
     public:
-    int16_t bool_to_octet(bool message,uint32_t id)
+    struct LampControlStruct {
+    
+        uint32_t lampID;
+        float intensity;
+        bool power;
+    };
+    
+    struct CameraControlStruct {
+    
+        uint32_t cameraID;
+        bool power;
+        bool light;
+        float focus;
+        float zoom;
+    
+    };
+    
+    struct PanAndTiltControlStruct {
+    
+        uint32_t panandtiltID;
+        float x;
+        float y;
+        float z;
+        
+    };
+
+    struct PanAndTiltPositionStruct {
+
+        float pan_one;
+        float tilt_one;
+        float pan_two;
+        float tilt_two;
+        float pan_three;
+        float tilt_three;
+        float pan_four;
+        float tilt_four;
+        float pan_five;
+        float tilt_five;
+        float pan_six;
+        float tilt_six;
+        float pan_seven;
+        float tilt_seven;
+        float pan_eight;
+        float tilt_eight;
+    
+    };
+
+    struct PanAndTiltPositionPublisherStruct {
+    
+        uint32_t panandtiltID;
+        float pan;
+        float tilt;
+    
+    };
+    
+    bool float_to_bool(float message, std::string type)
+    {
+        bool bool_val;
+        if (type == "tilt")
+        {
+            message = clamp(message, -90, 90);
+        }
+        if (type == "pan")
+        {
+            message = clamp(message, -180, 180);
+        } 
+        if (message > 0)
+        {
+            bool_val = true;
+            return bool_val;
+        }
+        else 
+        {
+            bool_val = false;
+            return bool_val;
+        }
+    }
+
+
+    float clamp(float v, float lo, float hi)
+    {
+        return (v < lo) ? lo : (hi < v) ? hi : v;
+    }
+
+    int16_t bool_to_octet(bool message,int16_t id)
     {
         int16_t oct_val;
         if (message==true){
@@ -51,17 +141,63 @@ class HelperMethods
         }
     }
 
-    float clamp(float v, float lo, float hi)
+    int16_t id_to_tag(uint32_t id)
+    {   
+        //id 1 is 0; so last id is 15
+        std::map<int, std::string>  m{
+        {1,"0000000000000000"}, //0
+        {2,"0000000000000001"}, //1
+        {3,"0000000000000010"}, //2
+        {4,"0000000000000100"}, //4
+        {5,"0000000000001000"}, //8
+        {6,"0000000000010000"}, //16
+        {7,"0000000000100000"}, //32
+        {8,"0000000001000000"}, //64
+        {9,"0000000010000000"}, //128
+        {10,"0000000100000000"}, //256
+        {11,"0000001000000000"}, //512
+        {12,"0000010000000000"}, //1024
+        {13,"0000100000000000"}, //2048
+        {14,"0001000000000000"}, //4096
+        {15,"0010000000000000"}, //8192
+        {16,"0100000000000000"} //16384
+        };
+
+        std::string bin = m[id];
+        int16_t i_bin = std::stoi(bin,nullptr,2);
+        return i_bin;
+    }
+
+    ::Quaternion eulerToQuaternion(float roll, float pitch, float yaw) 
     {
-        return (v < lo) ? lo : (hi < v) ? hi : v;
+        // Convert degrees to radians
+        // Roll, pitch, yaw are Roll, Tilt, Pan
+        float rollRad = roll * PI / 180.0;
+        float pitchRad = pitch * PI / 180.0;
+        float yawRad = yaw * PI / 180.0;
+    
+        // Calculate cosine and sine of half angles
+        float cr = cos(rollRad * 0.5);
+        float sr = sin(rollRad * 0.5);
+        float cp = cos(pitchRad * 0.5);
+        float sp = sin(pitchRad * 0.5);
+        float cy = cos(yawRad * 0.5);
+        float sy = sin(yawRad * 0.5);
+    
+        ::Quaternion q;
+        q.x() = sr * cp * cy - cr * sp * sy;
+        q.y() = cr * sp * cy + sr * cp * sy;
+        q.z() = cr * cp * sy - sr * sp * cy;
+        q.w() = cr * cp * cy + sr * sp * sy;
+    
+        return q;
     }
     
-
 };
 
 HelperMethods helpermethods;
 
-void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraControlStruct ccstruct)
+void camera_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::CameraControlStruct ccstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -78,8 +214,9 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::CameraControl> writer(publisher, topic);
 
-    int16_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,ccstruct.cameraID);
-    int16_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power,ccstruct.cameraID);
+    int16_t id = helpermethods.id_to_tag(ccstruct.cameraID);
+    int16_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,id);
+    int16_t var_power_oct = helpermethods.bool_to_octet(ccstruct.power,id);
     bool var_focus_bool = helpermethods.float_to_bool(ccstruct.focus);
     bool var_zoom_bool = helpermethods.float_to_bool(ccstruct.zoom);
 
@@ -93,21 +230,21 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
         data.power(var_power_oct);
         if (var_zoom_bool)
         {
-            data.zoom_in(static_cast<int16_t>(ccstruct.cameraID));
+            data.zoom_in(static_cast<int16_t>(id));
         }
         if (var_zoom_bool == false)
         {
-            data.zoom_out(static_cast<int16_t>(ccstruct.cameraID));
+            data.zoom_out(static_cast<int16_t>(id));
         }
         if (var_focus_bool)
         {
-            data.focus_far(static_cast<int16_t>(ccstruct.cameraID));
+            data.focus_far(static_cast<int16_t>(id));
         }
         if (var_zoom_bool == false)
         {
-            data.focus_near(static_cast<int16_t>(ccstruct.cameraID));
+            data.focus_near(static_cast<int16_t>(id));
         }
-        std::cout << "Writing ::CameraControl Status" << std::endl;
+        std::cout << "Writing ::CameraControl" << std::endl;
 
         writer.write(data);
 
@@ -116,7 +253,7 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, CameraC
     }
 }
 
-void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampControlStruct lcstruct)
+void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::LampControlStruct lcstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -133,7 +270,8 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
 
-    int16_t var_power_oct = helpermethods.bool_to_octet(lcstruct.power,lcstruct.lampID);
+    int16_t id = helpermethods.id_to_tag(lcstruct.lampID);
+
     float intensity = lcstruct.intensity;
 
     ::LampControl data;
@@ -146,14 +284,14 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
         if (intensity > 0)
         {   
             data.intensity(intensity);
-            data.power(static_cast<int16_t>(lcstruct.lampID));
+            data.power(static_cast<int16_t>(id));
         }
         if (intensity == 0)
         {
-            data.power(static_cast<int16_t>(lcstruct.lampID));
+            data.power(static_cast<int16_t>(id));
             writer.write(data);
             rti::util::sleep(dds::core::Duration(1));
-            data.power(static_cast<int16_t>(lcstruct.lampID));
+            data.power(static_cast<int16_t>(id));
         }
         std::cout << "Writing ::LampControl" << std::endl;
 
@@ -164,7 +302,7 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, LampContr
     }
 }
 
-void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanAndTiltControlStruct ptcstruct)
+void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,HelperMethods::PanAndTiltControlStruct ptcstruct)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
@@ -181,6 +319,7 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
     // Create a DataWriter with default QoS
     dds::pub::DataWriter< ::PanAndTiltControl> writer(publisher, topic);
 
+    int16_t id = helpermethods.id_to_tag(ptcstruct.panandtiltID);
     bool var_tilt_bool = helpermethods.float_to_bool(ptcstruct.x);
     bool var_pan_bool = helpermethods.float_to_bool(ptcstruct.z);
 
@@ -192,19 +331,19 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
         // Modify the data to be written here
         if (var_tilt_bool)
         {
-            data.tilt_up(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.tilt_up(static_cast<int16_t>(id));
         }
         if (var_tilt_bool == false)
         {
-            data.tilt_down(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.tilt_down(static_cast<int16_t>(id));
         }
         if (var_pan_bool)
         {
-            data.pan_right(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.pan_right(static_cast<int16_t>(id));
         }
         if (var_pan_bool == false)
         {
-            data.pan_left(static_cast<int16_t>(ptcstruct.panandtiltID));
+            data.pan_left(static_cast<int16_t>(id));
         }
         
         std::cout << "Writing ::PanAndTiltControl " << std::endl;
@@ -214,4 +353,42 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,PanA
         // Send once every second
         rti::util::sleep(dds::core::Duration(1));
     }
+}
+
+void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::PanAndTiltPositionPublisherStruct pub_data)
+{
+    // DDS objects behave like shared pointers or value types
+    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
+
+    // Start communicating in a domain, usually one participant per application
+   
+    dds::domain::DomainParticipant participant(domain_id);
+
+    // Create a Topic with a name and a datatype
+    dds::topic::Topic< ::PanAndTiltPositionPublisher> topic(participant, "PanAndTiltPositionTopic");
+
+    // Create a Publisher
+    dds::pub::Publisher publisher(participant);
+
+    // Create a DataWriter with default QoS
+    dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
+
+    ::Quaternion angle = helpermethods.eulerToQuaternion(0, pub_data.tilt, pub_data.pan);
+
+    ::PanAndTiltPositionPublisher data;
+    // Main loop, write data
+    // for (unsigned int samples_written = 0;
+    // !application::shutdown_requested && samples_written < sample_count;
+    // samples_written++) {
+
+    std::cout << "Writing ::PanAndTiltPosition with ID: " << pub_data.panandtiltID 
+    << ", pan: " << pub_data.pan 
+    << ", tilt: " << pub_data.tilt 
+    << ", quaternion: (" << angle.x() << ", " << angle.y() << ", " << angle.z() << ", " << angle.w() << ")" 
+    << std::endl;
+    data.panandtiltID(pub_data.panandtiltID);
+    data.angle(angle);
+    writer.write(data);
+    // Send once every second
+    // rti::util::sleep(dds::core::Duration(1));
 }
