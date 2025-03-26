@@ -197,22 +197,10 @@ class HelperMethods
 
 HelperMethods helpermethods;
 
-void camera_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::CameraControlStruct ccstruct)
+void camera_publisher(HelperMethods::CameraControlStruct ccstruct,dds::pub::DataWriter< ::CameraControl> writer)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
-
-    // Start communicating in a domain, usually one participant per application
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::CameraControl> topic(participant, "CameraControlTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
-    // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::CameraControl> writer(publisher, topic);
 
     int16_t id = helpermethods.id_to_tag(ccstruct.cameraID);
     int16_t var_light_oct = helpermethods.bool_to_octet(ccstruct.light,id);
@@ -221,54 +209,38 @@ void camera_publisher(unsigned int domain_id, unsigned int sample_count, HelperM
     bool var_zoom_bool = helpermethods.float_to_bool(ccstruct.zoom);
 
     ::CameraControl data;
-    // Main loop, write data
-    for (unsigned int samples_written = 0;
-    !application::shutdown_requested && samples_written < sample_count;
-    samples_written++) {
-        // Modify the data to be written here
-        data.LED(var_light_oct);
-        data.power(var_power_oct);
-        if (var_zoom_bool)
-        {
-            data.zoom_in(static_cast<int16_t>(id));
-        }
-        if (var_zoom_bool == false)
-        {
-            data.zoom_out(static_cast<int16_t>(id));
-        }
-        if (var_focus_bool)
-        {
-            data.focus_far(static_cast<int16_t>(id));
-        }
-        if (var_zoom_bool == false)
-        {
-            data.focus_near(static_cast<int16_t>(id));
-        }
-        std::cout << "Writing ::CameraControl" << std::endl;
 
-        writer.write(data);
-
-        // Send once every second
-        rti::util::sleep(dds::core::Duration(1));
+    data.LED(var_light_oct);
+    data.power(var_power_oct);
+    if (var_zoom_bool)
+    {
+        data.zoom_in(static_cast<int16_t>(id));
     }
+    if (var_zoom_bool == false)
+    {
+        data.zoom_out(static_cast<int16_t>(id));
+    }
+    if (var_focus_bool)
+    {
+        data.focus_far(static_cast<int16_t>(id));
+    }
+    if (var_zoom_bool == false)
+    {
+        data.focus_near(static_cast<int16_t>(id));
+    }
+    std::cout << "Writing ::CameraControl" << std::endl;
+
+    writer.write(data);
+
+    // Send once every second
+    rti::util::sleep(dds::core::Duration(1));
 }
 
-void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::LampControlStruct lcstruct)
+void lamp_publisher(HelperMethods::LampControlStruct lcstruct,dds::pub::DataWriter< ::LampControl> writer)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
 
-    // Start communicating in a domain, usually one participant per application
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::LampControl> topic(participant, "LampControlTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
-    // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::LampControl> writer(publisher, topic);
 
     int16_t id = helpermethods.id_to_tag(lcstruct.lampID);
 
@@ -276,9 +248,9 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMet
 
     ::LampControl data;
     // Main loop, write data
-    for (unsigned int samples_written = 0;
-    !application::shutdown_requested && samples_written < sample_count;
-    samples_written++) {
+    // for (unsigned int samples_written = 0;
+    // !application::shutdown_requested && samples_written < sample_count;
+    // samples_written++) {
         // Modify the data to be written here
         
         if (intensity > 0)
@@ -299,35 +271,25 @@ void lamp_publisher(unsigned int domain_id, unsigned int sample_count, HelperMet
 
         // Send once every second
         rti::util::sleep(dds::core::Duration(1));
-    }
+
 }
 
-void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,HelperMethods::PanAndTiltControlStruct ptcstruct)
+void panandtilt_publisher(HelperMethods::PanAndTiltControlStruct ptcstruct,dds::pub::DataWriter< ::PanAndTiltControl> writer)
 {
     // DDS objects behave like shared pointers or value types
     // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
 
     // Start communicating in a domain, usually one participant per application
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PanAndTiltControl> topic(participant, "PanAndTiltControlTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
-    // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::PanAndTiltControl> writer(publisher, topic);
-
+   
     int16_t id = helpermethods.id_to_tag(ptcstruct.panandtiltID);
     bool var_tilt_bool = helpermethods.float_to_bool(ptcstruct.x);
     bool var_pan_bool = helpermethods.float_to_bool(ptcstruct.z);
 
     ::PanAndTiltControl data;
     // Main loop, write data
-    for (unsigned int samples_written = 0;
-    !application::shutdown_requested && samples_written < sample_count;
-    samples_written++) {
+    // for (unsigned int samples_written = 0;
+    // !application::shutdown_requested && samples_written < sample_count;
+    // samples_written++) {
         // Modify the data to be written here
         if (var_tilt_bool)
         {
@@ -352,34 +314,15 @@ void panandtilt_publisher(unsigned int domain_id, unsigned int sample_count,Help
 
         // Send once every second
         rti::util::sleep(dds::core::Duration(1));
-    }
+
 }
 
-void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, HelperMethods::PanAndTiltPositionPublisherStruct pub_data)
+void pt_position_publisher(HelperMethods::PanAndTiltPositionPublisherStruct pub_data,dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer)
 {
-    // DDS objects behave like shared pointers or value types
-    // (see https://community.rti.com/best-practices/use-modern-c-types-correctly)
-
-    // Start communicating in a domain, usually one participant per application
-   
-    dds::domain::DomainParticipant participant(domain_id);
-
-    // Create a Topic with a name and a datatype
-    dds::topic::Topic< ::PanAndTiltPositionPublisher> topic(participant, "PanAndTiltPositionTopic");
-
-    // Create a Publisher
-    dds::pub::Publisher publisher(participant);
-
-    // Create a DataWriter with default QoS
-    dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
 
     ::Quaternion angle = helpermethods.eulerToQuaternion(0, pub_data.tilt, pub_data.pan);
 
     ::PanAndTiltPositionPublisher data;
-    // Main loop, write data
-    // for (unsigned int samples_written = 0;
-    // !application::shutdown_requested && samples_written < sample_count;
-    // samples_written++) {
 
     std::cout << "Writing ::PanAndTiltPosition with ID: " << pub_data.panandtiltID 
     << ", pan: " << pub_data.pan 
@@ -390,5 +333,5 @@ void pt_position_publisher(unsigned int domain_id, unsigned int sample_count, He
     data.angle(angle);
     writer.write(data);
     // Send once every second
-    // rti::util::sleep(dds::core::Duration(1));
+    rti::util::sleep(dds::core::Duration(1));
 }
