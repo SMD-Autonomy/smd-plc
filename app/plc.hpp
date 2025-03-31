@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493952772_hpp
-#define plc_493952772_hpp
+#ifndef plc_493952776_hpp
+#define plc_493952776_hpp
 
 #include <iosfwd>
 
@@ -308,21 +308,24 @@ class NDDSUSERDllExport LampControl {
 
     LampControl();
 
-    LampControl(float intensity_,int16_t power_);
+    LampControl(const ::dds::core::array< float, 16L>& intensity_,int16_t power_);
 
-    float& intensity() noexcept {
+    ::dds::core::array< float, 16L>& intensity() noexcept {
         return m_intensity_;
     }
 
-    const float& intensity() const noexcept {
+    const ::dds::core::array< float, 16L>& intensity() const noexcept {
         return m_intensity_;
     }
 
-    void intensity(float value) {
+    void intensity(const ::dds::core::array< float, 16L>& value) {
 
         m_intensity_ = value;
     }
 
+    void intensity(::dds::core::array< float, 16L>&& value) {
+        m_intensity_ = std::move(value);
+    }
     int16_t& power() noexcept {
         return m_power_;
     }
@@ -343,7 +346,7 @@ class NDDSUSERDllExport LampControl {
 
   private:
 
-    float m_intensity_;
+    ::dds::core::array< float, 16L> m_intensity_ {};
     int16_t m_power_;
 
 };
@@ -1387,5 +1390,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493952772_hpp
+#endif // plc_493952776_hpp
 

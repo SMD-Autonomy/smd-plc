@@ -27,7 +27,7 @@ struct PanAndTiltControlCustom {
 
 struct LampControl {
 
-    float intensity;
+    float intensity[16];
     int16 power;
 };
 

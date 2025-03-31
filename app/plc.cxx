@@ -209,12 +209,11 @@ std::ostream& operator << (std::ostream& o,const PanAndTiltControlCustom& sample
 // ---- LampControl: 
 
 LampControl::LampControl() :
-    m_intensity_ (0.0f) ,
     m_power_ (0)  {
 
 }   
 
-LampControl::LampControl (float intensity_,int16_t power_):
+LampControl::LampControl (const ::dds::core::array< float, 16L>& intensity_,int16_t power_):
     m_intensity_(intensity_), 
     m_power_(power_) {
 }
@@ -227,8 +226,7 @@ void LampControl::swap(LampControl& other_)  noexcept
 }  
 
 bool LampControl::operator == (const LampControl& other_) const {
-    if (std::fabs(m_intensity_ - other_.m_intensity_) > std::numeric_limits< float>::epsilon()
-    && !(std::fabs(m_intensity_ - other_.m_intensity_) < (std::numeric_limits< float>::min)())) {
+    if (m_intensity_ != other_.m_intensity_) {
         return false;
     }
     if (m_power_ != other_.m_power_) {
@@ -245,7 +243,7 @@ std::ostream& operator << (std::ostream& o,const LampControl& sample)
 {
     ::rti::util::StreamFlagSaver flag_saver (o);
     o <<"[";
-    o << "intensity: " << std::setprecision(9) << sample.intensity ()<<", ";
+    o << "intensity: " << sample.intensity ()<<", ";
     o << "power: " << sample.power ();
     o <<"]";
     return o;
@@ -1391,6 +1389,8 @@ namespace rti {
 
                 static RTIBool is_initialized = RTI_FALSE;
 
+                static DDS_TypeCode LampControl_g_tc_intensity_array =DDS_INITIALIZE_ARRAY_TYPECODE(1,16L, NULL,NULL);
+
                 static DDS_TypeCode_Member LampControl_g_tc_members[2]=
                 {
 
@@ -1459,16 +1459,11 @@ namespace rti {
 
                 LampControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
-                LampControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+                LampControl_g_tc_intensity_array._data._typeCode =(RTICdrTypeCode *)&DDS_g_tc_float;
+                LampControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)& LampControl_g_tc_intensity_array;
                 LampControl_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_short;
 
                 /* Initialize the values for member annotations. */
-                LampControl_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
-                LampControl_g_tc_members[0]._annotations._defaultValue._u.float_value = 0.0f;
-                LampControl_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
-                LampControl_g_tc_members[0]._annotations._minValue._u.float_value = RTIXCdrFloat_MIN;
-                LampControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_FLOAT;
-                LampControl_g_tc_members[0]._annotations._maxValue._u.float_value = RTIXCdrFloat_MAX;
                 LampControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_SHORT;
                 LampControl_g_tc_members[1]._annotations._defaultValue._u.short_value = 0;
                 LampControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_SHORT;
@@ -3407,13 +3402,13 @@ namespace dds {
 
         void topic_type_support< ::LampControl >::reset_sample(::LampControl& sample) 
         {
-            sample.intensity(0.0f);
+            ::rti::topic::reset_sample(sample.intensity());
             sample.power(0);
         }
 
         void topic_type_support< ::LampControl >::allocate_sample(::LampControl& sample, int, int) 
         {
-            RTIOsapiUtility_unusedParameter(sample);
+            ::rti::topic::allocate_sample(sample.intensity(),  -1, -1);
         }
         void topic_type_support< ::CameraControl >:: register_type(
             ::dds::domain::DomainParticipant& participant,

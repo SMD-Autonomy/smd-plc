@@ -253,16 +253,27 @@ void lamp_publisher(HelperMethods::LampControlStruct lcstruct,dds::pub::DataWrit
     // samples_written++) {
         // Modify the data to be written here
         
-        if (intensity > 0)
-        {   
-            data.intensity(intensity);
-            data.power(static_cast<int16_t>(id));
+        // if (intensity > 0)
+        // {   
+        //     data.intensity(intensity);
+        //     data.power(static_cast<int16_t>(id));
+        // }
+        // if (intensity == 0)
+        // {
+        //     data.power(static_cast<int16_t>(id));
+        //     writer.write(data);
+        //     rti::util::sleep(dds::core::Duration(1));
+        //     data.power(static_cast<int16_t>(id));
+        // }
+        // data.intensity() = {0};
+        data.intensity()[static_cast<int>(id)] = intensity;
+        bool power_check = false;
+        for (auto n : data.intensity()) {
+            if (n > 0){
+                power_check = true;
+            }
         }
-        if (intensity == 0)
-        {
-            data.power(static_cast<int16_t>(id));
-            writer.write(data);
-            rti::util::sleep(dds::core::Duration(1));
+        if (power_check == true){
             data.power(static_cast<int16_t>(id));
         }
         std::cout << "Writing ::LampControl" << std::endl;
@@ -307,6 +318,7 @@ void panandtilt_publisher(HelperMethods::PanAndTiltControlStruct ptcstruct,dds::
         {
             data.pan_left(static_cast<int16_t>(id));
         }
+        data.power(static_cast<int16_t>(id));
         
         std::cout << "Writing ::PanAndTiltControl " << std::endl;
 
