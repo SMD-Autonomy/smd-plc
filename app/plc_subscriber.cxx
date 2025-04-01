@@ -324,12 +324,12 @@ void panandtilt_position_subscriber(unsigned int domain_id, unsigned int sample_
     dds::core::cond::WaitSet waitset;
     waitset += read_condition;
 
-    //while (!application::shutdown_requested && samples_read < sample_count) {
+    while (!application::shutdown_requested && samples_read < sample_count) {
         std::cout << "::PanAndTiltPositionSubscriber subscriber sleeping up to 1 sec..." << std::endl;
 
         // Run the handlers of the active conditions. Wait for up to 1 second.
         waitset.dispatch(dds::core::Duration(1));
-    //}
+    }
 }
 
 int main(int argc, char *argv[])
@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
     threads.emplace_back(run_subscriber, camera_subscriber, 0);
     threads.emplace_back(run_subscriber, lamp_subscriber, 1);
     threads.emplace_back(run_subscriber, panandtilt_subscriber, 2);
-    threads.emplace_back(run_subscriber, panandtilt_position_subscriber, 3);
+    threads.emplace_back(run_subscriber, panandtilt_position_subscriber, 0);
 
     for (auto& thread : threads) {
         thread.join();

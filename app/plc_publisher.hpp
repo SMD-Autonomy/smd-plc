@@ -192,6 +192,14 @@ class HelperMethods
     
         return q;
     }
+
+    bool power_check(float intensity)
+    {
+        if (intensity == 0)
+        {
+            return true;
+        }
+    }
     
 };
 
@@ -247,35 +255,119 @@ void lamp_publisher(HelperMethods::LampControlStruct lcstruct,dds::pub::DataWrit
     float intensity = lcstruct.intensity;
 
     ::LampControl data;
-    // Main loop, write data
-    // for (unsigned int samples_written = 0;
-    // !application::shutdown_requested && samples_written < sample_count;
-    // samples_written++) {
-        // Modify the data to be written here
-        
-        // if (intensity > 0)
-        // {   
-        //     data.intensity(intensity);
-        //     data.power(static_cast<int16_t>(id));
-        // }
-        // if (intensity == 0)
-        // {
-        //     data.power(static_cast<int16_t>(id));
-        //     writer.write(data);
-        //     rti::util::sleep(dds::core::Duration(1));
-        //     data.power(static_cast<int16_t>(id));
-        // }
-        // data.intensity() = {0};
-        data.intensity()[static_cast<int>(id)] = intensity;
         bool power_check = false;
-        for (auto n : data.intensity()) {
-            if (n > 0){
-                power_check = true;
+        if (lcstruct.lampID == 1){
+            data.intensity().intensity_one() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
             }
         }
-        if (power_check == true){
-            data.power(static_cast<int16_t>(id));
+        if (lcstruct.lampID == 2){
+            data.intensity().intensity_two() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
         }
+        if (lcstruct.lampID == 3){
+            data.intensity().intensity_three() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 4){
+            data.intensity().intensity_four() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 5){
+            data.intensity().intensity_five() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 6){
+            data.intensity().intensity_six() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 7){
+            data.intensity().intensity_seven() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 8){
+            data.intensity().intensity_eight() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 9){
+            data.intensity().intensity_nine() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 10){
+            data.intensity().intensity_ten() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 11){
+            data.intensity().intensity_eleven() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 12){
+            data.intensity().intensity_twelve() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 13){
+            data.intensity().intensity_thirteen() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 14){
+            data.intensity().intensity_fourteen() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 15){
+            data.intensity().intensity_fifteen() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        }
+        if (lcstruct.lampID == 16){
+            data.intensity().intensity_sixteen() = intensity;
+            power_check = helpermethods.power_check(intensity);
+            if (!power_check){
+                data.power(static_cast<int16_t>(id));
+            }
+        } 
         std::cout << "Writing ::LampControl" << std::endl;
 
         writer.write(data);

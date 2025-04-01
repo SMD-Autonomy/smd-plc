@@ -1,4 +1,25 @@
 @appendable
+struct Power {
+
+    float intensity_one;
+    float intensity_two;
+    float intensity_three;
+    float intensity_four;
+    float intensity_five;
+    float intensity_six;
+    float intensity_seven;
+    float intensity_eight;
+    float intensity_nine;
+    float intensity_ten;
+    float intensity_eleven;
+    float intensity_twelve;
+    float intensity_thirteen;
+    float intensity_fourteen;
+    float intensity_fifteen;
+    float intensity_sixteen;
+
+};
+
 struct LampControlCustom {
 
     @key uint32 lampID;
@@ -27,7 +48,7 @@ struct PanAndTiltControlCustom {
 
 struct LampControl {
 
-    float intensity[16];
+    Power intensity;
     int16 power;
 };
 

@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493952776_hpp
-#define plc_493952776_hpp
+#ifndef plc_493953247_hpp
+#define plc_493953247_hpp
 
 #include <iosfwd>
 
@@ -62,6 +62,254 @@ or consult the Code Generator User's Manual.
 #undef NDDSUSERDllExport
 #define NDDSUSERDllExport __declspec(dllexport)
 #endif
+
+class NDDSUSERDllExport Power {
+  public:
+
+    Power();
+
+    Power(float intensity_one_,float intensity_two_,float intensity_three_,float intensity_four_,float intensity_five_,float intensity_six_,float intensity_seven_,float intensity_eight_,float intensity_nine_,float intensity_ten_,float intensity_eleven_,float intensity_twelve_,float intensity_thirteen_,float intensity_fourteen_,float intensity_fifteen_,float intensity_sixteen_);
+
+    float& intensity_one() noexcept {
+        return m_intensity_one_;
+    }
+
+    const float& intensity_one() const noexcept {
+        return m_intensity_one_;
+    }
+
+    void intensity_one(float value) {
+
+        m_intensity_one_ = value;
+    }
+
+    float& intensity_two() noexcept {
+        return m_intensity_two_;
+    }
+
+    const float& intensity_two() const noexcept {
+        return m_intensity_two_;
+    }
+
+    void intensity_two(float value) {
+
+        m_intensity_two_ = value;
+    }
+
+    float& intensity_three() noexcept {
+        return m_intensity_three_;
+    }
+
+    const float& intensity_three() const noexcept {
+        return m_intensity_three_;
+    }
+
+    void intensity_three(float value) {
+
+        m_intensity_three_ = value;
+    }
+
+    float& intensity_four() noexcept {
+        return m_intensity_four_;
+    }
+
+    const float& intensity_four() const noexcept {
+        return m_intensity_four_;
+    }
+
+    void intensity_four(float value) {
+
+        m_intensity_four_ = value;
+    }
+
+    float& intensity_five() noexcept {
+        return m_intensity_five_;
+    }
+
+    const float& intensity_five() const noexcept {
+        return m_intensity_five_;
+    }
+
+    void intensity_five(float value) {
+
+        m_intensity_five_ = value;
+    }
+
+    float& intensity_six() noexcept {
+        return m_intensity_six_;
+    }
+
+    const float& intensity_six() const noexcept {
+        return m_intensity_six_;
+    }
+
+    void intensity_six(float value) {
+
+        m_intensity_six_ = value;
+    }
+
+    float& intensity_seven() noexcept {
+        return m_intensity_seven_;
+    }
+
+    const float& intensity_seven() const noexcept {
+        return m_intensity_seven_;
+    }
+
+    void intensity_seven(float value) {
+
+        m_intensity_seven_ = value;
+    }
+
+    float& intensity_eight() noexcept {
+        return m_intensity_eight_;
+    }
+
+    const float& intensity_eight() const noexcept {
+        return m_intensity_eight_;
+    }
+
+    void intensity_eight(float value) {
+
+        m_intensity_eight_ = value;
+    }
+
+    float& intensity_nine() noexcept {
+        return m_intensity_nine_;
+    }
+
+    const float& intensity_nine() const noexcept {
+        return m_intensity_nine_;
+    }
+
+    void intensity_nine(float value) {
+
+        m_intensity_nine_ = value;
+    }
+
+    float& intensity_ten() noexcept {
+        return m_intensity_ten_;
+    }
+
+    const float& intensity_ten() const noexcept {
+        return m_intensity_ten_;
+    }
+
+    void intensity_ten(float value) {
+
+        m_intensity_ten_ = value;
+    }
+
+    float& intensity_eleven() noexcept {
+        return m_intensity_eleven_;
+    }
+
+    const float& intensity_eleven() const noexcept {
+        return m_intensity_eleven_;
+    }
+
+    void intensity_eleven(float value) {
+
+        m_intensity_eleven_ = value;
+    }
+
+    float& intensity_twelve() noexcept {
+        return m_intensity_twelve_;
+    }
+
+    const float& intensity_twelve() const noexcept {
+        return m_intensity_twelve_;
+    }
+
+    void intensity_twelve(float value) {
+
+        m_intensity_twelve_ = value;
+    }
+
+    float& intensity_thirteen() noexcept {
+        return m_intensity_thirteen_;
+    }
+
+    const float& intensity_thirteen() const noexcept {
+        return m_intensity_thirteen_;
+    }
+
+    void intensity_thirteen(float value) {
+
+        m_intensity_thirteen_ = value;
+    }
+
+    float& intensity_fourteen() noexcept {
+        return m_intensity_fourteen_;
+    }
+
+    const float& intensity_fourteen() const noexcept {
+        return m_intensity_fourteen_;
+    }
+
+    void intensity_fourteen(float value) {
+
+        m_intensity_fourteen_ = value;
+    }
+
+    float& intensity_fifteen() noexcept {
+        return m_intensity_fifteen_;
+    }
+
+    const float& intensity_fifteen() const noexcept {
+        return m_intensity_fifteen_;
+    }
+
+    void intensity_fifteen(float value) {
+
+        m_intensity_fifteen_ = value;
+    }
+
+    float& intensity_sixteen() noexcept {
+        return m_intensity_sixteen_;
+    }
+
+    const float& intensity_sixteen() const noexcept {
+        return m_intensity_sixteen_;
+    }
+
+    void intensity_sixteen(float value) {
+
+        m_intensity_sixteen_ = value;
+    }
+
+    bool operator == (const Power& other_) const;
+    bool operator != (const Power& other_) const;
+
+    void swap(Power& other_) noexcept ;
+
+  private:
+
+    float m_intensity_one_;
+    float m_intensity_two_;
+    float m_intensity_three_;
+    float m_intensity_four_;
+    float m_intensity_five_;
+    float m_intensity_six_;
+    float m_intensity_seven_;
+    float m_intensity_eight_;
+    float m_intensity_nine_;
+    float m_intensity_ten_;
+    float m_intensity_eleven_;
+    float m_intensity_twelve_;
+    float m_intensity_thirteen_;
+    float m_intensity_fourteen_;
+    float m_intensity_fifteen_;
+    float m_intensity_sixteen_;
+
+};
+
+inline void swap(Power& a, Power& b)  noexcept 
+{
+    a.swap(b);
+}
+
+NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const Power& sample);
 
 class NDDSUSERDllExport LampControlCustom {
   public:
@@ -308,22 +556,22 @@ class NDDSUSERDllExport LampControl {
 
     LampControl();
 
-    LampControl(const ::dds::core::array< float, 16L>& intensity_,int16_t power_);
+    LampControl(const ::Power& intensity_,int16_t power_);
 
-    ::dds::core::array< float, 16L>& intensity() noexcept {
+    ::Power& intensity() noexcept {
         return m_intensity_;
     }
 
-    const ::dds::core::array< float, 16L>& intensity() const noexcept {
+    const ::Power& intensity() const noexcept {
         return m_intensity_;
     }
 
-    void intensity(const ::dds::core::array< float, 16L>& value) {
+    void intensity(const ::Power& value) {
 
         m_intensity_ = value;
     }
 
-    void intensity(::dds::core::array< float, 16L>&& value) {
+    void intensity(::Power&& value) {
         m_intensity_ = std::move(value);
     }
     int16_t& power() noexcept {
@@ -346,7 +594,7 @@ class NDDSUSERDllExport LampControl {
 
   private:
 
-    ::dds::core::array< float, 16L> m_intensity_ {};
+    ::Power m_intensity_;
     int16_t m_power_;
 
 };
@@ -960,6 +1208,41 @@ namespace dds {
     namespace topic {
 
         template<>
+        struct topic_type_name< ::Power > {
+            NDDSUSERDllExport static std::string value() {
+                return "Power";
+            }
+        };
+
+        template<>
+        struct is_topic_type< ::Power > : public ::dds::core::true_type {};
+
+        template<>
+        struct topic_type_support< ::Power > {
+            NDDSUSERDllExport 
+            static void register_type(
+                ::dds::domain::DomainParticipant& participant,
+                const std::string & type_name);
+
+            NDDSUSERDllExport 
+            static std::vector<char>& to_cdr_buffer(
+                std::vector<char>& buffer, 
+                const ::Power& sample,
+                ::dds::core::policy::DataRepresentationId representation 
+                = ::dds::core::policy::DataRepresentation::auto_id());
+
+            NDDSUSERDllExport 
+            static void from_cdr_buffer(::Power& sample, const std::vector<char>& buffer);
+            NDDSUSERDllExport 
+            static void reset_sample(::Power& sample);
+
+            NDDSUSERDllExport 
+            static void allocate_sample(::Power& sample, int, int);
+
+            static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
+            ::rti::topic::TypePluginKind::STL;
+        };
+        template<>
         struct topic_type_name< ::LampControlCustom > {
             NDDSUSERDllExport static std::string value() {
                 return "LampControlCustom";
@@ -1281,6 +1564,17 @@ namespace rti {
     namespace topic {
 
         template<>
+        struct dynamic_type< ::Power > {
+            typedef ::dds::core::xtypes::StructType type;
+            NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
+        };
+
+        template <>
+        struct extensibility< ::Power > {
+            static const ::dds::core::xtypes::ExtensibilityKind::type kind =
+            ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
+
+        template<>
         struct dynamic_type< ::LampControlCustom > {
             typedef ::dds::core::xtypes::StructType type;
             NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
@@ -1390,5 +1684,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493952776_hpp
+#endif // plc_493953247_hpp
 
