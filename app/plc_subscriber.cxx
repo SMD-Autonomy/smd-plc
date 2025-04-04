@@ -18,6 +18,9 @@
 #include <dds/sub/ddssub.hpp>
 #include <dds/core/ddscore.hpp>
 #include <rti/config/Logger.hpp>  // for logging
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_ros/transform_broadcaster.h"
+
 // alternatively, to include all the standard APIs:
 //  <dds/dds.hpp>
 // or to include both the standard APIs and extensions:

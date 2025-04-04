@@ -40,7 +40,7 @@ TARGET_ARCH = x64Linux4gcc7.3.0
 ifndef COMPILER
     COMPILER = $(COMPILER_PATH)$(GCC_PREFIX)g++
 endif
-COMPILER_FLAGS = -m64 -Wall $(ADDITIONAL_COMPILER_FLAGS) -std=c++14
+COMPILER_FLAGS = -m64 -Wall $(ADDITIONAL_COMPILER_FLAGS) -std=c++17
 ifndef LINKER
     LINKER = $(COMPILER_PATH)$(GCC_PREFIX)g++
 endif
@@ -77,11 +77,48 @@ endif
 
 
 
-INCLUDES = -I. -I$(NDDSHOME)/include -I$(NDDSHOME)/include/ndds -I$(NDDSHOME)/include/ndds/hpp 
-       
+INCLUDES = -I. -I$(NDDSHOME)/include -I$(NDDSHOME)/include/ndds -I$(NDDSHOME)/include/ndds/hpp \
+-I$(ROSHOME)/action_msgs \
+-I$(ROSHOME)/builtin_interfaces \
+-I$(ROSHOME)/composition_interfaces \
+-I$(ROSHOME)/example_interfaces \
+-I$(ROSHOME)/fastrtps \
+-I$(ROSHOME)/libstatistics_collector \
+-I$(ROSHOME)/nav_msgs \
+-I$(ROSHOME)/rcl \
+-I$(ROSHOME)/rcl_action \
+-I$(ROSHOME)/rcl_interfaces \
+-I$(ROSHOME)/rcl_yaml_param_parser \
+-I$(ROSHOME)/rclcpp \
+-I$(ROSHOME)/rclcpp_action \
+-I$(ROSHOME)/rclcpp_components \
+-I$(ROSHOME)/rclcpp_lifecycle \
+-I$(ROSHOME)/rmw \
+-I$(ROSHOME)/rmw_dds_common \
+-I$(ROSHOME)/rcpputils \
+-I$(ROSHOME)/rcutils \
+-I$(ROSHOME)/sensor_msgs \
+-I$(ROSHOME)/std_msgs \
+-I$(ROSHOME)/std_srvs \
+-I$(ROSHOME)/tf2 \
+-I$(ROSHOME)/tf2_ros \
+-I$(ROSHOME)/tf2_msgs \
+-I$(ROSHOME)/tf2_geometry_msgs \
+-I$(ROSHOME)/tracetools \
+-I$(ROSHOME)/tracetools_trace \
+-I$(ROSHOME)/type_description_interfaces \
+-I$(ROSHOME)/type_support_dispatcher \
+-I$(ROSHOME)/uncrustify_vendor \
+-I$(ROSHOME)/vectornav_msgs \
+-I$(ROSHOME)/rosidl_runtime_c \
+-I$(ROSHOME)/rosidl_runtime_cpp \
+-I$(ROSHOME)/statistics_msgs \
+-I$(ROSHOME)/geometry_msgs \
+-I$(ROSHOME)/rosidl_typesupport_interface
+
 LIBS = -L$(NDDSHOME)/lib/$(TARGET_ARCH) \
-       
-LIBS += 
+
+LIBS +=
 
 LIBS +=  -lnddscpp2$(SHAREDLIB_SFX)$(DEBUG_SFX) -lnddsc$(SHAREDLIB_SFX)$(DEBUG_SFX) -lnddscore$(SHAREDLIB_SFX)$(DEBUG_SFX) \
         \
