@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plc_493953247_hpp
-#define plc_493953247_hpp
+#ifndef plc_493953418_hpp
+#define plc_493953418_hpp
 
 #include <iosfwd>
 
@@ -1191,6 +1191,109 @@ inline void swap(PanAndTiltPositionPublisher& a, PanAndTiltPositionPublisher& b)
 
 NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const PanAndTiltPositionPublisher& sample);
 
+class NDDSUSERDllExport PanAndTiltTransformPublisher {
+  public:
+
+    PanAndTiltTransformPublisher();
+
+    PanAndTiltTransformPublisher(uint32_t panandtiltID_,const ::Quaternion& angle_,const std::string& parent_frame_,const std::string& child_frame_,int64_t timestamp_);
+
+    uint32_t& panandtiltID() noexcept {
+        return m_panandtiltID_;
+    }
+
+    const uint32_t& panandtiltID() const noexcept {
+        return m_panandtiltID_;
+    }
+
+    void panandtiltID(uint32_t value) {
+
+        m_panandtiltID_ = value;
+    }
+
+    ::Quaternion& angle() noexcept {
+        return m_angle_;
+    }
+
+    const ::Quaternion& angle() const noexcept {
+        return m_angle_;
+    }
+
+    void angle(const ::Quaternion& value) {
+
+        m_angle_ = value;
+    }
+
+    void angle(::Quaternion&& value) {
+        m_angle_ = std::move(value);
+    }
+    std::string& parent_frame() noexcept {
+        return m_parent_frame_;
+    }
+
+    const std::string& parent_frame() const noexcept {
+        return m_parent_frame_;
+    }
+
+    void parent_frame(const std::string& value) {
+
+        m_parent_frame_ = value;
+    }
+
+    void parent_frame(std::string&& value) {
+        m_parent_frame_ = std::move(value);
+    }
+    std::string& child_frame() noexcept {
+        return m_child_frame_;
+    }
+
+    const std::string& child_frame() const noexcept {
+        return m_child_frame_;
+    }
+
+    void child_frame(const std::string& value) {
+
+        m_child_frame_ = value;
+    }
+
+    void child_frame(std::string&& value) {
+        m_child_frame_ = std::move(value);
+    }
+    int64_t& timestamp() noexcept {
+        return m_timestamp_;
+    }
+
+    const int64_t& timestamp() const noexcept {
+        return m_timestamp_;
+    }
+
+    void timestamp(int64_t value) {
+
+        m_timestamp_ = value;
+    }
+
+    bool operator == (const PanAndTiltTransformPublisher& other_) const;
+    bool operator != (const PanAndTiltTransformPublisher& other_) const;
+
+    void swap(PanAndTiltTransformPublisher& other_) noexcept ;
+
+  private:
+
+    uint32_t m_panandtiltID_;
+    ::Quaternion m_angle_;
+    std::string m_parent_frame_;
+    std::string m_child_frame_;
+    int64_t m_timestamp_;
+
+};
+
+inline void swap(PanAndTiltTransformPublisher& a, PanAndTiltTransformPublisher& b)  noexcept 
+{
+    a.swap(b);
+}
+
+NDDSUSERDllExport std::ostream& operator<<(std::ostream& o, const PanAndTiltTransformPublisher& sample);
+
 #ifdef NDDS_STANDALONE_TYPE
 namespace rti { 
     namespace topic {
@@ -1557,6 +1660,41 @@ namespace dds {
             static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
             ::rti::topic::TypePluginKind::STL;
         };
+        template<>
+        struct topic_type_name< ::PanAndTiltTransformPublisher > {
+            NDDSUSERDllExport static std::string value() {
+                return "PanAndTiltTransformPublisher";
+            }
+        };
+
+        template<>
+        struct is_topic_type< ::PanAndTiltTransformPublisher > : public ::dds::core::true_type {};
+
+        template<>
+        struct topic_type_support< ::PanAndTiltTransformPublisher > {
+            NDDSUSERDllExport 
+            static void register_type(
+                ::dds::domain::DomainParticipant& participant,
+                const std::string & type_name);
+
+            NDDSUSERDllExport 
+            static std::vector<char>& to_cdr_buffer(
+                std::vector<char>& buffer, 
+                const ::PanAndTiltTransformPublisher& sample,
+                ::dds::core::policy::DataRepresentationId representation 
+                = ::dds::core::policy::DataRepresentation::auto_id());
+
+            NDDSUSERDllExport 
+            static void from_cdr_buffer(::PanAndTiltTransformPublisher& sample, const std::vector<char>& buffer);
+            NDDSUSERDllExport 
+            static void reset_sample(::PanAndTiltTransformPublisher& sample);
+
+            NDDSUSERDllExport 
+            static void allocate_sample(::PanAndTiltTransformPublisher& sample, int, int);
+
+            static const ::rti::topic::TypePluginKind::type type_plugin_kind = 
+            ::rti::topic::TypePluginKind::STL;
+        };
     }
 }
 
@@ -1673,6 +1811,17 @@ namespace rti {
             static const ::dds::core::xtypes::ExtensibilityKind::type kind =
             ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
 
+        template<>
+        struct dynamic_type< ::PanAndTiltTransformPublisher > {
+            typedef ::dds::core::xtypes::StructType type;
+            NDDSUSERDllExport static const ::dds::core::xtypes::StructType& get();
+        };
+
+        template <>
+        struct extensibility< ::PanAndTiltTransformPublisher > {
+            static const ::dds::core::xtypes::ExtensibilityKind::type kind =
+            ::dds::core::xtypes::ExtensibilityKind::EXTENSIBLE;    };
+
     }
 }
 
@@ -1684,5 +1833,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // plc_493953247_hpp
+#endif // plc_493953418_hpp
 

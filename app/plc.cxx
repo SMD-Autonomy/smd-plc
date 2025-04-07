@@ -807,6 +807,70 @@ std::ostream& operator << (std::ostream& o,const PanAndTiltPositionPublisher& sa
     return o;
 }
 
+// ---- PanAndTiltTransformPublisher: 
+
+PanAndTiltTransformPublisher::PanAndTiltTransformPublisher() :
+    m_panandtiltID_ (0u) ,
+    m_parent_frame_ ("") ,
+    m_child_frame_ ("") ,
+    m_timestamp_ (0ll)  {
+
+}   
+
+PanAndTiltTransformPublisher::PanAndTiltTransformPublisher (uint32_t panandtiltID_,const ::Quaternion& angle_,const std::string& parent_frame_,const std::string& child_frame_,int64_t timestamp_):
+    m_panandtiltID_(panandtiltID_), 
+    m_angle_(angle_), 
+    m_parent_frame_(parent_frame_), 
+    m_child_frame_(child_frame_), 
+    m_timestamp_(timestamp_) {
+}
+
+void PanAndTiltTransformPublisher::swap(PanAndTiltTransformPublisher& other_)  noexcept 
+{
+    using std::swap;
+    swap(m_panandtiltID_, other_.m_panandtiltID_);
+    swap(m_angle_, other_.m_angle_);
+    swap(m_parent_frame_, other_.m_parent_frame_);
+    swap(m_child_frame_, other_.m_child_frame_);
+    swap(m_timestamp_, other_.m_timestamp_);
+}  
+
+bool PanAndTiltTransformPublisher::operator == (const PanAndTiltTransformPublisher& other_) const {
+    if (m_panandtiltID_ != other_.m_panandtiltID_) {
+        return false;
+    }
+    if (m_angle_ != other_.m_angle_) {
+        return false;
+    }
+    if (m_parent_frame_ != other_.m_parent_frame_) {
+        return false;
+    }
+    if (m_child_frame_ != other_.m_child_frame_) {
+        return false;
+    }
+    if (m_timestamp_ != other_.m_timestamp_) {
+        return false;
+    }
+    return true;
+}
+
+bool PanAndTiltTransformPublisher::operator != (const PanAndTiltTransformPublisher& other_) const {
+    return !this->operator ==(other_);
+}
+
+std::ostream& operator << (std::ostream& o,const PanAndTiltTransformPublisher& sample)
+{
+    ::rti::util::StreamFlagSaver flag_saver (o);
+    o <<"[";
+    o << "panandtiltID: " << sample.panandtiltID ()<<", ";
+    o << "angle: " << sample.angle ()<<", ";
+    o << "parent_frame: " << sample.parent_frame ()<<", ";
+    o << "child_frame: " << sample.child_frame ()<<", ";
+    o << "timestamp: " << sample.timestamp ();
+    o <<"]";
+    return o;
+}
+
 #ifdef NDDS_STANDALONE_TYPE
 namespace rti {
     namespace topic {
@@ -3878,6 +3942,270 @@ namespace rti {
                 ::rti::core::native_conversions::cast_from_native< ::dds::core::xtypes::DynamicType >(
                     *(native_type_code< ::PanAndTiltPositionPublisher >::get())));
         }
+
+        template<>
+        struct native_type_code< ::PanAndTiltTransformPublisher > {
+            static DDS_TypeCode * get()
+            {
+                using namespace ::rti::topic::interpreter;
+
+                static RTIBool is_initialized = RTI_FALSE;
+
+                static DDS_TypeCode PanAndTiltTransformPublisher_g_tc_parent_frame_string;
+                static DDS_TypeCode PanAndTiltTransformPublisher_g_tc_child_frame_string;
+
+                static DDS_TypeCode_Member PanAndTiltTransformPublisher_g_tc_members[5]=
+                {
+
+                    {
+                        (char *)"panandtiltID",/* Member name */
+                        {
+                            0,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"angle",/* Member name */
+                        {
+                            1,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"parent_frame",/* Member name */
+                        {
+                            2,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"child_frame",/* Member name */
+                        {
+                            3,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }, 
+                    {
+                        (char *)"timestamp",/* Member name */
+                        {
+                            4,/* Representation ID */
+                            DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                            -1, /* Bitfield bits */
+                            NULL/* Member type code is assigned later */
+                        },
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+                        DDS_PUBLIC_MEMBER,/* Member visibility */
+                        1,
+                        NULL, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER
+                    }
+                };
+
+                static DDS_TypeCode PanAndTiltTransformPublisher_g_tc =
+                {{
+                        DDS_TK_STRUCT, /* Kind */
+                        DDS_BOOLEAN_FALSE, /* Ignored */
+                        -1, /*Ignored*/
+                        (char *)"PanAndTiltTransformPublisher", /* Name */
+                        NULL, /* Ignored */      
+                        0, /* Ignored */
+                        0, /* Ignored */
+                        NULL, /* Ignored */
+                        5, /* Number of members */
+                        PanAndTiltTransformPublisher_g_tc_members, /* Members */
+                        DDS_VM_NONE, /* Ignored */
+                        RTICdrTypeCodeAnnotations_INITIALIZER,
+                        DDS_BOOLEAN_TRUE, /* _isCopyable */
+                        NULL, /* _sampleAccessInfo: assigned later */
+                        NULL /* _typePlugin: assigned later */
+                    }}; /* Type code for PanAndTiltTransformPublisher*/
+
+                if (is_initialized) {
+                    return &PanAndTiltTransformPublisher_g_tc;
+                }
+
+                is_initialized = RTI_TRUE;
+
+                PanAndTiltTransformPublisher_g_tc_parent_frame_string = initialize_string_typecode((255L));
+                PanAndTiltTransformPublisher_g_tc_child_frame_string = initialize_string_typecode((255L));
+
+                PanAndTiltTransformPublisher_g_tc._data._annotations._allowedDataRepresentationMask = 5;
+
+                PanAndTiltTransformPublisher_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_ulong;
+                PanAndTiltTransformPublisher_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&::rti::topic::dynamic_type< ::Quaternion>::get().native();
+                PanAndTiltTransformPublisher_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&PanAndTiltTransformPublisher_g_tc_parent_frame_string;
+                PanAndTiltTransformPublisher_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&PanAndTiltTransformPublisher_g_tc_child_frame_string;
+                PanAndTiltTransformPublisher_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_longlong;
+
+                /* Initialize the values for member annotations. */
+                PanAndTiltTransformPublisher_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltTransformPublisher_g_tc_members[0]._annotations._defaultValue._u.ulong_value = 0u;
+                PanAndTiltTransformPublisher_g_tc_members[0]._annotations._minValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltTransformPublisher_g_tc_members[0]._annotations._minValue._u.ulong_value = RTIXCdrUnsignedLong_MIN;
+                PanAndTiltTransformPublisher_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_ULONG;
+                PanAndTiltTransformPublisher_g_tc_members[0]._annotations._maxValue._u.ulong_value = RTIXCdrUnsignedLong_MAX;
+                PanAndTiltTransformPublisher_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_STRING;
+                PanAndTiltTransformPublisher_g_tc_members[2]._annotations._defaultValue._u.string_value = (DDS_Char *) "";
+                PanAndTiltTransformPublisher_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_STRING;
+                PanAndTiltTransformPublisher_g_tc_members[3]._annotations._defaultValue._u.string_value = (DDS_Char *) "";
+                PanAndTiltTransformPublisher_g_tc_members[4]._annotations._defaultValue._d = RTI_XCDR_TK_LONGLONG;
+                PanAndTiltTransformPublisher_g_tc_members[4]._annotations._defaultValue._u.long_long_value = 0ll;
+                PanAndTiltTransformPublisher_g_tc_members[4]._annotations._minValue._d = RTI_XCDR_TK_LONGLONG;
+                PanAndTiltTransformPublisher_g_tc_members[4]._annotations._minValue._u.long_long_value = RTIXCdrLongLong_MIN;
+                PanAndTiltTransformPublisher_g_tc_members[4]._annotations._maxValue._d = RTI_XCDR_TK_LONGLONG;
+                PanAndTiltTransformPublisher_g_tc_members[4]._annotations._maxValue._u.long_long_value = RTIXCdrLongLong_MAX;
+
+                PanAndTiltTransformPublisher_g_tc._data._sampleAccessInfo = sample_access_info();
+                PanAndTiltTransformPublisher_g_tc._data._typePlugin = type_plugin_info();    
+
+                return &PanAndTiltTransformPublisher_g_tc;
+            }
+
+            static RTIXCdrSampleAccessInfo * sample_access_info()
+            {
+                static RTIBool is_initialized = RTI_FALSE;
+
+                ::PanAndTiltTransformPublisher *sample;
+
+                static RTIXCdrMemberAccessInfo PanAndTiltTransformPublisher_g_memberAccessInfos[5] =
+                {RTIXCdrMemberAccessInfo_INITIALIZER};
+
+                static RTIXCdrSampleAccessInfo PanAndTiltTransformPublisher_g_sampleAccessInfo = 
+                RTIXCdrSampleAccessInfo_INITIALIZER;
+
+                if (is_initialized) {
+                    return (RTIXCdrSampleAccessInfo*) &PanAndTiltTransformPublisher_g_sampleAccessInfo;
+                }
+
+                RTIXCdrHeap_allocateStruct(
+                    &sample, 
+                    ::PanAndTiltTransformPublisher);
+                if (sample == NULL) {
+                    return NULL;
+                }
+
+                PanAndTiltTransformPublisher_g_memberAccessInfos[0].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->panandtiltID() - (char *)sample);
+
+                PanAndTiltTransformPublisher_g_memberAccessInfos[1].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->angle() - (char *)sample);
+
+                PanAndTiltTransformPublisher_g_memberAccessInfos[2].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->parent_frame() - (char *)sample);
+
+                PanAndTiltTransformPublisher_g_memberAccessInfos[3].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->child_frame() - (char *)sample);
+
+                PanAndTiltTransformPublisher_g_memberAccessInfos[4].bindingMemberValueOffset[0] = 
+                (RTIXCdrUnsignedLong) ((char *)&sample->timestamp() - (char *)sample);
+
+                PanAndTiltTransformPublisher_g_sampleAccessInfo.memberAccessInfos = 
+                PanAndTiltTransformPublisher_g_memberAccessInfos;
+
+                {
+                    size_t candidateTypeSize = sizeof(::PanAndTiltTransformPublisher);
+
+                    if (candidateTypeSize > RTIXCdrLong_MAX) {
+                        PanAndTiltTransformPublisher_g_sampleAccessInfo.typeSize[0] =
+                        RTIXCdrLong_MAX;
+                    } else {
+                        PanAndTiltTransformPublisher_g_sampleAccessInfo.typeSize[0] =
+                        (RTIXCdrUnsignedLong) candidateTypeSize;
+                    }
+                }
+
+                PanAndTiltTransformPublisher_g_sampleAccessInfo.useGetMemberValueOnlyWithRef =
+                RTI_XCDR_TRUE;
+
+                PanAndTiltTransformPublisher_g_sampleAccessInfo.getMemberValuePointerFcn = 
+                interpreter::get_aggregation_value_pointer< ::PanAndTiltTransformPublisher >;
+
+                PanAndTiltTransformPublisher_g_sampleAccessInfo.languageBinding = 
+                RTI_XCDR_TYPE_BINDING_CPP_11_STL ;
+
+                RTIXCdrHeap_freeStruct(sample);
+                is_initialized = RTI_TRUE;
+                return (RTIXCdrSampleAccessInfo*) &PanAndTiltTransformPublisher_g_sampleAccessInfo;
+            }
+            static RTIXCdrTypePlugin * type_plugin_info()
+            {
+                static RTIXCdrTypePlugin PanAndTiltTransformPublisher_g_typePlugin = 
+                {
+                    NULL, /* serialize */
+                    NULL, /* serialize_key */
+                    NULL, /* deserialize_sample */
+                    NULL, /* deserialize_key_sample */
+                    NULL, /* skip */
+                    NULL, /* get_serialized_sample_size */
+                    NULL, /* get_serialized_sample_max_size_ex */
+                    NULL, /* get_serialized_key_max_size_ex */
+                    NULL, /* get_serialized_sample_min_size */
+                    NULL, /* serialized_sample_to_key */
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL
+                };
+
+                return &PanAndTiltTransformPublisher_g_typePlugin;
+            }
+        }; // native_type_code
+
+        const ::dds::core::xtypes::StructType& dynamic_type< ::PanAndTiltTransformPublisher >::get()
+        {
+            return static_cast<const ::dds::core::xtypes::StructType&>(
+                ::rti::core::native_conversions::cast_from_native< ::dds::core::xtypes::DynamicType >(
+                    *(native_type_code< ::PanAndTiltTransformPublisher >::get())));
+        }
     }
 }
 
@@ -4565,6 +4893,75 @@ namespace dds {
         void topic_type_support< ::PanAndTiltPositionPublisher >::allocate_sample(::PanAndTiltPositionPublisher& sample, int, int) 
         {
             ::rti::topic::allocate_sample(sample.angle(),  -1, -1);
+        }
+        void topic_type_support< ::PanAndTiltTransformPublisher >:: register_type(
+            ::dds::domain::DomainParticipant& participant,
+            const std::string& type_name) 
+        {
+
+            ::rti::domain::register_type_plugin(
+                participant,
+                type_name,
+                ::PanAndTiltTransformPublisherPlugin_new,
+                ::PanAndTiltTransformPublisherPlugin_delete);
+        }
+
+        std::vector<char>& topic_type_support< ::PanAndTiltTransformPublisher >::to_cdr_buffer(
+            std::vector<char>& buffer, 
+            const ::PanAndTiltTransformPublisher& sample,
+            ::dds::core::policy::DataRepresentationId representation)
+        {
+            // First get the length of the buffer
+            unsigned int length = 0;
+            RTIBool ok = PanAndTiltTransformPublisherPlugin_serialize_to_cdr_buffer(
+                NULL, 
+                &length,
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to calculate cdr buffer size");
+
+            // Create a vector with that size and copy the cdr buffer into it
+            buffer.resize(length);
+            ok = PanAndTiltTransformPublisherPlugin_serialize_to_cdr_buffer(
+                &buffer[0], 
+                &length, 
+                &sample,
+                representation);
+            ::rti::core::check_return_code(
+                ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+                "Failed to copy cdr buffer");
+
+            return buffer;
+        }
+
+        void topic_type_support< ::PanAndTiltTransformPublisher >::from_cdr_buffer(::PanAndTiltTransformPublisher& sample, 
+        const std::vector<char>& buffer)
+        {
+
+            RTIBool ok  = PanAndTiltTransformPublisherPlugin_deserialize_from_cdr_buffer(
+                &sample, 
+                &buffer[0], 
+                static_cast<unsigned int>(buffer.size()));
+            ::rti::core::check_return_code(ok ? DDS_RETCODE_OK : DDS_RETCODE_ERROR,
+            "Failed to create ::PanAndTiltTransformPublisher from cdr buffer");
+        }
+
+        void topic_type_support< ::PanAndTiltTransformPublisher >::reset_sample(::PanAndTiltTransformPublisher& sample) 
+        {
+            sample.panandtiltID(0u);
+            ::rti::topic::reset_sample(sample.angle());
+            sample.parent_frame("");
+            sample.child_frame("");
+            sample.timestamp(0ll);
+        }
+
+        void topic_type_support< ::PanAndTiltTransformPublisher >::allocate_sample(::PanAndTiltTransformPublisher& sample, int, int) 
+        {
+            ::rti::topic::allocate_sample(sample.angle(),  -1, -1);
+            ::rti::topic::allocate_sample(sample.parent_frame(),  -1, 255L);
+            ::rti::topic::allocate_sample(sample.child_frame(),  -1, 255L);
         }
     }
 }  

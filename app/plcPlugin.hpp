@@ -10,8 +10,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the Code Generator User's Manual.
 */
 
-#ifndef plcPlugin_493953247_h
-#define plcPlugin_493953247_h
+#ifndef plcPlugin_493953418_h
+#define plcPlugin_493953418_h
 
 #include "plc.hpp"
 
@@ -1800,6 +1800,162 @@ PanAndTiltPositionPublisherPlugin_new(void);
 NDDSUSERDllExport extern void
 PanAndTiltPositionPublisherPlugin_delete(struct PRESTypePlugin *);
 
+#define PanAndTiltTransformPublisherPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample
+
+#define PanAndTiltTransformPublisherPlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
+#define PanAndTiltTransformPublisherPlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer
+
+#define PanAndTiltTransformPublisherPlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
+#define PanAndTiltTransformPublisherPlugin_destroy_sample PRESTypePluginDefaultEndpointData_deleteSample 
+
+/* --------------------------------------------------------------------------------------
+Support functions:
+* -------------------------------------------------------------------------------------- */
+
+NDDSUSERDllExport extern PanAndTiltTransformPublisher*
+PanAndTiltTransformPublisherPluginSupport_create_data_w_params(
+    const struct DDS_TypeAllocationParams_t * alloc_params);
+
+NDDSUSERDllExport extern PanAndTiltTransformPublisher*
+PanAndTiltTransformPublisherPluginSupport_create_data_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern PanAndTiltTransformPublisher*
+PanAndTiltTransformPublisherPluginSupport_create_data(void);
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltTransformPublisherPluginSupport_copy_data(
+    PanAndTiltTransformPublisher *out,
+    const PanAndTiltTransformPublisher *in);
+
+NDDSUSERDllExport extern void 
+PanAndTiltTransformPublisherPluginSupport_destroy_data_w_params(
+    PanAndTiltTransformPublisher *sample,
+    const struct DDS_TypeDeallocationParams_t * dealloc_params);
+
+NDDSUSERDllExport extern void 
+PanAndTiltTransformPublisherPluginSupport_destroy_data_ex(
+    PanAndTiltTransformPublisher *sample,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+PanAndTiltTransformPublisherPluginSupport_destroy_data(
+    PanAndTiltTransformPublisher *sample);
+
+NDDSUSERDllExport extern void 
+PanAndTiltTransformPublisherPluginSupport_print_data(
+    const PanAndTiltTransformPublisher *sample,
+    const char *desc,
+    unsigned int indent);
+
+/* ----------------------------------------------------------------------------
+Callback functions:
+* ---------------------------------------------------------------------------- */
+
+NDDSUSERDllExport extern PRESTypePluginParticipantData 
+PanAndTiltTransformPublisherPlugin_on_participant_attached(
+    void *registration_data, 
+    const struct PRESTypePluginParticipantInfo *participant_info,
+    RTIBool top_level_registration, 
+    void *container_plugin_context,
+    RTICdrTypeCode *typeCode);
+
+NDDSUSERDllExport extern void 
+PanAndTiltTransformPublisherPlugin_on_participant_detached(
+    PRESTypePluginParticipantData participant_data);
+
+NDDSUSERDllExport extern PRESTypePluginEndpointData 
+PanAndTiltTransformPublisherPlugin_on_endpoint_attached(
+    PRESTypePluginParticipantData participant_data,
+    const struct PRESTypePluginEndpointInfo *endpoint_info,
+    RTIBool top_level_registration, 
+    void *container_plugin_context);
+
+NDDSUSERDllExport extern void 
+PanAndTiltTransformPublisherPlugin_on_endpoint_detached(
+    PRESTypePluginEndpointData endpoint_data);
+
+NDDSUSERDllExport extern void    
+PanAndTiltTransformPublisherPlugin_return_sample(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltTransformPublisher *sample,
+    void *handle);    
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltTransformPublisherPlugin_copy_sample(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltTransformPublisher *out,
+    const PanAndTiltTransformPublisher *in);
+
+/* ----------------------------------------------------------------------------
+(De)Serialize functions:
+* ------------------------------------------------------------------------- */
+
+NDDSUSERDllExport extern RTIBool
+PanAndTiltTransformPublisherPlugin_serialize_to_cdr_buffer(
+    char * buffer,
+    unsigned int * length,
+    const PanAndTiltTransformPublisher *sample,
+    ::dds::core::policy::DataRepresentationId representation
+    = ::dds::core::policy::DataRepresentation::xcdr()); 
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltTransformPublisherPlugin_deserialize(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltTransformPublisher **sample, 
+    RTIBool * drop_sample,
+    struct RTICdrStream *cdrStream,
+    RTIBool deserialize_encapsulation,
+    RTIBool deserialize_sample, 
+    void *endpoint_plugin_qos);
+
+NDDSUSERDllExport extern RTIBool
+PanAndTiltTransformPublisherPlugin_deserialize_from_cdr_buffer(
+    PanAndTiltTransformPublisher *sample,
+    const char * buffer,
+    unsigned int length);    
+
+NDDSUSERDllExport extern unsigned int 
+PanAndTiltTransformPublisherPlugin_get_serialized_sample_max_size(
+    PRESTypePluginEndpointData endpoint_data,
+    RTIBool include_encapsulation,
+    RTIEncapsulationId encapsulation_id,
+    unsigned int current_alignment);
+
+/* --------------------------------------------------------------------------------------
+Key Management functions:
+* -------------------------------------------------------------------------------------- */
+NDDSUSERDllExport extern PRESTypePluginKeyKind 
+PanAndTiltTransformPublisherPlugin_get_key_kind(void);
+
+NDDSUSERDllExport extern unsigned int 
+PanAndTiltTransformPublisherPlugin_get_serialized_key_max_size(
+    PRESTypePluginEndpointData endpoint_data,
+    RTIBool include_encapsulation,
+    RTIEncapsulationId encapsulation_id,
+    unsigned int current_alignment);
+
+NDDSUSERDllExport extern unsigned int 
+PanAndTiltTransformPublisherPlugin_get_serialized_key_max_size_for_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    RTIEncapsulationId encapsulation_id,
+    unsigned int current_alignment);
+
+NDDSUSERDllExport extern RTIBool 
+PanAndTiltTransformPublisherPlugin_deserialize_key(
+    PRESTypePluginEndpointData endpoint_data,
+    PanAndTiltTransformPublisher ** sample,
+    RTIBool * drop_sample,
+    struct RTICdrStream *cdrStream,
+    RTIBool deserialize_encapsulation,
+    RTIBool deserialize_key,
+    void *endpoint_plugin_qos);
+
+/* Plugin Functions */
+NDDSUSERDllExport extern struct PRESTypePlugin*
+PanAndTiltTransformPublisherPlugin_new(void);
+
+NDDSUSERDllExport extern void
+PanAndTiltTransformPublisherPlugin_delete(struct PRESTypePlugin *);
+
 #if (defined(RTI_WIN32) || defined (RTI_WINCE) || defined(RTI_INTIME)) && defined(NDDS_USER_DLL_EXPORT)
 /* If the code is building on Windows, stop exporting symbols.
 */
@@ -1807,5 +1963,5 @@ PanAndTiltPositionPublisherPlugin_delete(struct PRESTypePlugin *);
 #define NDDSUSERDllExport
 #endif
 
-#endif /* plcPlugin_493953247_h */
+#endif /* plcPlugin_493953418_h */
 

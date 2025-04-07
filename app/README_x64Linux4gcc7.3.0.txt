@@ -1,7 +1,7 @@
 Welcome to your first Connext DDS example! 
 
 This example was generated for architecture x64Linux4gcc7.3.0, using the
-data type PanAndTiltPositionPublisher from plc.idl.
+data type PanAndTiltTransformPublisher from plc.idl.
 This example builds two applications, named plc_publisher and
 plc_subscriber.
 

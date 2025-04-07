@@ -109,3 +109,13 @@ struct PanAndTiltPositionPublisher {
     Quaternion angle;
 
 };
+
+struct PanAndTiltTransformPublisher {
+
+    uint32 panandtiltID;
+    Quaternion angle;
+    string parent_frame;
+    string child_frame;
+    int64 timestamp;
+
+};
