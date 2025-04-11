@@ -113,7 +113,7 @@ int process_panandtilt_data(dds::sub::DataReader< ::PanAndTiltControlCustom> rea
     return count;
 }
 
-int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber> reader,dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer)
+int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber> reader,dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer,dds::pub::DataWriter< ::PanAndTiltTransformPublisher> writer_transform)
 
 {
 
@@ -152,41 +152,49 @@ int process_ptposition_data(dds::sub::DataReader< ::PanAndTiltPositionSubscriber
                         pub_data.pan = pt_position_data.pan_one;
                         pub_data.tilt = pt_position_data.tilt_one;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                     case 1:
                         pub_data.pan = pt_position_data.pan_two;
                         pub_data.tilt = pt_position_data.tilt_two;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                     case 2:
                         pub_data.pan = pt_position_data.pan_three;
                         pub_data.tilt = pt_position_data.tilt_three;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                     case 3:
                         pub_data.pan = pt_position_data.pan_four;
                         pub_data.tilt = pt_position_data.tilt_four;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                     case 4:
                         pub_data.pan = pt_position_data.pan_five;
                         pub_data.tilt = pt_position_data.tilt_five;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                     case 5:
                         pub_data.pan = pt_position_data.pan_six;
                         pub_data.tilt = pt_position_data.tilt_six;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                     case 6:
                         pub_data.pan = pt_position_data.pan_seven;
                         pub_data.tilt = pt_position_data.tilt_seven;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                     case 7: 
                         pub_data.pan = pt_position_data.pan_eight;
                         pub_data.tilt = pt_position_data.tilt_eight;
                         pt_position_publisher(pub_data, writer);
+                        broadcast_dynamic_tf_from_urdf(pub_data,writer_transform,i,10);
                         break;
                 }
             }
@@ -307,13 +315,16 @@ void panandtilt_position_subscriber(unsigned int domain_id, unsigned int sample_
 
     dds::sub::Subscriber subscriber(participant);
     dds::pub::Publisher publisher(participant);
+    dds::pub::Publisher publisher_tf2(participant);
 
     dds::topic::Topic< ::PanAndTiltPositionPublisher> topic(participant, "PanAndTiltPositionTopic");
     dds::topic::Topic< ::PanAndTiltPositionSubscriber> panandtilt_position_topic(participant, "PanAndTiltPositionSubscriberTopic");
+    dds::topic::Topic< ::PanAndTiltTransformPublisher> panandtilt_transform(participant, "PanAndTiltTransformTopic");
 
     // Create a DataWriter with default QoS
     dds::sub::DataReader< ::PanAndTiltPositionSubscriber> reader(subscriber, panandtilt_position_topic); 
     dds::pub::DataWriter< ::PanAndTiltPositionPublisher> writer(publisher, topic);
+    dds::pub::DataWriter< ::PanAndTiltTransformPublisher> writer_transform(publisher, topic);
 
     // Create a ReadCondition for any data received on this reader and set a
     // handler to process the data
@@ -321,7 +332,7 @@ void panandtilt_position_subscriber(unsigned int domain_id, unsigned int sample_
     dds::sub::cond::ReadCondition read_condition(
         reader,
         dds::sub::status::DataState::any(),
-        [&, reader]() { samples_read += process_ptposition_data(reader,writer); });
+        [&, reader]() { samples_read += process_ptposition_data(reader,writer,writer_transform); });
 
     // WaitSet will be woken when the attached condition is triggered
     dds::core::cond::WaitSet waitset;

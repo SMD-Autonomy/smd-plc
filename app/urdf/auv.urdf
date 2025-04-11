@@ -1,0 +1,140 @@
+<robot name="eight_pan_tilt_arm">
+  <!-- Each pan-tilt pair -->
+  <link name="base"/>
+
+  <!-- Actuator 0 -->
+  <link name="link_0_tilt"/>
+  <joint name="joint_0_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_0_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_0_pan"/>
+  <joint name="joint_0_pan" type="revolute">
+    <parent link="link_0_tilt"/>
+    <child link="link_0_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Actuator 1 -->
+  <link name="link_1_tilt"/>
+  <joint name="joint_1_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_1_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_1_pan"/>
+  <joint name="joint_1_pan" type="revolute">
+    <parent link="link_1_tilt"/>
+    <child link="link_1_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+    <!-- Actuator 2 -->
+  <link name="link_2_tilt"/>
+  <joint name="joint_2_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_2_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_2_pan"/>
+  <joint name="joint_2_pan" type="revolute">
+    <parent link="link_2_tilt"/>
+    <child link="link_2_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+   <!-- Actuator 3 -->
+  <link name="link_3_tilt"/>
+  <joint name="joint_3_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_3_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_3_pan"/>
+  <joint name="joint_3_pan" type="revolute">
+    <parent link="link_3_tilt"/>
+    <child link="link_3_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Actuator 4 -->
+  <link name="link_4_tilt"/>
+  <joint name="joint_4_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_4_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_4_pan"/>
+  <joint name="joint_4_pan" type="revolute">
+    <parent link="link_4_tilt"/>
+    <child link="link_4_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Actuator 5 -->
+  <link name="link_5_tilt"/>
+  <joint name="joint_5_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_5_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_5_pan"/>
+  <joint name="joint_5_pan" type="revolute">
+    <parent link="link_5_tilt"/>
+    <child link="link_5_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Actuator 6 -->
+  <link name="link_6_tilt"/>
+  <joint name="joint_6_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_6_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_6_pan"/>
+  <joint name="joint_6_pan" type="revolute">
+    <parent link="link_6_tilt"/>
+    <child link="link_6_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Actuator 7 -->
+  <link name="link_7_tilt"/>
+  <joint name="joint_7_tilt" type="revolute">
+    <parent link="base"/>
+    <child link="link_7_tilt"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <link name="link_7_pan"/>
+  <joint name="joint_7_pan" type="revolute">
+    <parent link="link_7_tilt"/>
+    <child link="link_7_pan"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+</robot>

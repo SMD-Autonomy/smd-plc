@@ -21,6 +21,11 @@
 #include <dds/pub/ddspub.hpp>
 #include <rti/util/util.hpp>      // for sleep()
 #include <rti/config/Logger.hpp>  // for logging
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_ros/transform_broadcaster.h"
+#include "urdf/model.h"
+#include <fstream>  
+#include <sstream>
 #include "application.hpp"  // for command line parsing and ctrl-c
 #include "plc.hpp"
 
@@ -200,6 +205,17 @@ class HelperMethods
             return true;
         }
     }
+
+    // void lamp_data_writer(::LampControl data, float intensity, uint32_t lampID,int16_t id)
+    // {
+    //     if (lampID == 1){
+    //         data.intensity().intensity_one() = intensity;
+    //         power_check = power_check(intensity);
+    //         if (!power_check){
+    //             data.power(static_cast<int16_t>(id));
+    //         }
+    //     }
+    // }
     
 };
 
@@ -438,4 +454,54 @@ void pt_position_publisher(HelperMethods::PanAndTiltPositionPublisherStruct pub_
     writer.write(data);
     // Send once every second
     rti::util::sleep(dds::core::Duration(1));
+}
+
+void broadcast_dynamic_tf_from_urdf(HelperMethods::PanAndTiltControlStruct ptcstruct,dds::pub::DataWriter<::PanAndTiltTransformPublisher> writer,int actuator_id,int frequency_hz = 10) 
+{   
+    const std::string urdf_path = "./urdf/auv.urdf";
+    std::ifstream urdf_file(urdf_path);
+    if (!urdf_file.is_open()) {
+        std::cerr << "Failed to open URDF file: " << urdf_path << std::endl;
+        return;
+    }
+
+    std::stringstream buffer;
+    buffer << urdf_file.rdbuf();
+    std::string urdf_xml = buffer.str();
+
+    // urdf::Model model;
+    // if (!model.initString(urdf_xml)) {
+    //     std::cerr << "Failed to parse URDF." << std::endl;
+    //     return;
+    // }
+
+    std::string parent_frame = "base_link_" + std::to_string(actuator_id);
+    std::string child_frame = "link_" + std::to_string(actuator_id) + "_tilt";
+
+    // Convert tilt and pan into quaternion
+    tf2::Quaternion tf2_quat;
+    tf2_quat.setRPY(0, ptcstruct.x * M_PI / 180.0, ptcstruct.z * M_PI / 180.0);
+    tf2_quat.normalize();
+
+    // Convert to DDS quaternion
+    ::Quaternion dds_quat;
+    dds_quat.x(tf2_quat.x());
+    dds_quat.y(tf2_quat.y());
+    dds_quat.z(tf2_quat.z());
+    dds_quat.w(tf2_quat.w());
+
+    ::PanAndTiltTransformPublisher data;
+    data.panandtiltID(ptcstruct.panandtiltID);
+    data.angle(dds_quat);
+    data.parent_frame(parent_frame);
+    data.child_frame(child_frame);
+    data.timestamp(std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count());
+
+    std::cout << "[Dynamic TF] [" << parent_frame << "] -> [" << child_frame
+                << "] Pan: " << ptcstruct.z << ", Tilt: " << ptcstruct.x << std::endl;
+
+    writer.write(data);
+
+    rti::util::sleep(dds::core::Duration(1.0 / frequency_hz));
 }

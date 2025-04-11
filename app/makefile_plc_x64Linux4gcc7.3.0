@@ -114,7 +114,18 @@ INCLUDES = -I. -I$(NDDSHOME)/include -I$(NDDSHOME)/include/ndds -I$(NDDSHOME)/in
 -I$(ROSHOME)/rosidl_runtime_cpp \
 -I$(ROSHOME)/statistics_msgs \
 -I$(ROSHOME)/geometry_msgs \
--I$(ROSHOME)/rosidl_typesupport_interface
+-I$(ROSHOME)/rosidl_typesupport_interface \
+-I$(ROSHOME)/urdf \
+-I$(ROSHOME)/urdfdom_headers \
+-I$(ROSHOME)/urdfdom_headers/urdf_model \
+-I$(ROSHOME)/urdfdom_headers/urdf_model_state \
+-I$(ROSHOME)/urdfdom_headers/urdf_sensor \
+-I$(ROSHOME)/urdfdom_headers/urdf_world \
+-I$(ROSHOME)/urdfdom_headers/urdf_exception \
+-I$(ROSHOME)/urdf_parser_plugin \
+-I$(ROSHOME)/urdfdom \
+-I$(ROSHOME)/kdl_parser
+
 
 LIBS = -L$(NDDSHOME)/lib/$(TARGET_ARCH) \
 
